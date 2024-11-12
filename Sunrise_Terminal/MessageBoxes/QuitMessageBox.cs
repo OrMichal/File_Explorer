@@ -1,0 +1,76 @@
+﻿using Sunrise_Terminal.objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Sunrise_Terminal
+{
+    public class QuitMessageBox : Window, IMessageBox
+    {
+        private int selectedButton { get; set; } = 0;
+        public string Heading { get; set; }
+        public int height { get; set; }
+        new public int width { get; set; }
+        private int MarginTop { get; set; } = 2;
+        private int ButtonWidth { get; set; } = 7;
+        public string Description { get; set; }
+        private List<Button> buttons = new List<Button>();
+        private int justOnce = 0;
+
+        public QuitMessageBox(int height, int width)
+        {
+            this.height = height;
+            this.width = width;
+            Heading = "Quit?";
+            buttons.Add(new Button()
+            {
+                Label = "Yes"
+            });
+            buttons.Add(new Button()
+            {
+                Label = "No"
+            });
+        }
+
+        public override void Draw(int LocationX, API api, bool _ = true)
+        {
+            if(justOnce == 0)
+            {
+                graphics.DrawSquare(this.width, this.height, Console.WindowWidth/2 - this.width/2, Console.WindowHeight/2 - this.height/2, Heading);
+                justOnce++;
+            }
+            graphics.DrawButtons(ButtonWidth, Console.WindowWidth / 2 - ButtonWidth, Console.WindowHeight / 2 - this.height / 2 + MarginTop, this.buttons, selectedButton);
+
+
+        }
+
+        public override void HandleKey(ConsoleKeyInfo info, API api)
+        {
+            if (info.Key == ConsoleKey.Escape)
+            {
+                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+            }
+            else if (info.Key == ConsoleKey.LeftArrow)
+            {
+                selectedButton = 0;
+            }
+            else if (info.Key == ConsoleKey.RightArrow)
+            {
+                selectedButton = 1;
+            }
+            else if (info.Key == ConsoleKey.Enter)
+            {
+                if (selectedButton == 0)
+                {
+                    api.Application.End = true;
+                }
+                else
+                {
+                    api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                }
+            }
+        }
+    }
+}
