@@ -62,7 +62,7 @@ namespace Sunrise_Terminal
             if(key.Key == ConsoleKey.Enter)
             {
                 dataManagement.CreateDir(paths[SelectedPath], Input);
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.Application.SwitchWindow(api.GetActiveListWindow());
                 api.RequestFilesRefresh();
 
             }
@@ -123,7 +123,7 @@ namespace Sunrise_Terminal
 
             else if(key.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.Application.SwitchWindow(api.GetActiveListWindow());
             }
             else if(key.Key == ConsoleKey.Insert)
             {

@@ -152,6 +152,11 @@ namespace Sunrise_Terminal.objects
             }
         }
 
+        public void DrawLabel(int LocationX, int LocationY, string Content = "", int marginLeft = 0)
+        {
+            Console.SetCursorPosition(LocationX + marginLeft, LocationY);
+            Console.Write(Content);
+        }
 
     }
 }

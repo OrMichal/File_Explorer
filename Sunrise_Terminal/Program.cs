@@ -15,7 +15,7 @@ namespace Sunrise_Terminal
             api.activeWindow = app.activeWindow;
             Console.CursorVisible = false;
 
-            for(; ; )
+            for(;;)
             {
                 Parallel.For(0, 1, (Action) => {
                     app.Draw();
