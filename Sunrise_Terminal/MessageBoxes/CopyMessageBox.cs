@@ -74,7 +74,7 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if (File.Exists(srcPath)) copyFile(srcPath, destPath);
+                if (File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile()))) copyFile(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
                 else copyDir(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
                 
                 api.Application.SwitchWindow(api.Application.ListWindows[0]);
@@ -106,20 +106,27 @@ namespace Sunrise_Terminal
 
         private void CopyDirRecurs(DirectoryInfo source, DirectoryInfo target)
         {
-            foreach (DirectoryInfo dir in source.GetDirectories())
+            try
             {
-                DirectoryInfo targetDir = target.CreateSubdirectory(dir.Name);
-                CopyDirRecurs(dir, targetDir);
-            }
-
-            foreach (FileInfo item in source.GetFiles())
-            {
-                string destFile = Path.Combine(target.FullName, item.Name);
-                using (FileStream sourceStream = item.OpenRead())
-                using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write))
+                foreach (DirectoryInfo dir in source.GetDirectories())
                 {
-                    sourceStream.CopyTo(destStream);
+                    DirectoryInfo targetDir = target.CreateSubdirectory(dir.Name);
+                    CopyDirRecurs(dir, targetDir);
                 }
+
+                foreach (FileInfo item in source.GetFiles())
+                {
+                    string destFile = Path.Combine(target.FullName, item.Name);
+                    using (FileStream sourceStream = item.OpenRead())
+                    using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write))
+                    {
+                        sourceStream.CopyTo(destStream);
+                    }
+                }
+            }
+            catch
+            {
+
             }
         }
     }

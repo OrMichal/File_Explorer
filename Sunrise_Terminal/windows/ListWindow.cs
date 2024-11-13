@@ -19,12 +19,12 @@ namespace Sunrise_Terminal.windows
 
         public List<Row> Rows = new List<Row>();
         private Table table = new Table();
-        private DataManagement dataManagement = new DataManagement();
+        private DataManager dataManagement = new DataManager();
 
         public ListWindow()
         {
             ActivePath = dataManagement.StartingPath;
-            Rows = new DataManagement().GetFiles(Rows, ActivePath);
+            Rows = new DataManager().GetFiles(Rows, ActivePath);
         }
 
         public override void Draw(int LocationX, API api, bool active = true)
@@ -100,7 +100,7 @@ namespace Sunrise_Terminal.windows
             else if (info.Key == ConsoleKey.F3) api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth - 20, Console.WindowHeight - 20));
             else if (info.Key == ConsoleKey.F4) api.Application.SwitchWindow(new EditMessageBox(Console.WindowWidth - 10, Console.WindowHeight - 10));
             else if (info.Key == ConsoleKey.F5) api.Application.SwitchWindow(new CopyMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
-            else if (info.Key == ConsoleKey.F6) api.Application.SwitchWindow(new RenMovMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth));
+            else if (info.Key == ConsoleKey.F6) api.Application.SwitchWindow(new RenMovMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F7) api.Application.SwitchWindow(new CrtDirMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F8) api.Application.SwitchWindow(new DeletMessageBox(Settings.SmallMessageBoxHeight, Settings.SmallMessageBoxWidth));
             else if (info.Key == ConsoleKey.F9) api.Application.SwitchWindow(new UpperMenu());
@@ -109,7 +109,7 @@ namespace Sunrise_Terminal.windows
 
         private void OnFileRefreshed()
         {
-            this.Rows = new DataManagement().GetFiles(this.Rows, this.ActivePath);
+            this.Rows = new DataManager().GetFiles(this.Rows, this.ActivePath);
         }
     }
 }

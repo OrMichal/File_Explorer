@@ -34,7 +34,7 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 if (new DirectoryInfo(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile())).GetDirectories().Count() != 0)
                 {
-                    api.GetActiveListWindow().ActivePath = new DataManagement().GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
+                    api.GetActiveListWindow().ActivePath = new DataManager().GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
                     api.RequestFilesRefresh();
                     return;
                 }

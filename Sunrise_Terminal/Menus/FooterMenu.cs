@@ -32,7 +32,7 @@ namespace Sunrise_Terminal
             int location = 0;
             foreach (Object obj in objects)
             {
-                Console.SetCursorPosition(location, Console.WindowHeight - 1);
+                Console.SetCursorPosition(location, Settings.WindowDataLimit + 5);
 
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;

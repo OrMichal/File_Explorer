@@ -15,7 +15,7 @@ namespace Sunrise_Terminal
         public int selectedIndex { get; set; } = 0;
         public string ActivePath { get; set; }
         public string[] Headers = new string[] { "Name", "Size", "MTime" };
-        private DataManagement dataMan = new DataManagement();
+        private DataManager dataMan = new DataManager();
         private Formatter formatter = new Formatter();
         public List<Row> Rows { get; set; }
 
@@ -28,77 +28,79 @@ namespace Sunrise_Terminal
             int sizeWidth = width/4;
             int timeWidth = width/4;
 
-            Console.SetCursorPosition(LocationX, 1);
-            DirectoryInfo dir = new DirectoryInfo(ActivePath);
-            Console.WriteLine($"┌{ActivePath.PadRight(width, '─')}┐");
             try
             {
+                Console.SetCursorPosition(LocationX, 1);
+                DirectoryInfo dir = new DirectoryInfo(ActivePath);
+                Console.WriteLine($"┌{ActivePath.PadRight(width, '─')}┐");
+
                 Console.SetCursorPosition(LocationX, 2);
                 Console.WriteLine($"│{new string($"{formatter.DoublePadding(Headers[0],nameWidth)}│{formatter.DoublePadding(Headers[1],sizeWidth)}│{formatter.DoublePadding(Headers[2], timeWidth - 3)}").PadRight(width)}│");
+            
+                int i = 0;
+                for (i = 0; i < Limit; i++)
+                {
+                    int actualIndex = 0;
+                    if (i < Rows.Count)
+                    {
+                        actualIndex = Offset + i;
+                        try
+                        {
+                            Row row = Rows[actualIndex];
+
+
+                            Console.SetCursorPosition(LocationX, i + 3);
+                            Console.Write("│");
+                            if (actualIndex == selectedIndex && Active)
+                            {
+                                Window.SelectionColor();
+                            }
+                            if (!row.file && row.Size == 0)
+                            {
+                                row.Description = row.Size != 0 ? row.Size.ToString() : row.Description;
+                                Console.Write($"{new string($"{formatter.PadTrimRight(row.Name, nameWidth)}│{formatter.DoublePadding(row.Description,sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange,timeWidth - 3)}").PadRight(width)}");
+
+                            }
+                            else if (!row.file)
+                            {
+                                Console.Write($"{new string($"{formatter.PadTrimRight("/" + row.Name, nameWidth)}│{formatter.PadTrimLeft(row.Size.ToString(), sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange, timeWidth - 3)}").PadRight(width)}");
+                            }
+                            else
+                            {
+                                Console.Write($"{new string($"{formatter.PadTrimRight(row.Name, nameWidth)}│{formatter.PadTrimLeft(row.Size.ToString(), sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange, timeWidth - 3)}").PadRight(width)}");
+                            }
+                            Window.DefaultColor();
+                            Console.WriteLine("│");
+
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition (LocationX, i+3);
+                        Console.WriteLine($"│{new string($"{new string("".PadRight(nameWidth, ' '))}│{new string("".PadRight(sizeWidth, ' '))}│{new string("".PadRight(timeWidth - 4, ' '))}").PadRight(width)}│");
+                    }
+                }
+
+                Console.SetCursorPosition(LocationX, i + 2);
+                Console.WriteLine($"├{new string($"{new string("".PadRight(nameWidth, '─'))}┴{new string("".PadRight(sizeWidth, '─'))}┴{new string("".PadRight(timeWidth - 4, '─'))}").PadRight(width,'─')}┤");
+                i++;
+                Console.SetCursorPosition(LocationX, i + 2);
+                Console.WriteLine($"│{formatter.PadTrimRight(Rows[selectedIndex].Name, width)}│");
+                i++;
+                Console.SetCursorPosition(LocationX, i + 2);
+                Console.WriteLine($"└{new string("".PadRight(width, '─'))}┘");
+                i++;
+
+                Console.SetCursorPosition(LocationX, i + 3);
             }
-            catch (Exception)
+            catch
             {
 
             }
-            int i = 0;
-            for (i = 0; i < Limit; i++)
-            {
-                int actualIndex = 0;
-                if (i < Rows.Count)
-                {
-                    actualIndex = Offset + i;
-                    try
-                    {
-                        Row row = Rows[actualIndex];
-
-
-                        Console.SetCursorPosition(LocationX, i + 3);
-                        Console.Write("│");
-                        if (actualIndex == selectedIndex && Active)
-                        {
-                            Window.SelectionColor();
-                        }
-                        if (!row.file && row.Size == 0)
-                        {
-                            row.Description = row.Size != 0 ? row.Size.ToString() : row.Description;
-                            Console.Write($"{new string($"{formatter.PadTrimRight(row.Name, nameWidth)}│{formatter.DoublePadding(row.Description,sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange,timeWidth - 3)}").PadRight(width)}");
-
-                        }
-                        else if (!row.file)
-                        {
-                            Console.Write($"{new string($"{formatter.PadTrimRight("/" + row.Name, nameWidth)}│{formatter.PadTrimLeft(row.Size.ToString(), sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange, timeWidth - 3)}").PadRight(width)}");
-                        }
-                        else
-                        {
-                            Console.Write($"{new string($"{formatter.PadTrimRight(row.Name, nameWidth)}│{formatter.PadTrimLeft(row.Size.ToString(), sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange, timeWidth - 3)}").PadRight(width)}");
-                        }
-                        Window.DefaultColor();
-                        Console.WriteLine("│");
-
-                    }
-                    catch (ArgumentOutOfRangeException)
-                    {
-
-                    }
-                }
-                else
-                {
-                    Console.SetCursorPosition (LocationX, i+3);
-                    Console.WriteLine($"│{new string($"{new string("".PadRight(nameWidth, ' '))}│{new string("".PadRight(sizeWidth, ' '))}│{new string("".PadRight(timeWidth - 4, ' '))}").PadRight(width)}│");
-                }
-            }
-
-            Console.SetCursorPosition(LocationX, i + 2);
-            Console.WriteLine($"├{new string($"{new string("".PadRight(nameWidth, '─'))}┴{new string("".PadRight(sizeWidth, '─'))}┴{new string("".PadRight(timeWidth - 4, '─'))}").PadRight(width,'─')}┤");
-            i++;
-            Console.SetCursorPosition(LocationX, i + 2);
-            Console.WriteLine($"│{formatter.PadTrimRight(Rows[selectedIndex].Name, width)}│");
-            i++;
-            Console.SetCursorPosition(LocationX, i + 2);
-            Console.WriteLine($"└{new string("".PadRight(width, '─'))}┘");
-            i++;
-
-            Console.SetCursorPosition(LocationX, i + 3);
         }
     }
 }

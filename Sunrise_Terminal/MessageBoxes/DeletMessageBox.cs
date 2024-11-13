@@ -16,6 +16,7 @@ namespace Sunrise_Terminal
         public string Description { get; set; }
 
         private List<Button> buttons = new List<Button>();
+        private DataManager dataManager = new DataManager();
         private int justOnce = 0;
         private int selectedButton = 0;
         private int MarginTop = 2;
@@ -64,19 +65,23 @@ namespace Sunrise_Terminal
             {
                 if (selectedButton == 0)
                 {
-                    DeleteDir(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
+                    if(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                    {
+                        dataManager.DeleteFile(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()));
+                    }
+                    else
+                    {
+                        dataManager.DeleteDir(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
+                    }
                     api.RequestFilesRefresh();
                 }
 
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.Application.SwitchWindow(api.GetActiveListWindow());
                 api.Application.activeWindows.Pop();
             }
         }
 
-        private void DeleteDir(string path, string name)
-        {
-            Directory.Delete(path + "\\" + name, true);
-        }
+        
     }
 }
 

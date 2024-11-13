@@ -21,8 +21,10 @@ namespace Sunrise_Terminal
         private UpperMenu headerMenu = new UpperMenu();
         private FooterMenu footerMenu = new FooterMenu();
 
+
         public Application(int Height = 50, int Width = 160, int numberOfWindows = 2)
         {
+            Settings.NumberOfWindows = numberOfWindows;
             activeWindow = new Window();
 
             if (Height != null && Width != null) Console.SetWindowSize(Width, Height);

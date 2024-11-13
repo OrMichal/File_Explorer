@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Sunrise_Terminal.windows;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,87 +18,37 @@ namespace Sunrise_Terminal
         public string srcPath { get; set; }
         public string destPath { get; set; }
 
-        public RenMovMessageBox(int Height, int Width)
+        private int LocationX { get; set; }
+        private int LocationY { get; set; }
+        private List<string> paths = new List<string>();
+        private int a = 0;
+        private int selectedPath = 0;
+
+        public RenMovMessageBox(int Height, int Width, API api)
         {
             Heading = "Moving MessageBox";
             Description = "Are you sure?";
             this.height = Height;
             this.width = Width;
+            this.LocationX = Console.WindowWidth / 2 - this.width / 2 - 1;
+            this.LocationY = Console.WindowHeight / 2 - this.height / 2 - 1;
+
+            foreach (ListWindow lw in api.Application.ListWindows)
+            {
+                paths.Add(lw.ActivePath);
+            }
         }
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-
-            int i = 0;
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2);
-            IMessageBox.DefaultColor();
-            Console.Write($"┌─{Heading.PadRight(width + 2, '─')}─");
-            Console.WriteLine("┐");
-
-            for (i = 1; i < height - 1; i++)
+            if (a == 0)
             {
-                if (i < height / 2)
-                {
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2);
-                    IMessageBox.DefaultColor();
-                    Console.Write($"│ {new string("".PadRight(width + 2))} ");
-                    Console.WriteLine("│");
-                }
-
-                if (i == (height / 2))
-                {
-                    IMessageBox.DefaultColor();
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2);
-                    Console.WriteLine($"│  {Description.PadRight(width)}  │");
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2 + 1);
-
-                    IMessageBox.DefaultColor();
-                    Console.Write($"│ ┌{new string("".PadRight(width / 3, '─'))}┐ ");
-                    Console.Write($"┌{new string("".PadRight(width / 3, '─'))}┐ ");
-                    Console.WriteLine($"{new string("").PadRight(width / 4)}│");
-
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2 + 2);
-                    IMessageBox.DefaultColor();
-                    Console.Write($"│ │");
-
-                    if (confirmation)
-                    {
-                        IMessageBox.SelectionColor();
-                        Console.Write($"{new string("Yes").PadRight(width / 3)}");
-                        IMessageBox.DefaultColor();
-                        Console.Write($"│ │");
-                        Console.Write($"{new string("No").PadRight(width / 3)}");
-                        IMessageBox.DefaultColor();
-                        Console.WriteLine($"│ {new string("").PadRight(width / 4)}│");
-                    }
-                    else
-                    {
-                        Console.Write($"{new string("Yes").PadRight(width / 3)}");
-                        Console.Write($"│ │");
-                        IMessageBox.SelectionColor();
-                        Console.Write($"{new string("No").PadRight(width / 3)}");
-                        IMessageBox.DefaultColor();
-                        Console.WriteLine($"│ {new string("").PadRight(width / 4)}│");
-                    }
-
-
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2 + 3);
-                    IMessageBox.DefaultColor();
-                    Console.Write($"│ └{new string("".PadRight(width / 3, '─'))}┘ └{new string("".PadRight(width / 3, '─'))}┘ ");
-                    Console.WriteLine($"{new string("").PadRight(width / 4)}│");
-                }
-                else if (i > height / 2)
-                {
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2 + 3);
-                    IMessageBox.DefaultColor();
-                    Console.Write($"│ {new string("".PadRight(width + 2))} ");
-                    Console.WriteLine("│");
-                }
+                graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
+                a++;
             }
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 5, i + Console.WindowHeight / 2 + 3);
-            IMessageBox.DefaultColor();
-            Console.Write($"└─{new string("").PadRight(width + 2, '─')}─");
-            Console.WriteLine("┘");
+
+            graphics.DrawListBox(this.width - 2, api.Application.ListWindows.Count + 2, this.LocationX + 1, this.LocationY + 1, this.paths, selectedPath);
+            graphics.DrawLabel(this.LocationX, this.LocationY + 2 + api.Application.ListWindows.Count + 2, Description, 2);
 
         }
 
@@ -104,53 +56,42 @@ namespace Sunrise_Terminal
         {
             if(info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.Application.SwitchWindow(api.GetActiveListWindow());
             }
-            else if(info.Key == ConsoleKey.LeftArrow)
+            else if (info.Key == ConsoleKey.UpArrow)
             {
-                confirmation = true;    
+                if (selectedPath > 0)
+                {
+                    selectedPath--;
+                }
             }
-            else if(info.Key == ConsoleKey.RightArrow)
+            else if (info.Key == ConsoleKey.DownArrow)
             {
-                confirmation = false;
+                if (selectedPath < paths.Count - 1)
+                {
+                    selectedPath++;
+                }
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if (confirmation)
-                {
-                    Move(srcPath, destPath);
-                }
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                destPath = Path.Combine(api.Application.ListWindows[this.selectedPath].ActivePath, "cc " + api.GetSelectedFile());
+                Move(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
+                api.RequestFilesRefresh();
+                api.Application.SwitchWindow(api.GetActiveListWindow());
             }
         }
 
         private void Move(string SourceFilePath, string DestinationFilePath)
         {
-            try
+            string fileName = Path.GetFileName(SourceFilePath);
+            if (File.Exists(SourceFilePath))
             {
-                if (File.Exists(SourceFilePath))
-                {
-                    if (File.Exists(DestinationFilePath))
-                    {
-                        File.Delete(DestinationFilePath);
-                    }
-                    File.Move(SourceFilePath, DestinationFilePath);
-                }
-                else if (Directory.Exists(SourceFilePath))
-                {
-                    if (Directory.Exists(DestinationFilePath))
-                    {
-                        Directory.Delete(DestinationFilePath, true);
-                    }
-                    Directory.Move(SourceFilePath, DestinationFilePath);
-                }
+                File.Move(SourceFilePath, Path.Combine(DestinationFilePath, Path.GetFileName(SourceFilePath)));
             }
-            catch (UnauthorizedAccessException)
+            else if (Directory.Exists(SourceFilePath))
             {
-                throw new Exception("nn, nemáš přístup bráško");
+                Directory.Move(SourceFilePath, Path.Combine(DestinationFilePath, Path.GetFileName(SourceFilePath)));
             }
         }
-
-
     }
 }

@@ -26,7 +26,7 @@ namespace Sunrise_Terminal
         private int LocationY { get; set; }
         private int a {  get; set; }
         private List<string> paths { get; set; } = new List<string>();
-        private DataManagement dataManagement = new DataManagement();
+        private DataManager dataManagement = new DataManager();
 
         public CrtDirMessageBox(int height, int width, API api) 
         { 

@@ -10,6 +10,11 @@ namespace Sunrise_Terminal
     {
         public void ConsoleFormatCheck()
         {
+            if (!ConsoleSizeChanged())
+            {
+                return;
+            }
+
             int width2 = Console.WindowWidth / 2;
             if (width2 != Settings.WindowWidth)
             {
@@ -42,6 +47,26 @@ namespace Sunrise_Terminal
             {
                 Console.SetWindowSize(Console.WindowWidth, 30);
             }
+            
+        }
+
+        public bool ConsoleSizeChanged()
+        {
+            int width2 = Console.WindowWidth / 2;
+            if (width2 != Settings.WindowWidth)
+            {
+                Console.CursorVisible = false;
+                return true;
+            }
+
+            int limit = Console.WindowHeight - 7;
+            if (limit != Settings.WindowDataLimit)
+            {
+                Console.CursorVisible = false;
+                return true;
+            }
+
+            return false;
         }
 
         public string DoublePadding(string text, int length, char c = ' ')

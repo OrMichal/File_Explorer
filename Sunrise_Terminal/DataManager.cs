@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal
 {
-    public class DataManagement
+    public class DataManager
     {
         public string StartingPath { get; } = $@"C:\users\{Environment.UserName}\desktop";
 
@@ -208,6 +208,16 @@ namespace Sunrise_Terminal
         public void CreateDir(string path, string name)
         {
             Directory.CreateDirectory(path + "\\" + name);
+        }
+
+        public void DeleteDir(string path, string name)
+        {
+            Directory.Delete(Path.Combine(path, name), true);
+        }
+
+        public void DeleteFile(string path)
+        {
+            File.Delete(path);
         }
 
     }

@@ -86,9 +86,9 @@ namespace Sunrise_Terminal
             int GapLength = 0;
             foreach (Object obj in objects)
             {
-                GapLength += (Console.WindowWidth / 16 - 1);
+                GapLength += (3 + obj.name.Length + 3);
             }
-            return GapLength;
+            return (Console.WindowWidth - GapLength) % 2 == 0 ? Console.WindowWidth - GapLength : Console.WindowWidth - GapLength + 1;
         }
     }
 }
