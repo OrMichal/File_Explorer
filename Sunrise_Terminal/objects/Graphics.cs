@@ -145,7 +145,6 @@ namespace Sunrise_Terminal.objects
                 IMessageBox.DefaultColor();
                 Console.Write("│");
 
-                // Vykreslení dolního okraje tlačítka
                 Console.SetCursorPosition(buttonX, buttonY + 2);
                 IMessageBox.DefaultColor();
                 Console.Write($"└{new string('─', ButtonWidth - 2)}┘");
