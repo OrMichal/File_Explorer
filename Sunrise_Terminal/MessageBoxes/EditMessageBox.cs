@@ -28,32 +28,28 @@ namespace Sunrise_Terminal.MessageBoxes
         private bool insertion = false;
         private int justOnce = 0;
 
-        public EditMessageBox(int Width, int Height)
+        public EditMessageBox(int Width, int Height, API api)
         {
             this.width = Width;
             this.height = Height;
             Heading = "Editation";
+
+            using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+            {
+                while (!sr.EndOfStream)
+                {
+                    DataParted.Add(sr.ReadLine());
+                }
+            }
         }
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            if (justOnce == 0)
-            {
-                using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        DataParted.Add(sr.ReadLine());
-                    }
-                }
-                justOnce++;
-            }
-
             IMessageBox.DefaultColor();
             Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"┌─{new Formatter().DoublePadding(Heading, width + 4, '─')}─┐");
-
-            for (int i = 0; i < Limit; i++)
+            Console.WriteLine($"┌{new Formatter().DoublePadding(Heading, width - 2, '─')}┐");
+            int i = 0;
+            for (i = 0; i < Settings.WindowDataLimit; i++)
             {
                 int actualIndex = 0;
                 if (i < DataParted.Count())
@@ -62,7 +58,7 @@ namespace Sunrise_Terminal.MessageBoxes
                     if(actualIndex == selectedRow)
                     {
                         Console.SetCursorPosition(0, i + 2);
-                        Console.Write($"| {actualIndex + 1} ");
+                        Console.Write($"|{actualIndex + 1} ");
                         Console.BackgroundColor = ConsoleColor.Black;
                         int a = 0;
                         foreach(char c in DataParted[actualIndex])
@@ -85,19 +81,20 @@ namespace Sunrise_Terminal.MessageBoxes
                     else
                     {
                         IMessageBox.DefaultColor();
-                        Console.SetCursorPosition(0, i + 3);
-                        Console.WriteLine($"| {actualIndex + 1} {new Formatter().PadTrimRight(DataParted[actualIndex],width + 2)} |");
+                        Console.SetCursorPosition(0, i + 2);
+                        Console.WriteLine($"│{actualIndex + 1} {new Formatter().PadTrimRight(DataParted[actualIndex],width - 2)}│");
                     }
                 }
                 else
                 {
                     IMessageBox.DefaultColor();
-                    Console.SetCursorPosition (0, i + 3);
-                    Console.WriteLine($"| {new string(' ', width + 2)} |");
+                    Console.SetCursorPosition (0, i + 2);
+                    Console.WriteLine($"│{new string(' ', width - 2)}│");
                 }
             }
             IMessageBox.DefaultColor();
-            Console.WriteLine($"└─{new string('─', width + 4)}─┘");
+            Console.SetCursorPosition(0, i +2);
+            Console.WriteLine($"└{new string('─', width - 2)}┘");
         }
 
         public void SaveChanges()
@@ -116,10 +113,10 @@ namespace Sunrise_Terminal.MessageBoxes
             if (info.Key == ConsoleKey.DownArrow)
             {
                     
-                if (selectedRow <= DataParted.Count() - Limit + offset - 1)
+                if (selectedRow <= DataParted.Count() - Settings.WindowDataLimit + offset - 1)
                 {
                     selectedRow++;
-                    if (selectedRow >= offset + Limit - 1)
+                    if (selectedRow >= offset + Settings.WindowDataLimit - 2)
                     {
                         offset++;
                     }
@@ -169,8 +166,7 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                selectedRow++;
-                DataParted.Add(" ");
+                DataParted.Insert(selectedRow, "\n");
             }    
             else if(info.Key == ConsoleKey.F5)
             {
@@ -211,13 +207,9 @@ namespace Sunrise_Terminal.MessageBoxes
                 sb.Append(c);
             }
             sb.Append(info.KeyChar);
-            if (selectedRow >= offset + Limit)
-            {
-                offset++;
-            }
+            selectedChar = DataParted[selectedRow].Length;
 
             return sb.ToString();
-
         }
 
 

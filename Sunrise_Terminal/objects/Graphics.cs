@@ -156,6 +156,5 @@ namespace Sunrise_Terminal.objects
             Console.SetCursorPosition(LocationX + marginLeft, LocationY);
             Console.Write(Content);
         }
-
     }
 }

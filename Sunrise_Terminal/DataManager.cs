@@ -24,8 +24,7 @@ namespace Sunrise_Terminal
                 DateOfLastChange = " "
 
             });
-            try
-            {
+            
                 int i = 0;
                 foreach (var file in dir.GetDirectories())
                 {
@@ -34,7 +33,7 @@ namespace Sunrise_Terminal
                         file = false,
                         Name = file.Name,
                         DateOfLastChange = file.LastWriteTime.ToShortDateString(),
-                        Size = GetDirSize(path)
+                        //Size = GetDirSize(path)
                     });
                     i++;
                 }
@@ -51,11 +50,8 @@ namespace Sunrise_Terminal
                 }
                 return Rows;
 
-            }
-            catch (Exception)
-            {
-
-            }
+            
+            
             return Rows;
         }
 
@@ -96,18 +92,33 @@ namespace Sunrise_Terminal
             return lens;
         }
 
+        /*
         private long GetDirSize(string path)
         {
-            long size = new DirectoryInfo(path)
-                .GetFiles()
-                .Sum(files => files.Length);
+            long size = 0;
 
-            size += new DirectoryInfo(path)
-                .GetDirectories()
-                .Sum(dirs => GetDirSize(dirs.FullName));
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            size = dirInfo.GetFiles().Sum(file => file.Length);
+
+            foreach (DirectoryInfo dir in dirInfo.GetDirectories())
+            {
+                try
+                {
+                    size += GetDirSize(dir.FullName);
+
+                }
+                catch (Exception)
+                {
+                    return size;
+                }
+            }
 
             return size;
         }
+        */
+
+
+
 
         public string GoBackByOne(string path)
         {

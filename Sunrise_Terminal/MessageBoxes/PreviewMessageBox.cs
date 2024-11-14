@@ -8,25 +8,29 @@ namespace Sunrise_Terminal.MessageBoxes
 {
     public class PreviewMessageBox : Window, IMessageBox
     {
-        public delegate void RenewFilesDelegate();
-        public RenewFilesDelegate RenewFiles;
         public int width { get; set; }
         public int height { get; set; }
         public string Heading { get; set; }
         public string Description { get; set; }
         public int Limit { get; set; }
+        public Window activeWindow { get; set; }
+
         private List<string> DataParted { get; set; } = new List<string>();
         private int offset = 0;
 
-        public Window activeWindow { get; set; }
-        public bool WindowOnline { get; set; }
-        public bool WindowActiveRequest { get; set; }
-        private int justOnce = 0;
-        public PreviewMessageBox(int Width, int Height)
+        public PreviewMessageBox(int Width, int Height, API api)
         {
             this.width = Width;
             this.height = Height;
             Heading = "Previewing: ";
+
+            using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+            {
+                while (!sr.EndOfStream)
+                {
+                    DataParted.Add(sr.ReadLine());
+                }
+            }
         }
         public override void Draw(int LocationX, API api, bool _ =  true)
         {
@@ -45,17 +49,6 @@ namespace Sunrise_Terminal.MessageBoxes
 
             }
             
-            if (justOnce == 0)
-            {
-                using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        DataParted.Add(sr.ReadLine());
-                    }
-                }
-                justOnce++;
-            }
 
             IMessageBox.DefaultColor();
             int i = 0;
