@@ -16,7 +16,6 @@ namespace Sunrise_Terminal.MessageBoxes
         public int height { get; set; }
         public string Heading { get; set; }
         public string Description { get; set; }
-        public bool active { get; set; }
         private int offset { get; set; }
         private int selectedRow = 0;
         private int selectedChar = 0;
@@ -24,13 +23,10 @@ namespace Sunrise_Terminal.MessageBoxes
         public string itemToPreview { get; set; }
         public List<string> DataParted { get; set; } = new List<string>();
         public int Limit { get; set; }
-        private bool dataLoaded { get; set; } = false;
         public StreamReader SReader;
         public StreamWriter SWriter;
         private bool insertion = false;
-
-        public bool WindowOnline { get; set; }
-        public bool WindowActiveRequest { get; set; }
+        private int justOnce = 0;
 
         public EditMessageBox(int Width, int Height)
         {
@@ -41,12 +37,20 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            if (!dataLoaded)
+            if (justOnce == 0)
             {
-                DataParted = new StreamReader(Path.Combine(path, itemToPreview)).ReadToEnd().Split('\n').ToList();
-                dataLoaded = true;
+                using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        DataParted.Add(sr.ReadLine());
+                    }
+                }
+                justOnce++;
             }
+
             IMessageBox.DefaultColor();
+            Console.SetCursorPosition(0, 1);
             Console.WriteLine($"┌─{new Formatter().DoublePadding(Heading, width + 4, '─')}─┐");
 
             for (int i = 0; i < Limit; i++)
@@ -57,6 +61,7 @@ namespace Sunrise_Terminal.MessageBoxes
                     actualIndex = offset + i;
                     if(actualIndex == selectedRow)
                     {
+                        Console.SetCursorPosition(0, i + 2);
                         Console.Write($"| {actualIndex + 1} ");
                         Console.BackgroundColor = ConsoleColor.Black;
                         int a = 0;
@@ -80,12 +85,14 @@ namespace Sunrise_Terminal.MessageBoxes
                     else
                     {
                         IMessageBox.DefaultColor();
+                        Console.SetCursorPosition(0, i + 3);
                         Console.WriteLine($"| {actualIndex + 1} {new Formatter().PadTrimRight(DataParted[actualIndex],width + 2)} |");
                     }
                 }
                 else
                 {
                     IMessageBox.DefaultColor();
+                    Console.SetCursorPosition (0, i + 3);
                     Console.WriteLine($"| {new string(' ', width + 2)} |");
                 }
             }
@@ -168,9 +175,6 @@ namespace Sunrise_Terminal.MessageBoxes
             else if(info.Key == ConsoleKey.F5)
             {
                 SaveChanges();
-                this.active = false;
-                WindowOnline = true;
-                WindowActiveRequest = false;
             }
             else if( info.Key == ConsoleKey.Escape)
             {

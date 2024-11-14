@@ -21,6 +21,7 @@ namespace Sunrise_Terminal.MessageBoxes
         public Window activeWindow { get; set; }
         public bool WindowOnline { get; set; }
         public bool WindowActiveRequest { get; set; }
+        private int justOnce = 0;
         public PreviewMessageBox(int Width, int Height)
         {
             this.width = Width;
@@ -44,13 +45,16 @@ namespace Sunrise_Terminal.MessageBoxes
 
             }
             
-
-            using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+            if (justOnce == 0)
             {
-                while (!sr.EndOfStream)
+                using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
                 {
-                    DataParted.Add(sr.ReadLine());
+                    while (!sr.EndOfStream)
+                    {
+                        DataParted.Add(sr.ReadLine());
+                    }
                 }
+                justOnce++;
             }
 
             IMessageBox.DefaultColor();
