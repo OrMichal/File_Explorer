@@ -77,7 +77,7 @@ namespace Sunrise_Terminal
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
             else if (info.Key == ConsoleKey.F9)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.Application.SwitchWindow(api.GetActiveListWindow());
             }
         }
 
@@ -86,7 +86,7 @@ namespace Sunrise_Terminal
             int GapLength = 0;
             foreach (Object obj in objects)
             {
-                GapLength += (3 + obj.name.Length + 3);
+                GapLength += (obj.name.Length + Console.WindowWidth / 15 + 3);
             }
             return (Console.WindowWidth - GapLength) % 2 == 0 ? Console.WindowWidth - GapLength : Console.WindowWidth - GapLength + 1;
         }

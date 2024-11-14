@@ -14,9 +14,8 @@ namespace Sunrise_Terminal.MessageBoxes
         public int height { get; set; }
         public string Heading { get; set; }
         public string Description { get; set; }
-        public bool active { get; set; }
         public int Limit { get; set; }
-        private string[] DataParted { get; set; }
+        private List<string> DataParted { get; set; } = new List<string>();
         private int offset = 0;
 
         public Window activeWindow { get; set; }
@@ -30,6 +29,7 @@ namespace Sunrise_Terminal.MessageBoxes
         }
         public override void Draw(int LocationX, API api, bool _ =  true)
         {
+            
             try
             {
                 if (new DirectoryInfo(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile())).GetDirectories().Count() != 0)
@@ -43,8 +43,15 @@ namespace Sunrise_Terminal.MessageBoxes
             {
 
             }
-            StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()));
-            DataParted = sr.ReadToEnd().Split('\n'); 
+            
+
+            using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+            {
+                while (!sr.EndOfStream)
+                {
+                    DataParted.Add(sr.ReadLine());
+                }
+            }
 
             IMessageBox.DefaultColor();
             int i = 0;

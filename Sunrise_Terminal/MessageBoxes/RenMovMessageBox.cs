@@ -74,7 +74,6 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                destPath = Path.Combine(api.Application.ListWindows[this.selectedPath].ActivePath, "cc " + api.GetSelectedFile());
                 Move(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
                 api.RequestFilesRefresh();
                 api.Application.SwitchWindow(api.GetActiveListWindow());
