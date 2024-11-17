@@ -25,33 +25,29 @@ namespace Sunrise_Terminal
 
             });
             
-                int i = 0;
-                foreach (var file in dir.GetDirectories())
+            int i = 0;
+            foreach (var file in dir.GetDirectories())
+            {
+                Rows.Add(new Row
                 {
-                    Rows.Add(new Row
-                    {
-                        file = false,
-                        Name = file.Name,
-                        DateOfLastChange = file.LastWriteTime.ToShortDateString(),
-                        //Size = GetDirSize(path)
-                    });
-                    i++;
-                }
+                    file = false,
+                    Name = "/" + file.Name,
+                    DateOfLastChange = file.LastWriteTime.ToShortDateString(),
+                    //Size = GetDirSize(path)
+                });
+                i++;
+            }
 
-                foreach (var file in dir.GetFiles())
+            foreach (var file in dir.GetFiles())
+            {
+                Rows.Add(new Row
                 {
-                    Rows.Add(new Row
-                    {
-                        file = true,
-                        Name = file.Name,
-                        DateOfLastChange = file.LastWriteTime.ToShortDateString(),
-                        Size = file.Length
-                    });
-                }
-                return Rows;
-
-            
-            
+                    file = true,
+                    Name = file.Name,
+                    DateOfLastChange = file.LastWriteTime.ToShortDateString(),
+                    Size = file.Length
+                });
+            }
             return Rows;
         }
 

@@ -14,7 +14,6 @@ namespace Sunrise_Terminal
         public Stack<Window> activeWindows = new Stack<Window>();
         public List<ListWindow> ListWindows = new List<ListWindow>();
         public int ActiveWindowIndex { get; set; } = 0;
-        public bool End { get; set; } = false;
         public API Api { get; set; }
 
         private Formatter Formatter = new Formatter();

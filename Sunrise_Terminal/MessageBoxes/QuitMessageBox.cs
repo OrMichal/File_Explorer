@@ -62,7 +62,7 @@ namespace Sunrise_Terminal
             {
                 if (selectedButton == 0)
                 {
-                    api.Application.End = true;
+                    Environment.Exit(69);
                 }
                 else
                 {

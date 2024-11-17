@@ -26,6 +26,7 @@ namespace Sunrise_Terminal.MessageBoxes
         public StreamReader SReader;
         public StreamWriter SWriter;
         private bool insertion = false;
+        private DataManagement DataManagement = new DataManagement();
 
         public EditMessageBox(int Width, int Height, API api)
         {
@@ -113,7 +114,6 @@ namespace Sunrise_Terminal.MessageBoxes
 
             if (info.Key == ConsoleKey.DownArrow)
             {
-                    
                 if (selectedRow <= DataParted.Count() - Settings.WindowDataLimit + offset - 1)
                 {
                     selectedRow++;

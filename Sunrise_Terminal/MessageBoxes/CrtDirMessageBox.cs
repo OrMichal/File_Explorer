@@ -24,13 +24,12 @@ namespace Sunrise_Terminal
         private int Margin { get; set; } = 2;
         private int LocationX { get; set; }
         private int LocationY { get; set; }
-        private int justOnce {  get; set; }
+
         private List<string> paths { get; set; } = new List<string>();
         private DataManager dataManagement = new DataManager();
 
         public CrtDirMessageBox(int height, int width, API api) 
         {
-            justOnce = 0;
             this.height = height;
             this.width = width;
             Heading = "Directory creation";

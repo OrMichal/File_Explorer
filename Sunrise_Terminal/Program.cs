@@ -17,14 +17,12 @@ namespace Sunrise_Terminal
 
             for(;;)
             {
-                Parallel.For(0, 1, (Action) => {
-                    app.Draw();
-                    if (Console.KeyAvailable)
-                    {
-                        ConsoleKeyInfo info = Console.ReadKey(true);
-                        app.HandleKey(info);
-                    }
-                });
+                app.Draw();
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo info = Console.ReadKey(true);
+                    app.HandleKey(info);
+                }
             }
         }
     }
