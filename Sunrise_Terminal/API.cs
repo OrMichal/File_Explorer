@@ -39,5 +39,14 @@ namespace Sunrise_Terminal
         {
             Application.activeWindow = Application.activeWindows.Pop();
         }
+
+        public void Erase(int width, int height, int LocationX, int LocationY)
+        {
+            for (int y = LocationY; y < height + LocationY; y++)
+            {
+                Console.SetCursorPosition(LocationX, y);
+                Console.Write(new string(' ', width));
+            }
+        }
     }
 }

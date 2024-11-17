@@ -36,8 +36,7 @@ namespace Sunrise_Terminal
             Offset = 0;
             selected = Input.Length - 1;
             Limit = width - 1;
-            this.LocationX = Console.WindowWidth / 2 - this.width / 2;
-            this.LocationY = Console.WindowHeight / 2 - this.height / 2;
+
             foreach(var item in api.Application.ListWindows)
             {
                 paths.Add(item.ActivePath);
@@ -47,6 +46,9 @@ namespace Sunrise_Terminal
         public override void Draw(int LocationX, API api, bool _ = true)
         {
             Thread.Sleep(20);
+            this.LocationX = Console.WindowWidth / 2 - this.width / 2 + api.Application.activeWindows.Count;
+            this.LocationY = Console.WindowHeight / 2 - this.height / 2 + api.Application.activeWindows.Count;
+
             graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
             graphics.DrawListBox(this.width - 2, this.paths.Count + 2, this.LocationX + 1, LocationY + 1, this.paths, SelectedPath);
             graphics.DrawTextBox(this.width - 2, this.LocationX + 1, this.LocationY + 2 + this.paths.Count + 2, Input, selected, Offset);
@@ -60,6 +62,7 @@ namespace Sunrise_Terminal
             if (key.Key == ConsoleKey.Enter)
             {
                 dataManagement.CreateDir(paths[SelectedPath], Input);
+                api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                 api.CloseActiveWindow();
                 api.RequestFilesRefresh();
 
@@ -121,6 +124,7 @@ namespace Sunrise_Terminal
 
             else if(key.Key == ConsoleKey.Escape)
             {
+                api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                 api.CloseActiveWindow();
             }
             else if(key.Key == ConsoleKey.Insert)

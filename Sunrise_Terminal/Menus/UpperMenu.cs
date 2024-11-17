@@ -31,7 +31,6 @@ namespace Sunrise_Terminal
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-           
 
             Console.SetCursorPosition(0, 0);
             IMenu.DefaultColor();

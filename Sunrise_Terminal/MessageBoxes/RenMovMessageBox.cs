@@ -31,8 +31,7 @@ namespace Sunrise_Terminal
             Description = "Are you sure?";
             this.height = Height;
             this.width = Width;
-            this.LocationX = Console.WindowWidth / 2 - this.width / 2 - 1;
-            this.LocationY = Console.WindowHeight / 2 - this.height / 2 - 1;
+
 
             foreach (ListWindow lw in api.Application.ListWindows)
             {
@@ -43,6 +42,9 @@ namespace Sunrise_Terminal
         public override void Draw(int LocationX, API api, bool _ = true)
         {
             Thread.Sleep(20);
+            this.LocationX = Console.WindowWidth / 2 - this.width / 2 + api.Application.activeWindows.Count;
+            this.LocationY = Console.WindowHeight / 2 - this.height / 2 + api.Application.activeWindows.Count;
+
             graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
             graphics.DrawListBox(this.width - 2, api.Application.ListWindows.Count + 2, this.LocationX + 1, this.LocationY + 1, this.paths, selectedPath);
             graphics.DrawLabel(this.LocationX, this.LocationY + 2 + api.Application.ListWindows.Count + 2, Description, 2);
@@ -55,7 +57,8 @@ namespace Sunrise_Terminal
 
             if (info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.GetActiveListWindow());
+                api.Erase(this.width, this.height, this.LocationX, this.LocationY);
+                api.CloseActiveWindow();
             }
             else if (info.Key == ConsoleKey.UpArrow)
             {
@@ -75,7 +78,8 @@ namespace Sunrise_Terminal
             {
                 Move(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
                 api.RequestFilesRefresh();
-                api.Application.SwitchWindow(api.GetActiveListWindow());
+                api.Erase(this.width, this.height, this.LocationX, this.LocationY);
+                api.CloseActiveWindow();
             }
         }
 

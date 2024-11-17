@@ -27,8 +27,7 @@ namespace Sunrise_Terminal.MessageBoxes
             this.width = Width;
             this.height = Height;
             this.Heading = "Helper";
-            LocationX = Console.WindowWidth / 2;
-            LocationY = Console.WindowHeight / 2;
+
             using (StreamReader sr = new StreamReader($@"C:\Users\{Environment.UserName}\Desktop\Sunrise_Terminal\Sunrise_Terminal\help.json"))
             {
                 this.Description = sr.ReadToEnd();
@@ -42,11 +41,16 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            graphics.DrawTextBox(this.width, Console.WindowWidth / 2 - this.width / 2, Console.WindowHeight / 2 - this.height / 2, content);
+            this.LocationX = Console.WindowWidth / 2 - this.width / 2 + api.Application.activeWindows.Count;
+            this.LocationY = Console.WindowHeight / 2 - this.height / 2 + api.Application.activeWindows.Count;
+
+            graphics.DrawTextBox(this.width,this.LocationX , this.LocationY , content);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            HandleMBoxChange(info, api);
+
             if(info.Key == ConsoleKey.DownArrow && offset < descParted.Count() - api.GetActiveListWindow().Limit)
             {
                 offset++;
@@ -57,6 +61,7 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.Escape)
             {
+                api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                 api.CloseActiveWindow();
             }
         }

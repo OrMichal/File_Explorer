@@ -14,6 +14,8 @@ namespace Sunrise_Terminal
         public int height { get; set; }
         new public int width { get; set; }
         public string Description { get; set; }
+        private int LocationX { get; set; }
+        private int LocationY { get; set; }
 
         private List<Button> buttons = new List<Button>();
         private DataManager dataManager = new DataManager();
@@ -38,8 +40,11 @@ namespace Sunrise_Terminal
         public override void Draw(int LocationX, API api, bool _ = true)
         {
             Thread.Sleep(20);
-            graphics.DrawSquare(this.width, this.height, Console.BufferWidth/2 - this.width/2, Console.WindowHeight/2 - this.height/2, Heading);
-            graphics.DrawButtons(buttonWidth, Console.WindowWidth / 2 - buttonWidth, Console.WindowHeight / 2 - this.height / 2 + MarginTop, this.buttons, selectedButton);
+            this.LocationX = Console.WindowWidth / 2 - this.width / 2 + api.Application.activeWindows.Count;
+            this.LocationY = Console.WindowHeight / 2 - this.height / 2 + api.Application.activeWindows.Count;
+
+            graphics.DrawSquare(this.width, this.height, this.LocationX , this.LocationY , Heading);
+            graphics.DrawButtons(buttonWidth, this.LocationX + this.width / 2 - buttonWidth, LocationY + this.height/2 - this.height / 2 + MarginTop, this.buttons, selectedButton);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
@@ -48,6 +53,7 @@ namespace Sunrise_Terminal
 
             if (info.Key == ConsoleKey.Escape)
             {
+                api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                 api.CloseActiveWindow();
             }
             else if (info.Key == ConsoleKey.LeftArrow)
@@ -73,7 +79,8 @@ namespace Sunrise_Terminal
                     api.RequestFilesRefresh();
                 }
 
-                api.Application.SwitchWindow(api.GetActiveListWindow());
+                api.Erase(this.width, this.height, this.LocationX, this.LocationY);
+                api.CloseActiveWindow();
                 api.Application.activeWindows.Pop();
             }
         }
