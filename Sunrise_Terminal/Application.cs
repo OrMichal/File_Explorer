@@ -66,11 +66,8 @@ namespace Sunrise_Terminal
 
         public void SwitchWindow(Window window)
         {
-            activeWindows.Push(window);
-            if(activeWindow != window)
-            {
-                this.activeWindow = window;
-            }
+            activeWindows.Push(activeWindow);
+            this.activeWindow = window;
         }
     }
 

@@ -21,11 +21,12 @@ namespace Sunrise_Terminal
         private int LocationX { get; set; }
         private int LocationY { get; set; }
         private List<string> paths = new List<string>();
-        private int a = 0;
+        private int justOnce;
         private int selectedPath = 0;
 
         public RenMovMessageBox(int Height, int Width, API api)
         {
+            justOnce = 0;
             Heading = "Moving MessageBox";
             Description = "Are you sure?";
             this.height = Height;
@@ -41,12 +42,8 @@ namespace Sunrise_Terminal
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            if (a == 0)
-            {
-                graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
-                a++;
-            }
-
+            Thread.Sleep(20);
+            graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
             graphics.DrawListBox(this.width - 2, api.Application.ListWindows.Count + 2, this.LocationX + 1, this.LocationY + 1, this.paths, selectedPath);
             graphics.DrawLabel(this.LocationX, this.LocationY + 2 + api.Application.ListWindows.Count + 2, Description, 2);
 
@@ -54,7 +51,9 @@ namespace Sunrise_Terminal
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(info.Key == ConsoleKey.Escape)
+            HandleMBoxChange(info, api);
+
+            if (info.Key == ConsoleKey.Escape)
             {
                 api.Application.SwitchWindow(api.GetActiveListWindow());
             }

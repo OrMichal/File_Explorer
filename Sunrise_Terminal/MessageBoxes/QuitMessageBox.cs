@@ -17,7 +17,6 @@ namespace Sunrise_Terminal
         private int ButtonWidth { get; set; } = 7;
         public string Description { get; set; }
         private List<Button> buttons = new List<Button>();
-        private int justOnce = 0;
 
         public QuitMessageBox(int height, int width)
         {
@@ -36,11 +35,8 @@ namespace Sunrise_Terminal
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            if(justOnce == 0)
-            {
-                graphics.DrawSquare(this.width, this.height, Console.WindowWidth/2 - this.width/2, Console.WindowHeight/2 - this.height/2, Heading);
-                justOnce++;
-            }
+            Thread.Sleep(20);
+            graphics.DrawSquare(this.width, this.height, Console.WindowWidth/2 - this.width/2, Console.WindowHeight/2 - this.height/2, Heading);
             graphics.DrawButtons(ButtonWidth, Console.WindowWidth / 2 - ButtonWidth, Console.WindowHeight / 2 - this.height / 2 + MarginTop, this.buttons, selectedButton);
 
 
@@ -48,9 +44,11 @@ namespace Sunrise_Terminal
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            HandleMBoxChange(info, api);
+
             if (info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.CloseActiveWindow();
             }
             else if (info.Key == ConsoleKey.LeftArrow)
             {

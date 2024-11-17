@@ -80,7 +80,9 @@ namespace Sunrise_Terminal
 
         public virtual void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(info.Key == ConsoleKey.Enter)
+            HandleMBoxChange(info, api);
+
+            if (info.Key == ConsoleKey.Enter)
             {
                 api.Application.SwitchWindow(api.Application.ListWindows[0]);
             }

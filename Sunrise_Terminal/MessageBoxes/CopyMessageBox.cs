@@ -24,7 +24,6 @@ namespace Sunrise_Terminal
         private int LocationX {  get; set; }
         private int LocationY { get; set; }
 
-        public int a = 0;
         public CopyMessageBox(int height, int width, API api)
         {
             this.height = height;
@@ -42,21 +41,19 @@ namespace Sunrise_Terminal
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            if (a == 0)
-            {
-                graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
-                a++;
-            }
-
+            Thread.Sleep(20);
+            graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
             graphics.DrawListBox(this.width - 2, api.Application.ListWindows.Count + 2, this.LocationX + 1, this.LocationY + 1, this.paths, selectedPath);
             graphics.DrawLabel(this.LocationX, this.LocationY + 2 + api.Application.ListWindows.Count + 2, Description, 2);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(info.Key == ConsoleKey.Escape)
+            HandleMBoxChange(info, api);
+
+            if (info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.CloseActiveWindow();
             }
             else if (info.Key == ConsoleKey.UpArrow)
             {
@@ -76,9 +73,8 @@ namespace Sunrise_Terminal
             {
                 if (File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile()))) copyFile(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
                 else copyDir(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
-                
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
-                api.Application.activeWindows.Pop();
+
+                api.CloseActiveWindow();
                 api.RequestFilesRefresh();
             }
         }

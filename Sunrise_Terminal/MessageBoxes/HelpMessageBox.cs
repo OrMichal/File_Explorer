@@ -57,7 +57,7 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.CloseActiveWindow();
             }
         }
     }

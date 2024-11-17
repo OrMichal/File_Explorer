@@ -34,5 +34,10 @@ namespace Sunrise_Terminal
         {
             return this.Application.ListWindows[Application.ActiveWindowIndex];
         }
+
+        public void CloseActiveWindow()
+        {
+            Application.activeWindow = Application.activeWindows.Pop();
+        }
     }
 }

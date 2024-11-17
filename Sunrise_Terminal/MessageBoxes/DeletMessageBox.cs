@@ -17,7 +17,6 @@ namespace Sunrise_Terminal
 
         private List<Button> buttons = new List<Button>();
         private DataManager dataManager = new DataManager();
-        private int justOnce = 0;
         private int selectedButton = 0;
         private int MarginTop = 2;
         private int buttonWidth = 7;
@@ -38,20 +37,18 @@ namespace Sunrise_Terminal
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            if(justOnce == 0)
-            {
-                graphics.DrawSquare(this.width, this.height, Console.BufferWidth/2 - this.width/2, Console.WindowHeight/2 - this.height/2, Heading);
-                justOnce++;
-            }
+            Thread.Sleep(20);
+            graphics.DrawSquare(this.width, this.height, Console.BufferWidth/2 - this.width/2, Console.WindowHeight/2 - this.height/2, Heading);
             graphics.DrawButtons(buttonWidth, Console.WindowWidth / 2 - buttonWidth, Console.WindowHeight / 2 - this.height / 2 + MarginTop, this.buttons, selectedButton);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            HandleMBoxChange(info, api);
+
             if (info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
-                api.Application.activeWindows.Pop();
+                api.CloseActiveWindow();
             }
             else if (info.Key == ConsoleKey.LeftArrow)
             {

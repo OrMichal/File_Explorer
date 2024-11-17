@@ -24,12 +24,13 @@ namespace Sunrise_Terminal
         private int Margin { get; set; } = 2;
         private int LocationX { get; set; }
         private int LocationY { get; set; }
-        private int a {  get; set; }
+        private int justOnce {  get; set; }
         private List<string> paths { get; set; } = new List<string>();
         private DataManager dataManagement = new DataManager();
 
         public CrtDirMessageBox(int height, int width, API api) 
-        { 
+        {
+            justOnce = 0;
             this.height = height;
             this.width = width;
             Heading = "Directory creation";
@@ -46,12 +47,8 @@ namespace Sunrise_Terminal
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            if(a == 0)
-            {
-                graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
-                a++;
-            }
-
+            Thread.Sleep(20);
+            graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
             graphics.DrawListBox(this.width - 2, this.paths.Count + 2, this.LocationX + 1, LocationY + 1, this.paths, SelectedPath);
             graphics.DrawTextBox(this.width - 2, this.LocationX + 1, this.LocationY + 2 + this.paths.Count + 2, Input, selected, Offset);
 
@@ -59,10 +56,12 @@ namespace Sunrise_Terminal
 
         public override void HandleKey(ConsoleKeyInfo key, API api)
         {
-            if(key.Key == ConsoleKey.Enter)
+            HandleMBoxChange(key, api);
+
+            if (key.Key == ConsoleKey.Enter)
             {
                 dataManagement.CreateDir(paths[SelectedPath], Input);
-                api.Application.SwitchWindow(api.GetActiveListWindow());
+                api.CloseActiveWindow();
                 api.RequestFilesRefresh();
 
             }
@@ -123,7 +122,7 @@ namespace Sunrise_Terminal
 
             else if(key.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.GetActiveListWindow());
+                api.CloseActiveWindow();
             }
             else if(key.Key == ConsoleKey.Insert)
             {

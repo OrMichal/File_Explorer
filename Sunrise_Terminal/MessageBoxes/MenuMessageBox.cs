@@ -46,6 +46,8 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            HandleMBoxChange(info, api);
+
             if (info.Key == ConsoleKey.DownArrow && selected < operations.Count() - 1)
             {
                 selected++;
@@ -56,7 +58,7 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if (info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.CloseActiveWindow();
             }
         }
     }

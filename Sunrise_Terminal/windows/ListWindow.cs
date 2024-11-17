@@ -95,16 +95,13 @@ namespace Sunrise_Terminal.windows
             }
             //--------------------------------------------------------------------------------------------------------------------------------F1 - F10 keys
 
-            if (info.Key == ConsoleKey.F1) api.Application.SwitchWindow(new HelpMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
-            else if (info.Key == ConsoleKey.F2) api.Application.SwitchWindow(new MenuMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
-            else if (info.Key == ConsoleKey.F3) api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth - 20, Console.WindowHeight - 20, api));
-            else if (info.Key == ConsoleKey.F4) api.Application.SwitchWindow(new EditMessageBox(Console.WindowWidth - 10, Console.WindowHeight - 10, api));
-            else if (info.Key == ConsoleKey.F5) api.Application.SwitchWindow(new CopyMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
-            else if (info.Key == ConsoleKey.F6) api.Application.SwitchWindow(new RenMovMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
-            else if (info.Key == ConsoleKey.F7) api.Application.SwitchWindow(new CrtDirMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
-            else if (info.Key == ConsoleKey.F8) api.Application.SwitchWindow(new DeletMessageBox(Settings.SmallMessageBoxHeight, Settings.SmallMessageBoxWidth));
-            else if (info.Key == ConsoleKey.F9) api.Application.SwitchWindow(new UpperMenu());
-            else if (info.Key == ConsoleKey.F10) api.Application.SwitchWindow(new QuitMessageBox(Settings.SmallMessageBoxHeight, Settings.SmallMessageBoxWidth));
+            else if(info.Key >= ConsoleKey.F1 && info.Key <= ConsoleKey.F10)
+            {
+                HandleMBoxChange(info, api);
+                
+                if (info.Key == ConsoleKey.F9) api.Application.SwitchWindow(new UpperMenu());
+            }
+            
         }
 
         private void OnFileRefreshed()

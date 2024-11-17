@@ -26,7 +26,6 @@ namespace Sunrise_Terminal.MessageBoxes
         public StreamReader SReader;
         public StreamWriter SWriter;
         private bool insertion = false;
-        private int justOnce = 0;
 
         public EditMessageBox(int Width, int Height, API api)
         {
@@ -110,6 +109,8 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            HandleMBoxChange(info, api);
+
             if (info.Key == ConsoleKey.DownArrow)
             {
                     
@@ -174,7 +175,7 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if( info.Key == ConsoleKey.Escape)
             {
-                api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                api.CloseActiveWindow();
             }
         }
 
