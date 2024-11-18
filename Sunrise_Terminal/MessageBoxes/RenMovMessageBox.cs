@@ -23,6 +23,7 @@ namespace Sunrise_Terminal
         private List<string> paths = new List<string>();
         private int justOnce;
         private int selectedPath = 0;
+        private DataManager dataManager = new DataManager();
 
         public RenMovMessageBox(int Height, int Width, API api)
         {
@@ -76,23 +77,10 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                Move(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
+                dataManager.Move(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
                 api.RequestFilesRefresh();
                 api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                 api.CloseActiveWindow();
-            }
-        }
-
-        private void Move(string SourceFilePath, string DestinationFilePath)
-        {
-            string fileName = Path.GetFileName(SourceFilePath);
-            if (File.Exists(SourceFilePath))
-            {
-                File.Move(SourceFilePath, Path.Combine(DestinationFilePath, Path.GetFileName(SourceFilePath)));
-            }
-            else if (Directory.Exists(SourceFilePath))
-            {
-                Directory.Move(SourceFilePath, Path.Combine(DestinationFilePath, Path.GetFileName(SourceFilePath)));
             }
         }
     }

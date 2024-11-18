@@ -24,7 +24,7 @@ namespace Sunrise_Terminal
             
         }
 
-        public void HandleMBoxChange(ConsoleKeyInfo info, API api)
+        protected void HandleMBoxChange(ConsoleKeyInfo info, API api)
         {
             if (info.Key == ConsoleKey.F1) api.Application.SwitchWindow(new HelpMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
             else if (info.Key == ConsoleKey.F2) api.Application.SwitchWindow(new MenuMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));

@@ -26,6 +26,7 @@ namespace Sunrise_Terminal.MessageBoxes
         public StreamReader SReader;
         public StreamWriter SWriter;
         private bool insertion = false;
+        private DataManager dataManager = new DataManager();
 
         public EditMessageBox(int Width, int Height, API api)
         {
@@ -96,16 +97,7 @@ namespace Sunrise_Terminal.MessageBoxes
             Console.WriteLine($"└{new string('─', width - 2)}┘");
         }
 
-        public void SaveChanges()
-        {
-            using (StreamWriter sr = new StreamWriter(Path.Combine(path,itemToPreview)))
-            {
-                foreach(string item in DataParted)
-                {
-                    sr.WriteLine(item);
-                }
-            }
-        }
+        
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
@@ -150,19 +142,27 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar))
             {
-                if(!insertion) DataParted[selectedRow] = AddCharToText(DataParted[selectedRow],info);
-                else if(insertion) DataParted[selectedRow] = AddCharToText_Insert(DataParted[selectedRow],info);
+                if (!insertion)
+                {
+                    DataParted[selectedRow] = dataManager.AddCharToText(DataParted[selectedRow], info);
+                    selectedChar = DataParted[selectedRow].Length;
+
+                }
+                else if (insertion)
+                {
+                    DataParted[selectedRow] = dataManager.AddCharToText_Insert(selectedChar, DataParted[selectedRow], info);
+                }
             }
             else if(info.Key == ConsoleKey.Backspace)
             {
                 if(selectedChar == 0 && DataParted[selectedRow].Length == 0)
                 {
-                    DataParted[selectedRow] = RemoveChar(DataParted[selectedRow],selectedChar);
+                    DataParted[selectedRow] = dataManager.RemoveChar(DataParted[selectedRow],selectedChar);
                     DataParted.RemoveAt(selectedRow);
                 }
                 else
                 {
-                    DataParted[selectedRow] = RemoveChar(DataParted[selectedRow], selectedChar);
+                    DataParted[selectedRow] = dataManager.RemoveChar(DataParted[selectedRow], selectedChar);
                 }
             }
             else if(info.Key == ConsoleKey.Enter)
@@ -171,63 +171,12 @@ namespace Sunrise_Terminal.MessageBoxes
             }    
             else if(info.Key == ConsoleKey.F5)
             {
-                SaveChanges();
+                dataManager.SaveChanges(this.path, this.itemToPreview, this.DataParted);
             }
             else if( info.Key == ConsoleKey.Escape)
             {
                 api.CloseActiveWindow();
             }
-        }
-
-        public string AddCharToText_Insert(string text, ConsoleKeyInfo info)
-        {
-            StringBuilder sb = new StringBuilder();
-            int i = 0;
-            foreach (char c in text)
-            {
-                if (i == selectedChar)
-                {
-                    sb.Append(info.KeyChar);
-                }
-                else
-                {
-                    sb.Append(c);
-                }
-                i++;
-            }
-
-            return sb.ToString();
-        }
-
-        public string AddCharToText(string text, ConsoleKeyInfo info)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (char c in text)
-            {
-                sb.Append(c);
-            }
-            sb.Append(info.KeyChar);
-            selectedChar = DataParted[selectedRow].Length;
-
-            return sb.ToString();
-        }
-
-
-        public string RemoveChar(string text, int removalLocation)
-        {
-            StringBuilder sb = new StringBuilder();
-            int i = 0;
-            foreach (char c in text)
-            {
-                if (i != removalLocation)
-                {
-                    sb.Append(c);
-                }
-                i++;
-            }
-
-            if(selectedChar > 0) selectedChar--;
-            return sb.ToString();
         }
     }
 }

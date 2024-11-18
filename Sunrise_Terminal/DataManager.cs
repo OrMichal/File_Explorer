@@ -206,9 +206,6 @@ namespace Sunrise_Terminal
                 }
                 i++;
             }
-
-            
-
             return sb.ToString();
         }
 
@@ -219,12 +216,83 @@ namespace Sunrise_Terminal
 
         public void DeleteDir(string path, string name)
         {
-            Directory.Delete(Path.Combine(path, name), true);
+            Directory.Delete(path + "\\" + name, true);
         }
 
         public void DeleteFile(string path)
         {
             File.Delete(path);
+        }
+
+        public void copyDir(string sourcePath, string destinationPath)
+        {
+            Directory.CreateDirectory(Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
+            DirectoryInfo src = new DirectoryInfo(sourcePath);
+            DirectoryInfo dest = new DirectoryInfo(Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
+            CopyDirRecurs(src, dest);
+        }
+
+        private void CopyDirRecurs(DirectoryInfo source, DirectoryInfo target)
+        {
+            try
+            {
+                foreach (DirectoryInfo dir in source.GetDirectories())
+                {
+                    DirectoryInfo targetDir = target.CreateSubdirectory(dir.Name);
+                    CopyDirRecurs(dir, targetDir);
+                }
+
+                foreach (FileInfo item in source.GetFiles())
+                {
+                    string destFile = Path.Combine(target.FullName, item.Name);
+                    using (FileStream sourceStream = item.OpenRead())
+                    using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write))
+                    {
+                        sourceStream.CopyTo(destStream);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        public void copyFile(string sourceFilePath, string destinationFolderPath)
+        {
+            string fileName = Path.GetFileName(sourceFilePath);
+            string destinationFilePath = Path.Combine(destinationFolderPath, fileName);
+
+
+            using (FileStream sourceStream = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+            using (FileStream destStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write))
+            {
+                sourceStream.CopyTo(destStream);
+            }
+        }
+
+        public void Move(string SourceFilePath, string DestinationFilePath)
+        {
+            string fileName = Path.GetFileName(SourceFilePath);
+            if (File.Exists(SourceFilePath))
+            {
+                File.Move(SourceFilePath, Path.Combine(DestinationFilePath, Path.GetFileName(SourceFilePath)));
+            }
+            else if (Directory.Exists(SourceFilePath))
+            {
+                Directory.Move(SourceFilePath, Path.Combine(DestinationFilePath, Path.GetFileName(SourceFilePath)));
+            }
+        }
+
+        public void SaveChanges(string path, string itemToPreview, List<string> DataParted)
+        {
+            using (StreamWriter sr = new StreamWriter(Path.Combine(path, itemToPreview)))
+            {
+                foreach (string item in DataParted)
+                {
+                    sr.WriteLine(item);
+                }
+            }
         }
 
     }

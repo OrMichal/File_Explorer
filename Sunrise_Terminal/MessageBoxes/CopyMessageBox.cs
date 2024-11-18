@@ -19,10 +19,12 @@ namespace Sunrise_Terminal
         public int destWindowIndex { get; set; } = 1;
         public string destPath { get; set; }
         public Window window { get; set; }
+
         private int selectedPath = 0;
         private List<string> paths = new List<string>();
         private int LocationX {  get; set; }
         private int LocationY { get; set; }
+        private DataManager dataManager = new DataManager();
 
         public CopyMessageBox(int height, int width, API api)
         {
@@ -74,59 +76,12 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if (File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile()))) copyFile(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
-                else copyDir(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
+                if (File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile()))) dataManager.copyFile(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
+                else dataManager.copyDir(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
 
                 api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                 api.CloseActiveWindow();
                 api.RequestFilesRefresh();
-            }
-        }
-
-        public void copyFile(string sourceFilePath, string destinationFolderPath)
-        {
-            string fileName = Path.GetFileName(sourceFilePath);
-            string destinationFilePath = Path.Combine(destinationFolderPath, fileName);
-
-            using (FileStream sourceStream = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
-            using (FileStream destStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write))
-            {
-                sourceStream.CopyTo(destStream);
-            }
-        }
-
-
-        private void copyDir(string sourcePath, string destinationPath)
-        {
-            Directory.CreateDirectory(Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
-            DirectoryInfo src = new DirectoryInfo(sourcePath);
-            DirectoryInfo dest = new DirectoryInfo(Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
-            CopyDirRecurs(src, dest);
-        }
-
-        private void CopyDirRecurs(DirectoryInfo source, DirectoryInfo target)
-        {
-            try
-            {
-                foreach (DirectoryInfo dir in source.GetDirectories())
-                {
-                    DirectoryInfo targetDir = target.CreateSubdirectory(dir.Name);
-                    CopyDirRecurs(dir, targetDir);
-                }
-
-                foreach (FileInfo item in source.GetFiles())
-                {
-                    string destFile = Path.Combine(target.FullName, item.Name);
-                    using (FileStream sourceStream = item.OpenRead())
-                    using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write))
-                    {
-                        sourceStream.CopyTo(destStream);
-                    }
-                }
-            }
-            catch
-            {
-
             }
         }
     }

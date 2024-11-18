@@ -37,7 +37,8 @@ namespace Sunrise_Terminal
 
         public void CloseActiveWindow()
         {
-            Application.activeWindow = Application.activeWindows.Pop();
+            //Application.activeWindow = Application.activeWindows.Pop();
+            Application.activeWindows.Pop();
         }
 
         public void Erase(int width, int height, int LocationX, int LocationY)
