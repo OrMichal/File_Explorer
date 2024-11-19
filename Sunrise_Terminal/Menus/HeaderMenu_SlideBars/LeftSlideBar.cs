@@ -15,6 +15,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 
         public int SelectedOperation { get; set; } = 0;
         public List<Operation> Operations { get; set; }
+        private List<string> operationNames { get; set; }
 
         private Graphics graphics = new Graphics();
 
@@ -35,11 +36,13 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                     Name = "Filter"
                 }
             };
+
+            operationNames = Operations.Select(o => o.Name).ToList();
         }
 
         public void Draw(int LocationX)
         {
-            graphics.DrawListBox(this.Width, this.Height, LocationX, 1, Operations, SelectedOperation);
+            graphics.DrawListBox(this.Width, this.Height, LocationX, 1, operationNames, SelectedOperation);
         }
 
         public void HandleKey(ConsoleKeyInfo info, API api)

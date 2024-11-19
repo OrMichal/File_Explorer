@@ -8,16 +8,11 @@ namespace Sunrise_Terminal.objects
 {
     public class Operation
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         public virtual void Use()
         {
 
-        }
-
-        public override string ToString()
-        {
-            return Name;
         }
     }
 }

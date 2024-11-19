@@ -100,7 +100,7 @@ namespace Sunrise_Terminal.objects
             Console.WriteLine($"└{new string("").PadRight(width - 2, '─')}┘");
         }
 
-        public void DrawTextBox(int width, int LocationX, int LocationY, List<dynamic> Content = null, int SelectedIndex = 0, int offset = 0)
+        public void DrawTextBox(int width, int LocationX, int LocationY, List<string> Content = null, int SelectedIndex = 0, int offset = 0)
         {
             int i = 0;
 
@@ -157,4 +157,5 @@ namespace Sunrise_Terminal.objects
             Console.Write(Content);
         }
     }
+
 }
