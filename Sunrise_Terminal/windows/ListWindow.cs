@@ -99,7 +99,7 @@ namespace Sunrise_Terminal.windows
             {
                 HandleMBoxChange(info, api);
                 
-                if (info.Key == ConsoleKey.F9) api.Application.SwitchWindow(new UpperMenu());
+                if (info.Key == ConsoleKey.F9) api.Application.SwitchWindow(new HeaderMenu());
             }
             
         }

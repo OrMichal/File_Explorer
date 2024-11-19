@@ -10,21 +10,25 @@ namespace Sunrise_Terminal
 {
     public class Application
     {
-        //public Window activeWindow;
         public Stack<Window> activeWindows = new Stack<Window>();
         public List<ListWindow> ListWindows = new List<ListWindow>();
         public int ActiveWindowIndex { get; set; } = 0;
         public API Api { get; set; }
 
         private Formatter Formatter = new Formatter();
-        private UpperMenu headerMenu = new UpperMenu();
+        public HeaderMenu headerMenu = new HeaderMenu();
         private FooterMenu footerMenu = new FooterMenu();
 
+        public Window activeWindow
+        {
+            get {
+                return this.activeWindows.Peek();
+            }
+        }
 
         public Application(int Height = 50, int Width = 160, int numberOfWindows = 2)
         {
             Settings.NumberOfWindows = numberOfWindows;
-            //activeWindow = new Window();
             this.SwitchWindow(new Window());
 
             if (Height != null && Width != null) Console.SetWindowSize(Width, Height);
@@ -37,12 +41,6 @@ namespace Sunrise_Terminal
             SwitchWindow(ListWindows[0]);
         }
 
-        public Window activeWindow
-        {
-            get {
-                return this.activeWindows.Peek();
-            }
-        }
 
         public void Draw()
         {
@@ -74,7 +72,6 @@ namespace Sunrise_Terminal
         public void SwitchWindow(Window window)
         {
             activeWindows.Push(window);
-            //this.activeWindow = window;
         }
     }
 

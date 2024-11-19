@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Sunrise_Terminal.interfaces;
+using Sunrise_Terminal.Menus.HeaderMenu_SlideBars;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -7,11 +9,20 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal
 {
-    public class UpperMenu : Window, IMenu
+    public class HeaderMenu : Window, IMenu
     {
         public List<Object> objects { get; set; } = new List<Object>();
+        public Stack<ISlideBar> slideBars { get; set; }
         public int selectedObject { get; set; } = 0;
-        public UpperMenu()
+
+        public ISlideBar ActiveSlideBar
+        {
+            get
+            {
+                return slideBars.Peek();
+            }
+        }
+        public HeaderMenu()
         {
             using(StreamReader sr = new StreamReader($@"C:\Users\{Environment.UserName}\Desktop\Sunrise_Terminal\Sunrise_Terminal\HeaderData.json"))
             {
@@ -51,6 +62,9 @@ namespace Sunrise_Terminal
                 }
                 i++;
             }
+
+            ActiveSlideBar?.Draw((3 + objects[selectedObject].name.Length) * selectedObject + 1);
+
             Console.WriteLine(new string(' ', GetLastGapLength()));
             Window.DefaultColor();
         }
@@ -72,6 +86,10 @@ namespace Sunrise_Terminal
                 {
                     selectedObject++;
                 }
+            }
+            else if(info.Key == ConsoleKey.Enter)
+            {
+                if(selectedObject == 0) slideBars.Push(new LeftSlideBar(objects[selectedObject].name.Length * (selectedObject + 1)));
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
             else if (info.Key == ConsoleKey.F9)

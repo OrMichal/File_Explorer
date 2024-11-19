@@ -26,7 +26,7 @@ namespace Sunrise_Terminal.objects
             Console.WriteLine($"└{new string("").PadRight(Width - 2, '─')}┘");
         }
 
-        public void DrawListBox(int Width, int Height, int LocationX, int LocationY, List<string> Content = null, int selected = 0)
+        public void DrawListBox(int Width, int Height, int LocationX, int LocationY, IEnumerable<dynamic> Content = null, int selected = 0)
         {
             int i = 0;
 
@@ -100,14 +100,14 @@ namespace Sunrise_Terminal.objects
             Console.WriteLine($"└{new string("").PadRight(width - 2, '─')}┘");
         }
 
-        public void DrawTextBox(int width, int LocationX, int LocationY, List<string> Content = null, int SelectedIndex = 0, int offset = 0)
+        public void DrawTextBox(int width, int LocationX, int LocationY, List<dynamic> Content = null, int SelectedIndex = 0, int offset = 0)
         {
             int i = 0;
 
             Console.SetCursorPosition(LocationX, i + LocationY);
             IMessageBox.DefaultColor();
             Console.WriteLine($"┌{new string('─', width - 2)}┐");
-            for (i = 1; i < Content.Count; i++)
+            for (i = 1; i < Content.Count(); i++)
             {
                 Console.SetCursorPosition(LocationX, i + LocationY);
                 Console.WriteLine($"│{Content[i - 1].PadRight(width - 2)}│");
