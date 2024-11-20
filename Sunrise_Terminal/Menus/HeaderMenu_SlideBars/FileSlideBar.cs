@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
-    public class LeftSlideBar :Window, ISlideBar
+    public class FileSlideBar : Window, ISlideBar
     {
         public int Height { get; set; }
-        public int Width { get; set; }  
+        public int Width { get; set; }
         public int SelectedOperation { get; set; } = 0;
         public List<Operation> Operations { get; set; }
         private List<string> operationNames { get; set; }
@@ -19,25 +19,26 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
         private Graphics graphics = new Graphics();
 
 
-        public LeftSlideBar( int width)
+        public FileSlideBar(int width)
         {
             this.Width = width;
 
             Operations = new List<Operation>()
             {
-                new Operation(){ Name = "File listing" },
+                new Operation(){ Name = "Copy" },
+                new Operation(){ Name = "Rename/Move" },
+                new Operation(){ Name = "Link" },
+                new Operation(){ Name = "Delete" },
                 new Operation(){ Name = "Quick view" },
-                new Operation(){ Name = "Info" },
-                new Operation(){ Name = "Tree" },
-                new Operation(){ Name = "Listing format" },
-                new Operation(){ Name = "Sort order" },
-                new Operation(){ Name = "Filter" },
-                new Operation(){ Name = "Encoding"},
-                new Operation(){ Name = "FTP link"},
-                new Operation(){ Name = "Shell link"},
-                new Operation(){ Name = "SMB link"},
-                new Operation(){ Name = "Panelize"},
-                new Operation(){ Name = "Rescan"}
+                new Operation(){ Name = "Edit" },
+                new Operation(){ Name = "View" },
+                new Operation(){ Name = "Find file"},
+                new Operation(){ Name = "File properties"},
+                new Operation(){ Name = "Compare directories"},
+                new Operation(){ Name = "Advanced Chown"},
+                new Operation(){ Name = "Advanced Chmod"},
+                new Operation(){ Name = "Symlink"},
+                new Operation(){ Name = "Touch"}
             };
 
             operationNames = Operations.Select(o => o.Name).ToList();
@@ -45,27 +46,27 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 
         public override void Draw(int LocationX, API api, bool active = true)
         {
-            graphics.DrawListBox(this.Width, this.Height, this.LocationX, 1, operationNames, SelectedOperation);
+            graphics.DrawListBox(this.Width, this.Height, LocationX, 1, operationNames, SelectedOperation);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(info.Key == ConsoleKey.Escape)
+            if (info.Key == ConsoleKey.Escape)
             {
                 api.CloseActiveWindow();
             }
 
-            if(info.Key == ConsoleKey.DownArrow)
+            if (info.Key == ConsoleKey.DownArrow)
             {
-                if(this.SelectedOperation < Operations.Count - 1)
+                if (this.SelectedOperation < Operations.Count - 1)
                 {
                     this.SelectedOperation++;
                 }
             }
 
-            if(info.Key == ConsoleKey.UpArrow)
+            if (info.Key == ConsoleKey.UpArrow)
             {
-                if(this.SelectedOperation > 0)
+                if (this.SelectedOperation > 0)
                 {
                     this.SelectedOperation--;
                 }

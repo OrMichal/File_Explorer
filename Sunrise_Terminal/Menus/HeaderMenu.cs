@@ -14,7 +14,7 @@ namespace Sunrise_Terminal
         public List<Object> objects { get; set; } = new List<Object>();
         public int selectedObject { get; set; } = 0;
 
-        public Window slideBar = null;
+        public Window slideBar = new Window();
         public HeaderMenu()
         {
             using(StreamReader sr = new StreamReader($@"../HeaderData.json"))
@@ -54,11 +54,8 @@ namespace Sunrise_Terminal
                 i++;
             }
 
-            if(slideBar != null)
-            {
-                slideBar.Draw((3 + objects[selectedObject].name.Length) * (selectedObject + 1), api);
-            }
-
+            
+            slideBar.LocationX = (3 + objects[selectedObject].name.Length) * (selectedObject + 1);
             
             Console.WriteLine(new string(' ', GetLastGapLength()));
             Window.DefaultColor();
@@ -85,7 +82,11 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if(selectedObject == 0) OpenSlideBar(new LeftSlideBar(20), api);
+                if (selectedObject == 0) OpenSlideBar(new LeftSlideBar(20), api);
+                else if (selectedObject == 1) OpenSlideBar(new FileSlideBar(30), api);
+                else if (selectedObject == 2) OpenSlideBar(new CommandSlideBar(30), api);
+                else if (selectedObject == 3) OpenSlideBar(new OptionsSlideBar(30), api);
+                else if (selectedObject == 4) OpenSlideBar(new RightSlideBar(20), api);
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
             else if (info.Key == ConsoleKey.F9)

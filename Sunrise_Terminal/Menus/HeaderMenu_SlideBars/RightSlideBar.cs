@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
-    public class LeftSlideBar :Window, ISlideBar
+    public class RightSlideBar : Window, ISlideBar
     {
         public int Height { get; set; }
-        public int Width { get; set; }  
+        public int Width { get; set; }
         public int SelectedOperation { get; set; } = 0;
         public List<Operation> Operations { get; set; }
         private List<string> operationNames { get; set; }
@@ -19,9 +19,9 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
         private Graphics graphics = new Graphics();
 
 
-        public LeftSlideBar( int width)
+        public RightSlideBar(int width)
         {
-            this.Width = width;
+            Width = width;
 
             Operations = new List<Operation>()
             {
@@ -45,29 +45,29 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 
         public override void Draw(int LocationX, API api, bool active = true)
         {
-            graphics.DrawListBox(this.Width, this.Height, this.LocationX, 1, operationNames, SelectedOperation);
+            graphics.DrawListBox(Width, Height, this.LocationX, 1, operationNames, SelectedOperation);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(info.Key == ConsoleKey.Escape)
+            if (info.Key == ConsoleKey.Escape)
             {
                 api.CloseActiveWindow();
             }
 
-            if(info.Key == ConsoleKey.DownArrow)
+            if (info.Key == ConsoleKey.DownArrow)
             {
-                if(this.SelectedOperation < Operations.Count - 1)
+                if (SelectedOperation < Operations.Count - 1)
                 {
-                    this.SelectedOperation++;
+                    SelectedOperation++;
                 }
             }
 
-            if(info.Key == ConsoleKey.UpArrow)
+            if (info.Key == ConsoleKey.UpArrow)
             {
-                if(this.SelectedOperation > 0)
+                if (SelectedOperation > 0)
                 {
-                    this.SelectedOperation--;
+                    SelectedOperation--;
                 }
             }
         }

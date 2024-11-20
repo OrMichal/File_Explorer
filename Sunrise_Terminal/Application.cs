@@ -30,6 +30,7 @@ namespace Sunrise_Terminal
         {
             Settings.NumberOfWindows = numberOfWindows;
             this.SwitchWindow(new Window());
+            headerMenu.slideBar = this.activeWindows.Peek();
 
             if (Height != null && Width != null) Console.SetWindowSize(Width, Height);
             Console.CursorVisible = false;
@@ -54,7 +55,7 @@ namespace Sunrise_Terminal
                 i++;
             }
             
-            this.activeWindow.Draw(0, this.Api);
+            this.activeWindow.Draw(activeWindow.LocationX, this.Api);
             
             
             footerMenu.Draw();

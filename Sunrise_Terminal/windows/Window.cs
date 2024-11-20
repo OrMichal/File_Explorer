@@ -12,6 +12,7 @@ namespace Sunrise_Terminal
 
     public class Window
     {
+        public int LocationX { get; set; } = 0;
         protected Graphics graphics = new Graphics();
 
         public virtual void Draw(int LocationX, API api, bool active = true)
