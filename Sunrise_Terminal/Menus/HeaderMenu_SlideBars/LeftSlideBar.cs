@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
-    public class LeftSlideBar : ISlideBar
+    public class LeftSlideBar :Window, ISlideBar
     {
         public int Height { get; set; }
         public int Width { get; set; }  
-
         public int SelectedOperation { get; set; } = 0;
         public List<Operation> Operations { get; set; }
         private List<string> operationNames { get; set; }
@@ -20,36 +19,41 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
         private Graphics graphics = new Graphics();
 
 
-        public LeftSlideBar(int width)
+        public LeftSlideBar( int width)
         {
             this.Width = width;
 
             Operations = new List<Operation>()
             {
-                new Operation()
-                {
-                    Name = "Tree"
-                },
+                new Operation(){ Name = "File listing" },
+                new Operation(){ Name = "Quick view" },
+                new Operation(){ Name = "Info" },
+                new Operation(){ Name = "Tree" },
+                new Operation(){ Name = "Listing format" },
+                new Operation(){ Name = "Sort order" },
+                new Operation(){ Name = "Filter" },
+                new Operation(){ Name = "Encoding"},
+                new Operation(){ Name = "FTP link"},
+                new Operation(){ Name = "Shell link"},
+                new Operation(){ Name = "SMB link"},
+                new Operation(){ Name = "Panelize"},
+                new Operation(){ Name = "Rescan"}
 
-                new Operation()
-                {
-                    Name = "Filter"
-                }
             };
 
             operationNames = Operations.Select(o => o.Name).ToList();
         }
 
-        public void Draw(int LocationX)
+        public override void Draw(int LocationX, API api, bool active = true)
         {
             graphics.DrawListBox(this.Width, this.Height, LocationX, 1, operationNames, SelectedOperation);
         }
 
-        public void HandleKey(ConsoleKeyInfo info, API api)
+        public override void HandleKey(ConsoleKeyInfo info, API api)
         {
             if(info.Key == ConsoleKey.Escape)
             {
-                api.CloseSlideBar();
+                api.CloseActiveWindow();
             }
 
             if(info.Key == ConsoleKey.DownArrow)

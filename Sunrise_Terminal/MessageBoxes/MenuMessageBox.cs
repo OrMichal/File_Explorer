@@ -27,7 +27,7 @@ namespace Sunrise_Terminal.MessageBoxes
             this.height = Height;
             this.Heading = "Menu";
             
-            using (StreamReader sr = new StreamReader($@"C:\Users\{Environment.UserName}\Desktop\Sunrise_Terminal\Sunrise_Terminal\MenuData.json"))
+            using (StreamReader sr = new StreamReader($@"../MenuData.json"))
             {
                 this.Description = sr.ReadToEnd();
             }

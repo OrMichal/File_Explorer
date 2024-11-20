@@ -48,18 +48,14 @@ namespace Sunrise_Terminal
             headerMenu.Draw(0, this.Api);
 
             int i = 0;
-            if (ListWindows.Contains(this.activeWindow))
+            foreach (ListWindow lw in ListWindows)
             {
-                foreach (ListWindow lw in ListWindows)
-                {
-                    lw.Draw(Settings.WindowWidth * i, this.Api, ActiveWindowIndex == ListWindows.IndexOf(lw));
-                    i++;
-                }
+                lw.Draw(Settings.WindowWidth * i, this.Api, ActiveWindowIndex == ListWindows.IndexOf(lw));
+                i++;
             }
-            else
-            {
-                this.activeWindow.Draw(0, this.Api);
-            }
+            
+            this.activeWindow.Draw(0, this.Api);
+            
             
             footerMenu.Draw();
         }

@@ -12,23 +12,12 @@ namespace Sunrise_Terminal
     public class HeaderMenu : Window, IMenu
     {
         public List<Object> objects { get; set; } = new List<Object>();
-        public Stack<ISlideBar> slideBars { get; set; } = new Stack<ISlideBar>();
         public int selectedObject { get; set; } = 0;
 
-        public ISlideBar ActiveSlideBar
-        {
-            get
-            {
-                if(slideBars.Count > 0)
-                {
-                    return slideBars.Peek();
-                }
-                return null;
-            }
-        }
+        public Window slideBar = null;
         public HeaderMenu()
         {
-            using(StreamReader sr = new StreamReader($@"C:\Users\{Environment.UserName}\Desktop\Sunrise_Terminal\Sunrise_Terminal\HeaderData.json"))
+            using(StreamReader sr = new StreamReader($@"../HeaderData.json"))
             {
                 string text = sr.ReadToEnd();
                 string[] parts = text.Split(';');
@@ -65,23 +54,19 @@ namespace Sunrise_Terminal
                 i++;
             }
 
-            if(ActiveSlideBar != null)
+            if(slideBar != null)
             {
-                ActiveSlideBar.Draw((3 + objects[selectedObject].name.Length) * selectedObject + 1);
+                slideBar.Draw((3 + objects[selectedObject].name.Length) * (selectedObject + 1), api);
             }
 
+            
             Console.WriteLine(new string(' ', GetLastGapLength()));
             Window.DefaultColor();
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(ActiveSlideBar != null)
-            {
-                ActiveSlideBar.HandleKey(info, api);
-                return;
-            }
-
+            
             //------------------------------------------------------------------------------------------------------------------------------------left arrow key
             if (info.Key == ConsoleKey.LeftArrow)
             {
@@ -100,7 +85,7 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if(selectedObject == 0) slideBars.Push(new LeftSlideBar(20));
+                if(selectedObject == 0) OpenSlideBar(new LeftSlideBar(20), api);
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
             else if (info.Key == ConsoleKey.F9)
@@ -117,6 +102,11 @@ namespace Sunrise_Terminal
                 GapLength += (obj.name.Length + Console.WindowWidth / 15 + 3);
             }
             return (Console.WindowWidth - GapLength) % 2 == 0 ? Console.WindowWidth - GapLength : Console.WindowWidth - GapLength + 1;
+        }
+
+        private void OpenSlideBar(Window slideBar, API api)
+        {
+            api.Application.activeWindows.Push(slideBar);
         }
     }
 }

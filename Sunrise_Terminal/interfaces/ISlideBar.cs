@@ -15,8 +15,5 @@ namespace Sunrise_Terminal.interfaces
         public int SelectedOperation { get; set; }
         public List<Operation> Operations { get; set; }
 
-        public void Draw(int LocationX);
-
-        public void HandleKey(ConsoleKeyInfo info, API api);
     }
 }

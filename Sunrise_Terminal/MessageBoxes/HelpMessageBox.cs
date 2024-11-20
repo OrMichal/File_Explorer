@@ -28,7 +28,7 @@ namespace Sunrise_Terminal.MessageBoxes
             this.height = Height;
             this.Heading = "Helper";
 
-            using (StreamReader sr = new StreamReader($@"C:\Users\{Environment.UserName}\Desktop\Sunrise_Terminal\Sunrise_Terminal\help.json"))
+            using (StreamReader sr = new StreamReader($@"../help.json"))
             {
                 this.Description = sr.ReadToEnd();
             }

@@ -12,7 +12,7 @@ namespace Sunrise_Terminal
 
         public FooterMenu()
         {
-            using (StreamReader sr = new StreamReader($@"C:\Users\{Environment.UserName}\Desktop\Sunrise_Terminal\Sunrise_Terminal\footerData.json"))
+            using (StreamReader sr = new StreamReader($@"../footerData.json"))
             {
                 string text = sr.ReadToEnd();
                 string[] parts = text.Split('\n');

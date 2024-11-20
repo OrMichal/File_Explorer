@@ -40,11 +40,6 @@ namespace Sunrise_Terminal
             Application.activeWindows.Pop();
         }
 
-        public void CloseSlideBar()
-        {
-            Application.headerMenu.slideBars.Pop();
-        }
-
         public void Erase(int width, int height, int LocationX, int LocationY)
         {
             for (int y = LocationY; y < height + LocationY; y++)

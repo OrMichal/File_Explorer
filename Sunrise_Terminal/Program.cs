@@ -18,11 +18,10 @@ namespace Sunrise_Terminal
             for(;;)
             {
                 app.Draw();
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo info = Console.ReadKey(true);
-                    app.HandleKey(info);
-                }
+                
+                ConsoleKeyInfo info = Console.ReadKey(true);
+                app.HandleKey(info);
+                
             }
         }
     }
