@@ -51,6 +51,22 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
             {
                 api.CloseSlideBar();
             }
+
+            if(info.Key == ConsoleKey.DownArrow)
+            {
+                if(this.SelectedOperation < Operations.Count - 1)
+                {
+                    this.SelectedOperation++;
+                }
+            }
+
+            if(info.Key == ConsoleKey.UpArrow)
+            {
+                if(this.SelectedOperation > 0)
+                {
+                    this.SelectedOperation--;
+                }
+            }
         }
     }
 }

@@ -24,9 +24,7 @@ namespace Sunrise_Terminal
                     return slideBars.Peek();
                 }
                 return null;
-
             }
-
         }
         public HeaderMenu()
         {
@@ -67,7 +65,7 @@ namespace Sunrise_Terminal
                 i++;
             }
 
-            if (slideBars.Count > 0)
+            if(ActiveSlideBar != null)
             {
                 ActiveSlideBar.Draw((3 + objects[selectedObject].name.Length) * selectedObject + 1);
             }
@@ -78,14 +76,14 @@ namespace Sunrise_Terminal
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(slideBars.Count > 0)
+            if(ActiveSlideBar != null)
             {
                 ActiveSlideBar.HandleKey(info, api);
                 return;
             }
 
             //------------------------------------------------------------------------------------------------------------------------------------left arrow key
-            if (info.Key == ConsoleKey.LeftArrow && slideBars.Count == 0)
+            if (info.Key == ConsoleKey.LeftArrow)
             {
                 if(selectedObject > 0)
                 {
@@ -95,14 +93,14 @@ namespace Sunrise_Terminal
             //------------------------------------------------------------------------------------------------------------------------------------right arrow key
             else if (info.Key == ConsoleKey.RightArrow)
             {
-                if(selectedObject < objects.Count - 2 && slideBars.Count == 0)
+                if(selectedObject < objects.Count - 2)
                 {
                     selectedObject++;
                 }
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if(selectedObject == 0) slideBars.Push(new LeftSlideBar(30));
+                if(selectedObject == 0) slideBars.Push(new LeftSlideBar(20));
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
             else if (info.Key == ConsoleKey.F9)
