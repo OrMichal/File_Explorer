@@ -14,6 +14,7 @@ namespace Sunrise_Terminal
     {
         public int LocationX { get; set; } = 0;
         protected Graphics graphics = new Graphics();
+        protected Movement movement = new Movement();
 
         public virtual void Draw(int LocationX, API api, bool active = true)
         {
@@ -29,8 +30,8 @@ namespace Sunrise_Terminal
         {
             if (info.Key == ConsoleKey.F1) api.Application.SwitchWindow(new HelpMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
             else if (info.Key == ConsoleKey.F2) api.Application.SwitchWindow(new MenuMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
-            else if (info.Key == ConsoleKey.F3) api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth - 20, Console.WindowHeight - 20, api));
-            else if (info.Key == ConsoleKey.F4) api.Application.SwitchWindow(new EditMessageBox(Console.WindowWidth - 10, Console.WindowHeight - 10, api));
+            else if (info.Key == ConsoleKey.F3) api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth, Console.WindowHeight, api));
+            else if (info.Key == ConsoleKey.F4) api.Application.SwitchWindow(new EditMessageBox(Console.WindowWidth, Console.WindowHeight, api));
             else if (info.Key == ConsoleKey.F5) api.Application.SwitchWindow(new CopyMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F6) api.Application.SwitchWindow(new RenMovMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F7) api.Application.SwitchWindow(new CrtDirMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));

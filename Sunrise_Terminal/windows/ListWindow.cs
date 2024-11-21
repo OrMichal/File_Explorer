@@ -72,8 +72,9 @@ namespace Sunrise_Terminal.windows
             if (info.Key == ConsoleKey.Tab)
             {
                 api.Application.ActiveWindowIndex = (api.Application.ActiveWindowIndex + 1) % api.Application.ListWindows.Count;
-                api.Application.SwitchWindow(api.Application.ListWindows[api.Application.ActiveWindowIndex]);
                 api.Application.activeWindows.Pop();
+                api.Application.SwitchWindow(api.Application.ListWindows[api.Application.ActiveWindowIndex]);
+
             }
             //--------------------------------------------------------------------------------------------------------------------------------Enter key
             if (info.Key == ConsoleKey.Enter)

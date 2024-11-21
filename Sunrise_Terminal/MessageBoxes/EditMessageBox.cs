@@ -22,6 +22,7 @@ namespace Sunrise_Terminal.MessageBoxes
         public string path { get; set; }
         public string itemToPreview { get; set; }
         public List<string> DataParted { get; set; } = new List<string>();
+        public List<char> selectedChars = new List<char>();
         public int Limit { get; set; }
         public StreamReader SReader;
         public StreamWriter SWriter;
@@ -33,14 +34,28 @@ namespace Sunrise_Terminal.MessageBoxes
             this.width = Width;
             this.height = Height;
             Heading = "Editation";
-
-            using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+            try
             {
-                while (!sr.EndOfStream)
+                using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
                 {
-                    DataParted.Add(sr.ReadLine());
+                    while (!sr.EndOfStream)
+                    {
+                        DataParted.Add(sr.ReadLine());
+                    }
+
+                    DataParted.Add(" ");
                 }
+
             }
+            catch (FileNotFoundException)
+            {
+                return;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return;
+            }
+            
 
             if(DataParted.Count == 0)
             {
@@ -58,6 +73,12 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
+            if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
+            {
+                api.Application.SwitchWindow(new InfoMessageBox(30, 7, "This is not a File"));
+                return;
+            }
+
             IMessageBox.DefaultColor();
             Console.SetCursorPosition(0, 1);
             Console.WriteLine($"┌{new Formatter().DoublePadding(Heading, width - 2, '─')}┐");
@@ -71,7 +92,7 @@ namespace Sunrise_Terminal.MessageBoxes
                     if(actualIndex == selectedRow)
                     {
                         Console.SetCursorPosition(0, i + 2);
-                        Console.Write($"|{actualIndex + 1} ");
+                        Console.Write($"|{(actualIndex + 1).ToString().PadRight(4)} ");
                         Console.BackgroundColor = ConsoleColor.Black;
                         int a = 0;
                         foreach(char c in DataParted[actualIndex])
@@ -90,13 +111,14 @@ namespace Sunrise_Terminal.MessageBoxes
                             }
                             a++;
                         }
-                        Console.WriteLine($"{ new string(" ").PadRight(width - DataParted[actualIndex].Length - 4)}│");
+                        Console.WriteLine($"{ new string(" ").PadRight(width - DataParted[actualIndex].Length - 7)}│");
                     }
                     else
                     {
+
                         IMessageBox.DefaultColor();
                         Console.SetCursorPosition(0, i + 2);
-                        Console.WriteLine($"│{new string($"{actualIndex + 1} {new Formatter().PadTrimRight(DataParted[actualIndex],width - 4)}").PadRight(width - 4)}│");
+                        Console.WriteLine($"│{new string($"{new string((actualIndex + 1).ToString()).PadRight(4)} {new Formatter().PadTrimRight(DataParted[actualIndex],width - 7)}").PadRight(width - 8)}│");
                     }
                 }
                 else
@@ -115,6 +137,11 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
+            {
+                return;
+            }
+
             HandleMBoxChange(info, api);
 
             if (info.Key == ConsoleKey.DownArrow)
@@ -123,7 +150,6 @@ namespace Sunrise_Terminal.MessageBoxes
                 if(DataParted.Count < Settings.WindowDataLimit && selectedRow < DataParted.Count - 1)
                 {
                     selectedRow++;
-                    return;
                 }
 
                 if (selectedRow <= DataParted.Count() - Settings.WindowDataLimit + offset - 1)
@@ -134,9 +160,15 @@ namespace Sunrise_Terminal.MessageBoxes
                         offset++;
                     }
                 }
+
+                if(selectedChar >= DataParted[selectedRow].Length)
+                {
+                    selectedChar = DataParted[selectedRow].Length - 1;
+                }
             }
             else if (info.Key == ConsoleKey.UpArrow)
             {
+
                 if (selectedRow > 0)
                 {
                     selectedRow--;
@@ -144,6 +176,10 @@ namespace Sunrise_Terminal.MessageBoxes
                     {
                         offset--;
                     }
+                }
+                if (selectedChar >= DataParted[selectedRow].Length)
+                {
+                    selectedChar = DataParted[selectedRow].Length - 1;
                 }
             }
             else if(info.Key == ConsoleKey.RightArrow)
@@ -155,40 +191,57 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.LeftArrow)
             {
+                if (info.Modifiers.HasFlag(ConsoleModifiers.Shift) && selectedChar > 0)
+                {
+                    selectedChars.Add(DataParted[selectedRow][selectedChar]);
+                }
+
                 if(selectedChar > 0)
                 {
                     selectedChar--;
                 }
             }
-            else if(char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar))
+            else if(char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar) && info.Key != ConsoleKey.Enter)
             {
-                if (!insertion)
-                {
-                    DataParted[selectedRow] = dataManager.AddCharToText(DataParted[selectedRow], info);
-                    selectedChar = DataParted[selectedRow].Length;
-
-                }
-                else if (insertion)
+                if (insertion)
                 {
                     DataParted[selectedRow] = dataManager.AddCharToText_Insert(selectedChar, DataParted[selectedRow], info);
+                }
+                else if (!insertion)
+                {
+                    DataParted[selectedRow] = dataManager.AddCharToText(DataParted[selectedRow], info);
+                    selectedChar = DataParted[selectedRow].Length - 1;
+
                 }
             }
             else if(info.Key == ConsoleKey.Backspace)
             {
-                if(selectedChar == 0 && DataParted[selectedRow].Length == 0)
+                if(selectedChar == 0 && DataParted[selectedRow].Length == 1)
                 {
                     DataParted[selectedRow] = dataManager.RemoveChar(DataParted[selectedRow],selectedChar);
                     DataParted.RemoveAt(selectedRow);
+                    selectedChar = 0;
                 }
                 else
                 {
+                    if(selectedChar == DataParted[selectedRow].Length - 1)
+                    {
+                        selectedChar--;
+                    }
+
                     DataParted[selectedRow] = dataManager.RemoveChar(DataParted[selectedRow], selectedChar);
                 }
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                DataParted.Add(new string(" "));
-            }    
+                DataParted.Insert(selectedRow + 1, " ");
+                selectedRow++;
+                selectedChar = 0;
+                if(selectedRow >= offset + Settings.WindowDataLimit - 1)
+                {
+                    offset++;
+                }
+            }
             else if(info.Key == ConsoleKey.F5)
             {
                 dataManager.SaveChanges(this.path, this.itemToPreview, this.DataParted);
@@ -197,6 +250,12 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 api.CloseActiveWindow();
             }
+            else if(info.Key == ConsoleKey.Insert)
+            {
+                insertion = !insertion;
+            }
         }
+
+        
     }
 }

@@ -32,7 +32,7 @@ namespace Sunrise_Terminal
 
         public ListWindow GetActiveListWindow()
         {
-            return this.Application.ListWindows[Application.ActiveWindowIndex];
+            return this.Application.ListWindows[this.Application.ActiveWindowIndex];
         }
 
         public void CloseActiveWindow()
@@ -47,6 +47,11 @@ namespace Sunrise_Terminal
                 Console.SetCursorPosition(LocationX, y);
                 Console.Write(new string(' ', width));
             }
+        }
+
+        public void ThrowError(string message)
+        {
+            Application.SwitchWindow(new InfoMessageBox(30, 7, message));
         }
     }
 }

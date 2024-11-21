@@ -48,14 +48,22 @@ namespace Sunrise_Terminal
             Formatter.ConsoleFormatCheck();
             headerMenu.Draw(0, this.Api);
 
-            int i = 0;
-            foreach (ListWindow lw in ListWindows)
+            if (ListWindows.Contains(activeWindow))
             {
-                lw.Draw(Settings.WindowWidth * i, this.Api, ActiveWindowIndex == ListWindows.IndexOf(lw));
-                i++;
+                int i = 0;
+                foreach (ListWindow lw in ListWindows)
+                {
+                    lw.Draw(Settings.WindowWidth * i, this.Api, ActiveWindowIndex == ListWindows.IndexOf(lw));
+                    i++;
+                }
+
+            }
+            else
+            {
+                this.activeWindow.Draw(activeWindow.LocationX, this.Api);
+
             }
             
-            this.activeWindow.Draw(activeWindow.LocationX, this.Api);
             
             
             footerMenu.Draw();

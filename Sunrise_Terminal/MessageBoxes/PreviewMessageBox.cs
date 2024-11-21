@@ -17,6 +17,7 @@ namespace Sunrise_Terminal.MessageBoxes
 
         private List<string> DataParted { get; set; } = new List<string>();
         private int offset = 0;
+        private DataManager dataManager = new DataManager();
 
         public PreviewMessageBox(int Width, int Height, API api)
         {
@@ -24,29 +25,24 @@ namespace Sunrise_Terminal.MessageBoxes
             this.height = Height;
             Heading = "Previewing: ";
 
-            using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+            if(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
             {
-                while (!sr.EndOfStream)
+                using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
                 {
-                    DataParted.Add(sr.ReadLine());
+                    while (!sr.EndOfStream)
+                    {
+                        DataParted.Add(sr.ReadLine());
+                    }
                 }
             }
         }
         public override void Draw(int LocationX, API api, bool _ =  true)
         {
-            
-            try
+            if (Directory.Exists(api.GetActiveListWindow().ActivePath + api.GetSelectedFile()))
             {
-                if (new DirectoryInfo(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile())).GetDirectories().Count() != 0)
-                {
-                    api.GetActiveListWindow().ActivePath = new DataManager().GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
-                    api.RequestFilesRefresh();
-                    return;
-                }
-            }
-            catch (IOException)
-            {
-
+                api.GetActiveListWindow().ActivePath = dataManager.GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
+                api.RequestFilesRefresh();
+                return;
             }
             
 
