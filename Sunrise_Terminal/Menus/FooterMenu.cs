@@ -8,22 +8,23 @@ namespace Sunrise_Terminal
 {
     public class FooterMenu : IMenu
     {
-        public List<Object> objects { get; set; } = new List<Object>();
+        public List<Object> objects { get; set; }
 
         public FooterMenu()
         {
-            using (StreamReader sr = new StreamReader($@"../footerData.json"))
+            objects = new List<Object>()
             {
-                string text = sr.ReadToEnd();
-                string[] parts = text.Split('\n');
-                foreach (string part in parts)
-                {
-                    objects.Add(new Object()
-                    {
-                        name = part,
-                    });
-                }
-            }
+                new Object(){name = "Help"},
+                new Object(){name = "Menu"},
+                new Object(){name = "Preview"},
+                new Object(){name = "Edit"},
+                new Object(){name = "Copy"},
+                new Object(){name = "RenMov"},
+                new Object(){name = "CrtDir"},
+                new Object(){name = "Delete"},
+                new Object(){name = "PullDn"},
+                new Object(){name = "Quit"}
+            };
         }
         public void Draw()
         {

@@ -11,24 +11,19 @@ namespace Sunrise_Terminal
 {
     public class HeaderMenu : Window, IMenu
     {
-        public List<Object> objects { get; set; } = new List<Object>();
+        public List<Object> objects { get; set; }
         public int selectedObject { get; set; } = 0;
 
         public Window slideBar = new Window();
         public HeaderMenu()
         {
-            using(StreamReader sr = new StreamReader($@"../HeaderData.json"))
-            {
-                string text = sr.ReadToEnd();
-                string[] parts = text.Split(';');
-                foreach(string part in parts)
-                {
-                    objects.Add(new Object()
-                    {
-                        name = part,
-                    });
-                }
-            }
+            objects = new List<Object>(){ 
+                new Object(){name = "Left"},
+                new Object(){name = "File"},
+                new Object(){name = "Command"},
+                new Object(){name = "Options"},
+                new Object(){name = "Right"}
+            };
         }
 
 
