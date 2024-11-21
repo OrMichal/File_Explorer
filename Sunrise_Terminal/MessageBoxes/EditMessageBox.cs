@@ -256,6 +256,5 @@ namespace Sunrise_Terminal.MessageBoxes
             }
         }
 
-        
     }
 }
