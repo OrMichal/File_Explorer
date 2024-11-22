@@ -111,7 +111,7 @@ namespace Sunrise_Terminal.MessageBoxes
                             }
                             a++;
                         }
-                        Console.WriteLine($"{ new string(" ").PadRight(width - DataParted[actualIndex].Length - 7)}│");
+                        Console.WriteLine($"{ new Formatter().PadTrimRight(new string(" "),(width - DataParted[actualIndex].Length - 7))}│");
                     }
                     else
                     {
@@ -221,6 +221,7 @@ namespace Sunrise_Terminal.MessageBoxes
                     DataParted[selectedRow] = dataManager.RemoveChar(DataParted[selectedRow],selectedChar);
                     DataParted.RemoveAt(selectedRow);
                     selectedChar = 0;
+                    selectedRow--;
                 }
                 else
                 {
