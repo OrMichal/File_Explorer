@@ -17,8 +17,8 @@ namespace Sunrise_Terminal.UI
         public int selectedIndex { get; set; } = 0;
         public string ActivePath { get; set; }
         public string[] Headers = new string[] { "Name", "Size", "MTime" };
-        private DataManager dataMan = new DataManager();
-        private Formatter formatter = new Formatter();
+        private DataManagement dataMan = new DataManagement();
+        private UltraFormatter formatter = new UltraFormatter();
         public List<Row> Rows { get; set; }
 
         public void Draw(int LocationX, bool Active)

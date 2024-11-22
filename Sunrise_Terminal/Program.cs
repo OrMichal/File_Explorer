@@ -15,7 +15,6 @@ namespace Sunrise_Terminal
             api.Application = app;
             api.activeWindow = app.activeWindow;
             Console.CursorVisible = false;
-
             for(;;)
             {
 

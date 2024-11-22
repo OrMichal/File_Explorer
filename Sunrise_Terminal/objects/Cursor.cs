@@ -41,7 +41,8 @@ namespace Sunrise_Terminal.objects
 
         public void MoveDown()
         {
-            if (this.Movement.Data.Count < Settings.WindowDataLimit && Y < this.Movement.Data.Count - 1)
+            
+            if (this.Movement.Data.Count < Settings.WindowDataLimit && this.Y < this.Movement.Data.Count - 1)
             {
                 this.Y++;
             }

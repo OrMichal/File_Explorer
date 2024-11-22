@@ -36,6 +36,7 @@ namespace Sunrise_Terminal.MessageBoxes
         private bool insertion = false;
         private DataManagement dataManager = new DataManagement();
         public Cursor<string> cursor { get; set; } = new Cursor<string>();
+        private EditOperations editOperations;
         private string selectedRowText
         {
             get
@@ -47,6 +48,7 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public EditMessageBox(int Width, int Height, API api)
         {
+            editOperations = new EditOperations(this.cursor);
             cursor.Movement.Data = this.Rows;
             this.width = Width;
             this.height = Height;
@@ -96,58 +98,7 @@ namespace Sunrise_Terminal.MessageBoxes
                 return;
             }
 
-            IMessageBox.DefaultColor();
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"┌{new Formatter().DoublePadding(Heading, width - 2, '─')}┐");
-            int i = 0;
-            for (i = 0; i < Settings.WindowDataLimit; i++)
-            {
-                int actualIndex = 0;
-                if (i < Rows.Count())
-                {
-                    actualIndex = cursor.Offset + i;
-                    if(actualIndex == cursor.Y)
-                    {
-                        Console.SetCursorPosition(0, i + 2);
-                        Console.Write($"|{(actualIndex + 1).ToString().PadRight(4)} ");
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        int a = 0;
-                        foreach(char c in Rows[actualIndex])
-                        {
-                            if(a == cursor.X)
-                            {
-                                Console.BackgroundColor = ConsoleColor.White;
-                                Console.ForegroundColor = ConsoleColor.Black;
-                                Console.Write($"{Rows[actualIndex][a]}");
-                                IMessageBox.DefaultColor();
-                            }
-                            else
-                            {
-                                IMessageBox.DefaultColor();
-                                Console.Write($"{Rows[actualIndex][a]}");
-                            }
-                            a++;
-                        }
-                        Console.WriteLine($"{ new string(" ").PadRight(width - Rows[actualIndex].Length - 7)}│");
-                    }
-                    else
-                    {
-
-                        IMessageBox.DefaultColor();
-                        Console.SetCursorPosition(0, i + 2);
-                        Console.WriteLine($"│{new string($"{new string((actualIndex + 1).ToString()).PadRight(4)} {new Formatter().PadTrimRight(Rows[actualIndex],width - 7)}").PadRight(width - 8)}│");
-                    }
-                }
-                else
-                {
-                    IMessageBox.DefaultColor();
-                    Console.SetCursorPosition (0, i + 2);
-                    Console.WriteLine($"│{new string(' ', width - 2)}│");
-                }
-            }
-            IMessageBox.DefaultColor();
-            Console.SetCursorPosition(0, i +2);
-            Console.WriteLine($"└{new string('─', width - 2)}┘");
+            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset);
         }
 
         
@@ -200,38 +151,16 @@ namespace Sunrise_Terminal.MessageBoxes
 
                 if(cursor.X == 0)
                 {
-                    if(!(Rows.Count > 1))
-                    {
-                        return;
-                    }
-
-                    Rows[cursor.Y] = dataManager.RemoveChar(selectedRowText,cursor.X);
-                    Rows.RemoveAt(cursor.Y);
-                    if(cursor.Y > 0)
-                    {
-                        cursor.Y--;
-                    }
-                    cursor.X = 0;
+                    editOperations.RemoveRow();
                 }
                 else
                 {
-                    if(cursor.X == Rows[cursor.Y].Length - 1)
-                    {
-                        cursor.X--;
-                    }
-
-                    Rows[cursor.Y] = dataManager.RemoveChar(selectedRowText, cursor.X);
+                    editOperations.EraseLastChar();
                 }
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                Rows.Insert(cursor.Y + 1, " ");
-                cursor.Y++;
-                cursor.X = 0;
-                if(cursor.Y >= cursor.Offset + Settings.WindowDataLimit - 1)
-                {
-                    cursor.Offset++;
-                }
+                editOperations.InsertNewLine();
             }
             else if(info.Key == ConsoleKey.F5)
             {

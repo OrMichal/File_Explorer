@@ -23,12 +23,12 @@ namespace Sunrise_Terminal.windows
 
         public List<Row> Rows = new List<Row>();
         private Table table = new Table();
-        private DataManager dataManagement = new DataManager();
+        private DataManagement dataManagement = new DataManagement();
 
         public ListWindow()
         {
             ActivePath = dataManagement.StartingPath;
-            Rows = new DataManager().GetFiles(Rows, ActivePath);
+            Rows = new DataManagement().GetFiles(Rows, ActivePath);
         }
 
         public override void Draw(int LocationX, API api, bool active = true)
@@ -111,7 +111,7 @@ namespace Sunrise_Terminal.windows
 
         private void OnFileRefreshed()
         {
-            this.Rows = new DataManager().GetFiles(this.Rows, this.ActivePath);
+            this.Rows = new DataManagement().GetFiles(this.Rows, this.ActivePath);
         }
     }
 }

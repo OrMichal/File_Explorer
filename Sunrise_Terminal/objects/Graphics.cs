@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sunrise_Terminal.interfaces;
+using Sunrise_Terminal.Utilities;
 
 namespace Sunrise_Terminal.objects
 {
     public class Graphics
     {
+        private UltraFormatter formatter = new UltraFormatter();
         public void DrawSquare(int Width, int Height, int LocationX, int LocationY, string Heading = "")
         {
             int i = 0;
 
             Console.SetCursorPosition(LocationX, i + LocationY);
             IMessageBox.DefaultColor();
-            Console.WriteLine($"┌{new Formatter().DoublePadding(Heading,Width - 2, '─')}┐");
+            Console.WriteLine($"┌{formatter.DoublePadding(Heading,Width - 2, '─')}┐");
 
             for(i = 1; i <= Height - 2; i++)
             {
@@ -42,7 +44,7 @@ namespace Sunrise_Terminal.objects
                     Console.SetCursorPosition(LocationX, LocationY + i);
                     Console.Write("│");
                     IMessageBox.SelectionColor();
-                    Console.Write($"{new Formatter().PadTrimRight(s, Width - 2)}");
+                    Console.Write($"{formatter.PadTrimRight(s, Width - 2)}");
                     IMessageBox.DefaultColor();
                     Console.WriteLine("│");
                 }
@@ -50,7 +52,7 @@ namespace Sunrise_Terminal.objects
                 {
                     Console.SetCursorPosition(LocationX, LocationY + i);
                     IMessageBox.DefaultColor();
-                    Console.WriteLine($"│{new Formatter().PadTrimRight(s, Width - 2)}│");
+                    Console.WriteLine($"│{formatter.PadTrimRight(s, Width - 2)}│");
                 }
                 i++;
             }
@@ -156,6 +158,62 @@ namespace Sunrise_Terminal.objects
         {
             Console.SetCursorPosition(LocationX + marginLeft, LocationY);
             Console.Write(Content);
+        }
+
+        public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset)
+        {
+            IMessageBox.DefaultColor();
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine($"┌{new UltraFormatter().DoublePadding(Heading, width - 2, '─')}┐");
+            int i = 0;
+            for (i = 0; i < Settings.WindowDataLimit; i++)
+            {
+                int actualIndex = 0;
+                if (i < array.Count())
+                {
+                    actualIndex = Offset + i;
+                    if (actualIndex == selectedY)
+                    {
+                        Console.SetCursorPosition(0, i + 2);
+                        Console.Write($"|{(actualIndex + 1).ToString().PadRight(4)} ");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        int a = 0;
+                        foreach (char c in array[actualIndex])
+                        {
+                            if (a == selectedX)
+                            {
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                Console.Write($"{array[actualIndex][a]}");
+                                IMessageBox.DefaultColor();
+                            }
+                            else
+                            {
+                                IMessageBox.DefaultColor();
+                                Console.Write($"{array[actualIndex][a]}");
+                            }
+                            a++;
+                        }
+                        Console.WriteLine($"{new string(" ").PadRight(width - array[actualIndex].Length - 7)}│");
+                    }
+                    else
+                    {
+
+                        IMessageBox.DefaultColor();
+                        Console.SetCursorPosition(0, i + 2);
+                        Console.WriteLine($"│{new string($"{new string((actualIndex + 1).ToString()).PadRight(4)} {new UltraFormatter().PadTrimRight(array[actualIndex], width - 7)}").PadRight(width - 8)}│");
+                    }
+                }
+                else
+                {
+                    IMessageBox.DefaultColor();
+                    Console.SetCursorPosition(0, i + 2);
+                    Console.WriteLine($"│{new string(' ', width - 2)}│");
+                }
+            }
+            IMessageBox.DefaultColor();
+            Console.SetCursorPosition(0, i + 2);
+            Console.WriteLine($"└{new string('─', width - 2)}┘");
         }
     }
 

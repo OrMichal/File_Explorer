@@ -27,7 +27,7 @@ namespace Sunrise_Terminal
         private List<string> paths = new List<string>();
         private int LocationX {  get; set; }
         private int LocationY { get; set; }
-        private DataManager dataManager = new DataManager();
+        private DataManagement dataManager = new DataManagement();
 
         public CopyMessageBox(int height, int width, API api)
         {

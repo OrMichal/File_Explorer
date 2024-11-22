@@ -26,7 +26,7 @@ namespace Sunrise_Terminal
         private List<string> paths = new List<string>();
         private int justOnce;
         private int selectedPath = 0;
-        private DataManager dataManager = new DataManager();
+        private DataManagement dataManager = new DataManagement();
 
         public RenMovMessageBox(int Height, int Width, API api)
         {

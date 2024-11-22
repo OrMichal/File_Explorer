@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Sunrise_Terminal.Core;
 using Sunrise_Terminal.DataHandlers;
 using Sunrise_Terminal.interfaces;
+using Sunrise_Terminal.Utilities;
 
 namespace Sunrise_Terminal.MessageBoxes
 {
@@ -22,7 +23,7 @@ namespace Sunrise_Terminal.MessageBoxes
         private List<string> DataParted { get; set; } = new List<string>();
         private int offset = 0;
         private DataManagement dataManager = new DataManagement();
-        private Formatter formatter = new Formatter();
+        private UltraFormatter formatter = new UltraFormatter();
 
         public PreviewMessageBox(int Width, int Height, API api)
         {
@@ -54,7 +55,7 @@ namespace Sunrise_Terminal.MessageBoxes
             IMessageBox.DefaultColor();
             int i = 0;
             Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"┌{new Formatter().DoublePadding(Heading + api.GetSelectedFile(), width - 2, '─')}┐");
+            Console.WriteLine($"┌{formatter.DoublePadding(Heading + api.GetSelectedFile(), width - 2, '─')}┐");
             for (i = 0; i < api.GetActiveListWindow().Limit; i++)
             {
                 int actualIndex = 0;
@@ -62,7 +63,7 @@ namespace Sunrise_Terminal.MessageBoxes
                 {
                     actualIndex = offset + i;
                     Console.SetCursorPosition(0, i + 2);
-                    Console.WriteLine($"│{(actualIndex + 1).ToString().PadRight(4)} {new Formatter().PadTrimRight(DataParted[actualIndex], width - 7)}│");
+                    Console.WriteLine($"│{(actualIndex + 1).ToString().PadRight(4)} {formatter.PadTrimRight(DataParted[actualIndex], width - 7)}│");
                 }
                 else
                 {

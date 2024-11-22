@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal.Utilities
 {
-    public class Formatter
+    public class UltraFormatter
     {
         
         public bool ConsoleSizeChanged()

@@ -16,9 +16,10 @@ namespace Sunrise_Terminal.Core
         public int ActiveWindowIndex { get; set; } = 0;
         public API Api { get; set; }
 
-        private Formatter Formatter = new Formatter();
+        private UltraFormatter Formatter = new UltraFormatter();
         public HeaderMenu headerMenu = new HeaderMenu();
         private FooterMenu footerMenu = new FooterMenu();
+        private ConsoleFormatter consoleFormatter = new ConsoleFormatter();
 
         public Window activeWindow
         {
@@ -47,7 +48,7 @@ namespace Sunrise_Terminal.Core
 
         public void Draw()
         {
-            Formatter.ConsoleFormatCheck();
+            consoleFormatter.FormatCheck();
             headerMenu.Draw(0, Api);
 
             if (ListWindows.Contains(activeWindow))
