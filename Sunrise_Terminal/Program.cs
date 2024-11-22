@@ -1,6 +1,7 @@
 ﻿using System.Dynamic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Sunrise_Terminal.Core;
 
 namespace Sunrise_Terminal
 {

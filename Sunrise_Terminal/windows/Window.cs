@@ -1,5 +1,7 @@
-﻿using Sunrise_Terminal.MessageBoxes;
+﻿using Sunrise_Terminal.Core;
+using Sunrise_Terminal.MessageBoxes;
 using Sunrise_Terminal.objects;
+using Sunrise_Terminal.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -14,7 +16,6 @@ namespace Sunrise_Terminal
     {
         public int LocationX { get; set; } = 0;
         protected Graphics graphics = new Graphics();
-        protected Movement movement = new Movement();
 
         public virtual void Draw(int LocationX, API api, bool active = true)
         {

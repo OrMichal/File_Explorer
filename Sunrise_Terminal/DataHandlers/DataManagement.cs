@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.DataHandlers
 {
     public class DataManagement
     {
@@ -33,8 +33,7 @@ namespace Sunrise_Terminal
                     {
                         file = false,
                         Name = file.Name,
-                        DateOfLastChange = file.LastWriteTime.ToShortDateString(),
-                        Size = GetDirSize(path)
+                        DateOfLastChange = file.LastWriteTime.ToShortDateString()
                     });
                     i++;
                 }
@@ -162,7 +161,7 @@ namespace Sunrise_Terminal
                 sb.Append(c);
             }
             sb.Append(info.KeyChar);
-            
+
 
             return sb.ToString();
         }
@@ -200,7 +199,7 @@ namespace Sunrise_Terminal
                 i++;
             }
 
-            
+
 
             return sb.ToString();
         }
@@ -210,5 +209,26 @@ namespace Sunrise_Terminal
             Directory.CreateDirectory(path + "\\" + name);
         }
 
+
+        public void DeleteDir(string path, string name)
+        {
+            Directory.Delete(path + "\\" + name, true);
+        }
+
+        public void DeleteFile(string path)
+        {
+            File.Delete(path);
+        }
+
+        public void SaveChanges(string path, string itemToPreview, List<string> DataParted)
+        {
+            using (StreamWriter sr = new StreamWriter(Path.Combine(path, itemToPreview)))
+            {
+                foreach (string item in DataParted)
+                {
+                    sr.WriteLine(item);
+                }
+            }
+        }
     }
 }

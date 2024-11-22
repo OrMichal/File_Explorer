@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.DataHandlers
 {
     public class DataManager
     {
@@ -24,7 +24,7 @@ namespace Sunrise_Terminal
                 DateOfLastChange = " "
 
             });
-            
+
             int i = 0;
             foreach (var file in dir.GetDirectories())
             {
@@ -169,7 +169,7 @@ namespace Sunrise_Terminal
                 sb.Append(c);
             }
             sb.Append(info.KeyChar);
-            
+
 
             return sb.ToString();
         }

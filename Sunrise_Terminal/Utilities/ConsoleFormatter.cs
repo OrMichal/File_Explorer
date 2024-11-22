@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.Utilities
 {
     public class ConsoleFormatter : Window
     {

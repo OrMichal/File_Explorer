@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.Core
 {
     public class API
     {
@@ -22,17 +22,17 @@ namespace Sunrise_Terminal
 
         public string GetSelectedFile()
         {
-            return this.GetActiveListWindow().Rows[this.GetActiveListWindow().selectedIndex].Name;
+            return GetActiveListWindow().Rows[GetActiveListWindow().selectedIndex].Name;
         }
 
         public string GetActivePath()
         {
-            return this.GetActiveListWindow().ActivePath;
+            return GetActiveListWindow().ActivePath;
         }
 
         public ListWindow GetActiveListWindow()
         {
-            return this.Application.ListWindows[this.Application.ActiveWindowIndex];
+            return Application.ListWindows[Application.ActiveWindowIndex];
         }
 
         public void CloseActiveWindow()

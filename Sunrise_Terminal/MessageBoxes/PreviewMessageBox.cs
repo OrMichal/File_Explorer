@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Core;
+using Sunrise_Terminal.DataHandlers;
+using Sunrise_Terminal.interfaces;
 
 namespace Sunrise_Terminal.MessageBoxes
 {
@@ -17,7 +21,8 @@ namespace Sunrise_Terminal.MessageBoxes
 
         private List<string> DataParted { get; set; } = new List<string>();
         private int offset = 0;
-        private DataManager dataManager = new DataManager();
+        private DataManagement dataManager = new DataManagement();
+        private Formatter formatter = new Formatter();
 
         public PreviewMessageBox(int Width, int Height, API api)
         {

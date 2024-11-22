@@ -4,52 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.Utilities
 {
     public class Formatter
     {
-        public void ConsoleFormatCheck()
-        {
-            if (!ConsoleSizeChanged())
-            {
-                return;
-            }
-
-            int width2 = Console.WindowWidth / 2;
-            if (width2 != Settings.WindowWidth)
-            {
-                Console.Clear();
-                Console.CursorVisible = false;
-            }
-
-            int limit = Console.WindowHeight - 7;
-            if (limit != Settings.WindowDataLimit)
-            {
-                Console.Clear();
-                Console.CursorVisible = false;
-            }
-
-            Settings.WindowDataLimit = limit;
-            Settings.WindowWidth = width2;
-            if (Settings.WindowWidth * 2 < 110)
-            {
-                try
-                {
-                    Console.SetWindowSize(110, Console.WindowHeight);
-                }
-                catch (IOException)
-                {
-
-                }
-            }
-
-            if (Console.WindowHeight < 30)
-            {
-                Console.SetWindowSize(Console.WindowWidth, 30);
-            }
-            
-        }
-
+        
         public bool ConsoleSizeChanged()
         {
             int width2 = Console.WindowWidth / 2;

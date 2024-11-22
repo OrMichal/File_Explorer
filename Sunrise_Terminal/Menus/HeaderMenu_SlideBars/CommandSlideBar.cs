@@ -1,4 +1,5 @@
-﻿using Sunrise_Terminal.interfaces;
+﻿using Sunrise_Terminal.Core;
+using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.objects;
 using System;
 using System.Collections.Generic;

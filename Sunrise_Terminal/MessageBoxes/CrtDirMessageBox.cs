@@ -5,6 +5,9 @@ using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Core;
+using Sunrise_Terminal.DataHandlers;
+using Sunrise_Terminal.interfaces;
 
 namespace Sunrise_Terminal
 {
@@ -26,7 +29,7 @@ namespace Sunrise_Terminal
         private int LocationY { get; set; }
 
         private List<string> paths { get; set; } = new List<string>();
-        private DataManager dataManagement = new DataManager();
+        private DataManagement dataManagement = new DataManagement();
 
         public CrtDirMessageBox(int height, int width, API api) 
         {

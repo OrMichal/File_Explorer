@@ -1,4 +1,7 @@
-﻿using Sunrise_Terminal.objects;
+﻿using Sunrise_Terminal.Core;
+using Sunrise_Terminal.DataHandlers;
+using Sunrise_Terminal.interfaces;
+using Sunrise_Terminal.objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +21,7 @@ namespace Sunrise_Terminal
         private int LocationY { get; set; }
 
         private List<Button> buttons = new List<Button>();
-        private DataManager dataManager = new DataManager();
+        private DataManagement dataManager = new DataManagement();
         private int selectedButton = 0;
         private int MarginTop = 2;
         private int buttonWidth = 7;

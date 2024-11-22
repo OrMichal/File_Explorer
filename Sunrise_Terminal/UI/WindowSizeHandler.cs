@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Core;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.UI
 {
     public class WindowSizeHandler
     {
@@ -25,10 +26,10 @@ namespace Sunrise_Terminal
 
             while (continueChecking)
             {
-                if(currentHeight != perviousHeight || currentWidth != perviousWidth)
+                if (currentHeight != perviousHeight || currentWidth != perviousWidth)
                 {
-                    this.perviousWidth = currentWidth;
-                    this.perviousHeight = currentHeight;
+                    perviousWidth = currentWidth;
+                    perviousHeight = currentHeight;
                     app.Draw();
                 }
             }

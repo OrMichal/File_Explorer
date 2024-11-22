@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Core;
+using Sunrise_Terminal.DataHandlers;
+using Sunrise_Terminal.interfaces;
+using Sunrise_Terminal.objects;
+using Sunrise_Terminal.Utilities;
 
 namespace Sunrise_Terminal.MessageBoxes
 {
-    public class EditMessageBox : Window, IMessageBox
+    public class EditMessageBox : Window, IMessageBox, IHasCursor<string>
     {
         public delegate void RenewFile();
         public RenewFile RenewFileDelegate;
@@ -16,21 +23,31 @@ namespace Sunrise_Terminal.MessageBoxes
         public int height { get; set; }
         public string Heading { get; set; }
         public string Description { get; set; }
-        private int offset { get; set; }
-        private int selectedRow = 0;
-        private int selectedChar = 0;
+        public int Offset { get; set; }
         public string path { get; set; }
         public string itemToPreview { get; set; }
-        public List<string> DataParted { get; set; } = new List<string>();
+        public List<string> Rows { get; set; } = new List<string>();
         public List<char> selectedChars = new List<char>();
         public int Limit { get; set; }
+
+
         public StreamReader SReader;
         public StreamWriter SWriter;
         private bool insertion = false;
-        private DataManager dataManager = new DataManager();
+        private DataManagement dataManager = new DataManagement();
+        public Cursor<string> cursor { get; set; } = new Cursor<string>();
+        private string selectedRowText
+        {
+            get
+            {
+                return this.Rows[cursor.Y] ?? (0).ToString();
+            }
+
+        }
 
         public EditMessageBox(int Width, int Height, API api)
         {
+            cursor.Movement.Data = this.Rows;
             this.width = Width;
             this.height = Height;
             Heading = "Editation";
@@ -40,10 +57,10 @@ namespace Sunrise_Terminal.MessageBoxes
                 {
                     while (!sr.EndOfStream)
                     {
-                        DataParted.Add(sr.ReadLine());
+                        Rows.Add(sr.ReadLine());
                     }
 
-                    DataParted.Add(" ");
+                    Rows.Add(" ");
                 }
 
             }
@@ -57,16 +74,16 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             
 
-            if(DataParted.Count == 0)
+            if(Rows.Count == 0)
             {
-                DataParted.Add(" ");
+                Rows.Add(" ");
             }
 
-            for (int i = 0; i < DataParted.Count; i++)
+            for (int i = 0; i < Rows.Count; i++)
             {
-                if(DataParted[i].Length == 0)
+                if(Rows[i].Length == 0)
                 {
-                    DataParted[i] = " ";
+                    Rows[i] = " ";
                 }
             }
         }
@@ -86,39 +103,39 @@ namespace Sunrise_Terminal.MessageBoxes
             for (i = 0; i < Settings.WindowDataLimit; i++)
             {
                 int actualIndex = 0;
-                if (i < DataParted.Count())
+                if (i < Rows.Count())
                 {
-                    actualIndex = offset + i;
-                    if(actualIndex == selectedRow)
+                    actualIndex = cursor.Offset + i;
+                    if(actualIndex == cursor.Y)
                     {
                         Console.SetCursorPosition(0, i + 2);
                         Console.Write($"|{(actualIndex + 1).ToString().PadRight(4)} ");
                         Console.BackgroundColor = ConsoleColor.Black;
                         int a = 0;
-                        foreach(char c in DataParted[actualIndex])
+                        foreach(char c in Rows[actualIndex])
                         {
-                            if(a == selectedChar)
+                            if(a == cursor.X)
                             {
                                 Console.BackgroundColor = ConsoleColor.White;
                                 Console.ForegroundColor = ConsoleColor.Black;
-                                Console.Write($"{DataParted[actualIndex][a]}");
+                                Console.Write($"{Rows[actualIndex][a]}");
                                 IMessageBox.DefaultColor();
                             }
                             else
                             {
                                 IMessageBox.DefaultColor();
-                                Console.Write($"{DataParted[actualIndex][a]}");
+                                Console.Write($"{Rows[actualIndex][a]}");
                             }
                             a++;
                         }
-                        Console.WriteLine($"{ new string(" ").PadRight(width - DataParted[actualIndex].Length - 7)}│");
+                        Console.WriteLine($"{ new string(" ").PadRight(width - Rows[actualIndex].Length - 7)}│");
                     }
                     else
                     {
 
                         IMessageBox.DefaultColor();
                         Console.SetCursorPosition(0, i + 2);
-                        Console.WriteLine($"│{new string($"{new string((actualIndex + 1).ToString()).PadRight(4)} {new Formatter().PadTrimRight(DataParted[actualIndex],width - 7)}").PadRight(width - 8)}│");
+                        Console.WriteLine($"│{new string($"{new string((actualIndex + 1).ToString()).PadRight(4)} {new Formatter().PadTrimRight(Rows[actualIndex],width - 7)}").PadRight(width - 8)}│");
                     }
                 }
                 else
@@ -146,105 +163,79 @@ namespace Sunrise_Terminal.MessageBoxes
 
             if (info.Key == ConsoleKey.DownArrow)
             {
-
-                if(DataParted.Count < Settings.WindowDataLimit && selectedRow < DataParted.Count - 1)
-                {
-                    selectedRow++;
-                }
-
-                if (selectedRow <= DataParted.Count() - Settings.WindowDataLimit + offset - 1)
-                {
-                    selectedRow++;
-                    if (selectedRow >= offset + Settings.WindowDataLimit - 2)
-                    {
-                        offset++;
-                    }
-                }
-
-                if(selectedChar >= DataParted[selectedRow].Length)
-                {
-                    selectedChar = DataParted[selectedRow].Length - 1;
-                }
+                cursor.MoveDown();
+                
             }
             else if (info.Key == ConsoleKey.UpArrow)
             {
-
-                if (selectedRow > 0)
-                {
-                    selectedRow--;
-                    if (selectedRow < offset)
-                    {
-                        offset--;
-                    }
-                }
-                if (selectedChar >= DataParted[selectedRow].Length)
-                {
-                    selectedChar = DataParted[selectedRow].Length - 1;
-                }
+                cursor.MoveUp();
             }
             else if(info.Key == ConsoleKey.RightArrow)
             {
-                if(selectedChar < DataParted[selectedRow].Length - 1)
-                {
-                    selectedChar++;
-                }
+                cursor.MoveRight();
             }
             else if(info.Key == ConsoleKey.LeftArrow)
             {
-                if (info.Modifiers.HasFlag(ConsoleModifiers.Shift) && selectedChar > 0)
-                {
-                    selectedChars.Add(DataParted[selectedRow][selectedChar]);
-                }
-
-                if(selectedChar > 0)
-                {
-                    selectedChar--;
-                }
+                cursor.MoveLeft();   
             }
             else if(char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar) && info.Key != ConsoleKey.Enter)
             {
                 if (insertion)
                 {
-                    DataParted[selectedRow] = dataManager.AddCharToText_Insert(selectedChar, DataParted[selectedRow], info);
+                    Rows[cursor.Y] = dataManager.AddCharToText_Insert(cursor.X, selectedRowText, info);
+                    if(cursor.X < this.selectedRowText.Count() - 1)
+                    {
+                        cursor.X++;
+                    }
                 }
                 else if (!insertion)
                 {
-                    DataParted[selectedRow] = dataManager.AddCharToText(DataParted[selectedRow], info);
-                    selectedChar = DataParted[selectedRow].Length - 1;
+                    Rows[cursor.Y] = dataManager.AddCharToText(selectedRowText, info);
+                    cursor.X = this.Rows[this.cursor.Y].Count() - 1;
 
                 }
             }
             else if(info.Key == ConsoleKey.Backspace)
             {
-                if(selectedChar == 0 && DataParted[selectedRow].Length == 1)
+
+                if(cursor.X == 0)
                 {
-                    DataParted[selectedRow] = dataManager.RemoveChar(DataParted[selectedRow],selectedChar);
-                    DataParted.RemoveAt(selectedRow);
-                    selectedChar = 0;
+                    if(!(Rows.Count > 1))
+                    {
+                        return;
+                    }
+
+                    Rows[cursor.Y] = dataManager.RemoveChar(selectedRowText,cursor.X);
+                    Rows.RemoveAt(cursor.Y);
+                    if(cursor.Y > 0)
+                    {
+                        cursor.Y--;
+                    }
+                    cursor.X = 0;
                 }
                 else
                 {
-                    if(selectedChar == DataParted[selectedRow].Length - 1)
+                    if(cursor.X == Rows[cursor.Y].Length - 1)
                     {
-                        selectedChar--;
+                        cursor.X--;
                     }
 
-                    DataParted[selectedRow] = dataManager.RemoveChar(DataParted[selectedRow], selectedChar);
+                    Rows[cursor.Y] = dataManager.RemoveChar(selectedRowText, cursor.X);
                 }
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                DataParted.Insert(selectedRow + 1, " ");
-                selectedRow++;
-                selectedChar = 0;
-                if(selectedRow >= offset + Settings.WindowDataLimit - 1)
+                Rows.Insert(cursor.Y + 1, " ");
+                cursor.Y++;
+                cursor.X = 0;
+                if(cursor.Y >= cursor.Offset + Settings.WindowDataLimit - 1)
                 {
-                    offset++;
+                    cursor.Offset++;
                 }
             }
             else if(info.Key == ConsoleKey.F5)
             {
-                dataManager.SaveChanges(this.path, this.itemToPreview, this.DataParted);
+                dataManager.SaveChanges(this.path, this.itemToPreview, this.Rows);
             }
             else if( info.Key == ConsoleKey.Escape)
             {

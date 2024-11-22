@@ -1,4 +1,5 @@
-﻿using Sunrise_Terminal.windows;
+﻿using Sunrise_Terminal.Utilities;
+using Sunrise_Terminal.windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.Core
 {
     public class Application
     {
@@ -21,16 +22,17 @@ namespace Sunrise_Terminal
 
         public Window activeWindow
         {
-            get {
-                return this.activeWindows.Peek();
+            get
+            {
+                return activeWindows.Peek();
             }
         }
 
         public Application(int Height = 50, int Width = 160, int numberOfWindows = 2)
         {
             Settings.NumberOfWindows = numberOfWindows;
-            this.SwitchWindow(new Window());
-            headerMenu.slideBar = this.activeWindows.Peek();
+            SwitchWindow(new Window());
+            headerMenu.slideBar = activeWindows.Peek();
 
             if (Height != null && Width != null) Console.SetWindowSize(Width, Height);
             Console.CursorVisible = false;
@@ -46,32 +48,32 @@ namespace Sunrise_Terminal
         public void Draw()
         {
             Formatter.ConsoleFormatCheck();
-            headerMenu.Draw(0, this.Api);
+            headerMenu.Draw(0, Api);
 
             if (ListWindows.Contains(activeWindow))
             {
                 int i = 0;
                 foreach (ListWindow lw in ListWindows)
                 {
-                    lw.Draw(Settings.WindowWidth * i, this.Api, ActiveWindowIndex == ListWindows.IndexOf(lw));
+                    lw.Draw(Settings.WindowWidth * i, Api, ActiveWindowIndex == ListWindows.IndexOf(lw));
                     i++;
                 }
 
             }
             else
             {
-                this.activeWindow.Draw(activeWindow.LocationX, this.Api);
+                activeWindow.Draw(activeWindow.LocationX, Api);
 
             }
-            
-            
-            
+
+
+
             footerMenu.Draw();
         }
 
         public void HandleKey(ConsoleKeyInfo info)
         {
-            activeWindow.HandleKey(info, this.Api);
+            activeWindow.HandleKey(info, Api);
         }
 
         public void SwitchWindow(Window window)

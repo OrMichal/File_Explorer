@@ -1,4 +1,7 @@
-﻿using Sunrise_Terminal.windows;
+﻿using Sunrise_Terminal.Core;
+using Sunrise_Terminal.DataHandlers;
+using Sunrise_Terminal.interfaces;
+using Sunrise_Terminal.windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
