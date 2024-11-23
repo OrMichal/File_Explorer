@@ -15,7 +15,7 @@ namespace Sunrise_Terminal
         public List<Object> objects { get; set; }
         public int selectedObject { get; set; } = 0;
 
-        public Window slideBar = new Window();
+        public int slideBarLocationX { get; set; }
         public HeaderMenu()
         {
             objects = new List<Object>(){ 
@@ -51,7 +51,7 @@ namespace Sunrise_Terminal
             }
 
             
-            slideBar.LocationX = (3 + objects[selectedObject].name.Length) * (selectedObject + 1);
+            slideBarLocationX = GetLocation();
             
             Console.WriteLine(new string(' ', GetLastGapLength()));
             Window.DefaultColor();
@@ -71,18 +71,18 @@ namespace Sunrise_Terminal
             //------------------------------------------------------------------------------------------------------------------------------------right arrow key
             else if (info.Key == ConsoleKey.RightArrow)
             {
-                if(selectedObject < objects.Count - 2)
+                if(selectedObject < objects.Count - 1)
                 {
                     selectedObject++;
                 }
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if (selectedObject == 0) OpenSlideBar(new LeftSlideBar(20), api);
-                else if (selectedObject == 1) OpenSlideBar(new FileSlideBar(30), api);
-                else if (selectedObject == 2) OpenSlideBar(new CommandSlideBar(30), api);
-                else if (selectedObject == 3) OpenSlideBar(new OptionsSlideBar(30), api);
-                else if (selectedObject == 4) OpenSlideBar(new RightSlideBar(20), api);
+                if (selectedObject == 0) OpenSlideBar(new LeftSlideBar(20, this.slideBarLocationX), api);
+                else if (selectedObject == 1) OpenSlideBar(new FileSlideBar(25, this.slideBarLocationX), api);
+                else if (selectedObject == 2) OpenSlideBar(new CommandSlideBar(30, this.slideBarLocationX), api);
+                else if (selectedObject == 3) OpenSlideBar(new OptionsSlideBar(30, this.slideBarLocationX), api);
+                else if (selectedObject == 4) OpenSlideBar(new RightSlideBar(20, this.slideBarLocationX), api);
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
             else if (info.Key == ConsoleKey.F9)
@@ -104,6 +104,16 @@ namespace Sunrise_Terminal
         private void OpenSlideBar(Window slideBar, API api)
         {
             api.Application.activeWindows.Push(slideBar);
+        }
+
+        private int GetLocation()
+        {
+            int num = 0;
+            for (int i = 0; i < selectedObject; i++)
+            {
+                num +=  3 + objects[i].name.Length + Console.WindowWidth/15;
+            }
+            return num;
         }
     }
 }

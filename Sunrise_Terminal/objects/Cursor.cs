@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Sunrise_Terminal.objects
         public int Y { get; set; }
         public int Offset { get; set; }
         public Movement<TArrayDataType> Movement { get; set; } = new Movement<TArrayDataType>();
+        private int lastOkX = 0;
         public Cursor()
         {
             this.X = 0;
@@ -36,12 +38,15 @@ namespace Sunrise_Terminal.objects
                 {
                     this.X = this.Movement.Data[this.Y].ToString().Length - 1;
                 }
+                else
+                {
+                    this.X = lastOkX;
+                }
             }
         }
 
         public void MoveDown()
         {
-            
             if (this.Movement.Data.Count < Settings.WindowDataLimit && this.Y < this.Movement.Data.Count - 1)
             {
                 this.Y++;
@@ -60,13 +65,18 @@ namespace Sunrise_Terminal.objects
             {
                 X = this.Movement.Data[this.Y].ToString().Length - 1;
             }
+            else
+            {
+                this.X = lastOkX;
+            }
         }
 
         public void MoveRight()
         {
             if (this.X < this.Movement.Data[Y].ToString().Length - 1)
             {
-                X++;
+                this.X++;
+                lastOkX++;
             }
         }
 
@@ -75,6 +85,7 @@ namespace Sunrise_Terminal.objects
             if (this.X > 0)
             {
                 this.X--;
+                lastOkX--;
             }
         }
     }

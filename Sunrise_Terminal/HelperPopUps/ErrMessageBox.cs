@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Sunrise_Terminal.Core;
 using Sunrise_Terminal.interfaces;
 
-namespace Sunrise_Terminal
+namespace Sunrise_Terminal.HelperPopUps
 {
-    public class InfoMessageBox : Window, IMessageBox
+    public class ErrMessageBox : Window, IMessageBox
     {
         new public int width { get; set; }
         public int height { get; set; }
@@ -17,19 +17,20 @@ namespace Sunrise_Terminal
         public int LocationX { get; set; }
         public int LocationY { get; set; }
 
-        public InfoMessageBox(int Width, int Height, string Message)
+        public ErrMessageBox(int Width, int Height, string Message)
         {
-            this.width = Width;
-            this.height = Height;
-            this.Description = Message;
-            this.LocationX = Console.WindowWidth / 2 - this.width / 2;
-            this.LocationY = Console.WindowHeight / 2 - this.height / 2;
+            width = Width;
+            height = Height;
+            Description = Message;
+            LocationX = Console.WindowWidth / 2 - width / 2;
+            LocationY = Console.WindowHeight / 2 - height / 2;
         }
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            graphics.DrawSquare(this.width, this.height, this.LocationX, this.LocationY, this.Heading);
-            graphics.DrawLabel(this.LocationX, this.LocationY + 4, Description, 6);
+            graphics.DrawSquare(width, height, this.LocationX, LocationY, Heading);
+            graphics.DrawLabel(this.LocationX, LocationY + 4, Description, 6);
+            Console.Beep(2000, 500);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
@@ -39,7 +40,7 @@ namespace Sunrise_Terminal
                 api.CloseActiveWindow();
                 api.CloseActiveWindow();
             }
-            else if(info.Key == ConsoleKey.Escape)
+            else if (info.Key == ConsoleKey.Escape)
             {
                 api.CloseActiveWindow();
                 api.CloseActiveWindow();

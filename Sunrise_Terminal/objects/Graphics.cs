@@ -11,6 +11,7 @@ namespace Sunrise_Terminal.objects
     public class Graphics
     {
         private UltraFormatter formatter = new UltraFormatter();
+        private Checkers checkers = new Checkers();
         public void DrawSquare(int Width, int Height, int LocationX, int LocationY, string Heading = "")
         {
             int i = 0;
@@ -160,61 +161,69 @@ namespace Sunrise_Terminal.objects
             Console.Write(Content);
         }
 
-        public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset)
+        public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset, string highLightedText)
         {
             IMessageBox.DefaultColor();
             Console.SetCursorPosition(0, 1);
             Console.WriteLine($"┌{new UltraFormatter().DoublePadding(Heading, width - 2, '─')}┐");
-            int i = 0;
-            for (i = 0; i < Settings.WindowDataLimit; i++)
-            {
-                int actualIndex = 0;
-                if (i < array.Count())
-                {
-                    actualIndex = Offset + i;
-                    if (actualIndex == selectedY)
-                    {
-                        Console.SetCursorPosition(0, i + 2);
-                        Console.Write($"|{(actualIndex + 1).ToString().PadRight(4)} ");
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        int a = 0;
-                        foreach (char c in array[actualIndex])
-                        {
-                            if (a == selectedX)
-                            {
-                                Console.BackgroundColor = ConsoleColor.White;
-                                Console.ForegroundColor = ConsoleColor.Black;
-                                Console.Write($"{array[actualIndex][a]}");
-                                IMessageBox.DefaultColor();
-                            }
-                            else
-                            {
-                                IMessageBox.DefaultColor();
-                                Console.Write($"{array[actualIndex][a]}");
-                            }
-                            a++;
-                        }
-                        Console.WriteLine($"{new string(" ").PadRight(width - array[actualIndex].Length - 7)}│");
-                    }
-                    else
-                    {
 
-                        IMessageBox.DefaultColor();
-                        Console.SetCursorPosition(0, i + 2);
-                        Console.WriteLine($"│{new string($"{new string((actualIndex + 1).ToString()).PadRight(4)} {new UltraFormatter().PadTrimRight(array[actualIndex], width - 7)}").PadRight(width - 8)}│");
-                    }
-                }
-                else
+            for (int i = 0; i < Settings.WindowDataLimit; i++)
+            {
+                if (Offset + i >= array.Count)
                 {
                     IMessageBox.DefaultColor();
                     Console.SetCursorPosition(0, i + 2);
                     Console.WriteLine($"│{new string(' ', width - 2)}│");
+                    continue;
                 }
+
+                int actualIndex = Offset + i;
+                string currentLine = array[actualIndex];
+                bool isSelected = (actualIndex == selectedY);
+
+                Console.SetCursorPosition(0, i + 2);
+
+                if (isSelected)
+                {
+                    Console.Write($"│{(actualIndex + 1).ToString().PadRight(4)} ");
+                    for (int j = 0; j < currentLine.Length; j++)
+                    {
+                        if (j == selectedX)
+                        {
+                            IMessageBox.SelectionColor();
+                            Console.Write(currentLine[j]);
+                        }
+                        else
+                        {
+                            IMessageBox.DefaultColor();
+                            Console.Write(currentLine[j]);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.Write($"│");
+
+                    if (checkers.StringContains(currentLine, highLightedText))
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                    }
+                    else
+                    {
+                        IMessageBox.DefaultColor();
+                    }
+                    Console.Write($"{(actualIndex + 1).ToString().PadRight(4)} ");
+                    Console.Write(currentLine);
+                    Console.Write($"{new string(' ', width - currentLine.Length - 7)} ");
+                }
+                IMessageBox.DefaultColor();
             }
+
             IMessageBox.DefaultColor();
-            Console.SetCursorPosition(0, i + 2);
+            Console.SetCursorPosition(0, Settings.WindowDataLimit + 2);
             Console.WriteLine($"└{new string('─', width - 2)}┘");
         }
+
     }
 
 }

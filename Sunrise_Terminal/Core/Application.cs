@@ -3,6 +3,7 @@ using Sunrise_Terminal.windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
@@ -12,14 +13,13 @@ namespace Sunrise_Terminal.Core
     public class Application
     {
         public Stack<Window> activeWindows = new Stack<Window>();
-        public List<ListWindow> ListWindows = new List<ListWindow>();
-        public int ActiveWindowIndex { get; set; } = 0;
-        public API Api { get; set; }
+        public API Api { get; set; } = new API();
 
         private UltraFormatter Formatter = new UltraFormatter();
         public HeaderMenu headerMenu = new HeaderMenu();
         private FooterMenu footerMenu = new FooterMenu();
         private ConsoleFormatter consoleFormatter = new ConsoleFormatter();
+        public DirPanel DirPanel;
 
         public Window activeWindow
         {
@@ -31,18 +31,13 @@ namespace Sunrise_Terminal.Core
 
         public Application(int Height = 50, int Width = 160, int numberOfWindows = 2)
         {
+            this.Api.Application = this;
+            DirPanel = new DirPanel(numberOfWindows, this.Api);
             Settings.NumberOfWindows = numberOfWindows;
-            SwitchWindow(new Window());
-            headerMenu.slideBar = activeWindows.Peek();
+            SwitchWindow(DirPanel);
 
             if (Height != null && Width != null) Console.SetWindowSize(Width, Height);
             Console.CursorVisible = false;
-
-            for (int i = 0; i < numberOfWindows; i++)
-            {
-                ListWindows.Add(new ListWindow());
-            }
-            SwitchWindow(ListWindows[0]);
         }
 
 
@@ -51,23 +46,14 @@ namespace Sunrise_Terminal.Core
             consoleFormatter.FormatCheck();
             headerMenu.Draw(0, Api);
 
-            if (ListWindows.Contains(activeWindow))
+            if (DirPanel.listWindows.Contains(activeWindow))
             {
-                int i = 0;
-                foreach (ListWindow lw in ListWindows)
-                {
-                    lw.Draw(Settings.WindowWidth * i, Api, ActiveWindowIndex == ListWindows.IndexOf(lw));
-                    i++;
-                }
-
+                DirPanel.Draw(0, Api);
             }
             else
             {
                 activeWindow.Draw(activeWindow.LocationX, Api);
-
             }
-
-
 
             footerMenu.Draw();
         }
@@ -80,6 +66,7 @@ namespace Sunrise_Terminal.Core
         public void SwitchWindow(Window window)
         {
             activeWindows.Push(window);
+            
         }
     }
 

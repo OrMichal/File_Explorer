@@ -41,13 +41,16 @@ namespace Sunrise_Terminal.MessageBoxes
                     }
                 }
             }
+            
         }
         public override void Draw(int LocationX, API api, bool _ =  true)
         {
+            
             if (Directory.Exists(api.GetActiveListWindow().ActivePath + api.GetSelectedFile()))
             {
                 api.GetActiveListWindow().ActivePath = dataManager.GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
                 api.RequestFilesRefresh();
+                api.CloseActiveWindow();
                 return;
             }
             
@@ -77,6 +80,7 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            
             HandleMBoxChange(info, api);
 
             if (info.Key == ConsoleKey.DownArrow && this.offset <= DataParted.Count() - api.GetActiveListWindow().Limit - 1)

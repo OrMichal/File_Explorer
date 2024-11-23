@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.HelperPopUps;
 
 namespace Sunrise_Terminal.Core
 {
@@ -13,6 +14,7 @@ namespace Sunrise_Terminal.Core
         public Window activeWindow { get; set; }
 
         public event Action RefreshFilesEvent;
+        public int ActiveWindowIndex { get; set; } = 0;
 
 
         public void RequestFilesRefresh()
@@ -22,7 +24,7 @@ namespace Sunrise_Terminal.Core
 
         public string GetSelectedFile()
         {
-            return GetActiveListWindow().Rows[GetActiveListWindow().selectedIndex].Name;
+            return GetActiveListWindow().Rows[GetActiveListWindow().cursor.Y].Name;
         }
 
         public string GetActivePath()
@@ -32,7 +34,7 @@ namespace Sunrise_Terminal.Core
 
         public ListWindow GetActiveListWindow()
         {
-            return Application.ListWindows[Application.ActiveWindowIndex];
+            return Application.DirPanel.listWindows[this.ActiveWindowIndex];
         }
 
         public void CloseActiveWindow()
@@ -51,7 +53,12 @@ namespace Sunrise_Terminal.Core
 
         public void ThrowError(string message)
         {
-            Application.SwitchWindow(new InfoMessageBox(30, 7, message));
+            Application.SwitchWindow(new ErrMessageBox(30, 7, message));
+        }
+
+        public void ReDrawDirPanel()
+        {
+            Application.DirPanel.Draw(0, this);
         }
     }
 }

@@ -15,8 +15,6 @@ namespace Sunrise_Terminal.windows
 {
     public class ListWindow : Window, IHasCursor<Row>
     {
-
-        public int selectedIndex = 0;
         public int width = Console.WindowWidth / 2;
         public int Limit = Console.WindowHeight - 7;
         public int Offset { get; set; } = 0;
@@ -57,25 +55,26 @@ namespace Sunrise_Terminal.windows
             if (info.Key == ConsoleKey.DownArrow)
             {
                 cursor.MoveDown();
+                Console.Beep(8000, 1);
             }
             //---------------------------------------------------------------------------------------------------------------------------------Up Arrow key
             else if (info.Key == ConsoleKey.UpArrow)
             {
                 cursor.MoveUp();
+                Console.Beep(8000, 1);
             }
             //--------------------------------------------------------------------------------------------------------------------------------Tab key
             if (info.Key == ConsoleKey.Tab)
             {
-                api.Application.ActiveWindowIndex = (api.Application.ActiveWindowIndex + 1) % api.Application.ListWindows.Count;
+                api.ActiveWindowIndex = (api.ActiveWindowIndex + 1) % api.Application.DirPanel.listWindows.Count;
                 api.Application.activeWindows.Pop();
-                api.Application.SwitchWindow(api.Application.ListWindows[api.Application.ActiveWindowIndex]);
-
+                api.Application.SwitchWindow(api.Application.DirPanel.listWindows[api.ActiveWindowIndex]);
             }
             //--------------------------------------------------------------------------------------------------------------------------------Enter key
             if (info.Key == ConsoleKey.Enter)
             {
 
-                if (api.GetActiveListWindow().selectedIndex == 0)
+                if (api.GetActiveListWindow().cursor.Y == 0)
                 {
                     api.GetActiveListWindow().ActivePath = dataManagement.GoBackByOne(api.GetActiveListWindow().ActivePath);
                 }
@@ -83,11 +82,11 @@ namespace Sunrise_Terminal.windows
                 {
                     api.GetActiveListWindow().ActivePath = dataManagement.GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
                 }
-                api.GetActiveListWindow().selectedIndex = 0;
+                api.GetActiveListWindow().cursor.Y = 0;
 
                 OnFileRefreshed();
                 Offset = 0;
-                selectedIndex = 0;
+                cursor.Y = 0;
             }
             //--------------------------------------------------------------------------------------------------------------------------------F1 - F10 keys
 

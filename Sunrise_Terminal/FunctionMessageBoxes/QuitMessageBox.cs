@@ -74,7 +74,7 @@ namespace Sunrise_Terminal
                 }
                 else
                 {
-                    api.Application.SwitchWindow(api.Application.ListWindows[0]);
+                    api.Application.SwitchWindow(api.GetActiveListWindow());
                 }
             }
         }

@@ -32,7 +32,7 @@ namespace Sunrise_Terminal.DataHandlers
                     Rows.Add(new Row
                     {
                         file = false,
-                        Name = file.Name,
+                        Name = "/" + file.Name,
                         DateOfLastChange = file.LastWriteTime.ToShortDateString()
                     });
                     i++;

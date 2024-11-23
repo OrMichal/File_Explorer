@@ -29,20 +29,25 @@ namespace Sunrise_Terminal
         }
         public void Draw()
         {
+            Console.SetCursorPosition(0, Console.WindowHeight- 2);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine($"{new string("Hint: To access administrator account press alt + f4!").PadRight(Console.WindowWidth)}");
+            
             IMenu.DefaultColor();
             int num = 1;
             int location = 0;
             foreach (Object obj in objects)
             {
-                Console.SetCursorPosition(location, Settings.WindowDataLimit + 5);
+                Console.SetCursorPosition(location, Console.WindowHeight - 1);
 
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"{num}");
                 IMenu.DefaultColor();
                 Console.Write(obj.name);
+                Console.Write(new string(' ', Console.WindowWidth/10 - num.ToString().Length - obj.name.Length));
                 num++;
-                location += obj.name.Length + 1;
+                location += Console.WindowWidth/objects.Count;
             }
             Window.DefaultColor();
         }

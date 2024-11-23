@@ -58,5 +58,40 @@ namespace Sunrise_Terminal.DataHandlers
                 cursor.Offset++;
             }
         }
+
+        public void PushDown()
+        {
+
+            if (cursor.Y < cursor.Movement.Data.Count - 1)
+            {
+                string dataToPlace = cursor.Movement.Data[cursor.Y].ToString();
+                string dataWherePlace = cursor.Movement.Data[cursor.Y + 1].ToString();
+                cursor.Movement.Data[cursor.Y + 1] = dataToPlace;
+                cursor.Movement.Data[cursor.Y] = dataWherePlace;
+                cursor.MoveDown();
+            }
+        }
+
+        public void PushUp()
+        {
+
+            if (cursor.Y >= 1)
+            {
+                string dataToPlace = cursor.Movement.Data[cursor.Y].ToString();
+                string dataWherePlace = cursor.Movement.Data[cursor.Y - 1].ToString();
+                cursor.Movement.Data[cursor.Y - 1] = dataToPlace;
+                cursor.Movement.Data[cursor.Y] = dataWherePlace;
+                cursor.MoveUp();
+            }
+        }
+
+        public void CopyCurrentLine()
+        {
+            if(cursor.Y != cursor.Movement.Data.Count - 1)
+            {
+                cursor.Movement.Data.Insert(cursor.Y + 1, cursor.Movement.Data[cursor.Y]);
+                cursor.MoveDown();
+            }
+        }
     }
 }

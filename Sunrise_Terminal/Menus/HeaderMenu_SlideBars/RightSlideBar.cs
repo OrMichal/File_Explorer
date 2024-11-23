@@ -16,12 +16,14 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
         public int SelectedOperation { get; set; } = 0;
         public List<Operation> Operations { get; set; }
         private List<string> operationNames { get; set; }
+        private int LocationX { get; set; }
 
         private Graphics graphics = new Graphics();
 
 
-        public RightSlideBar(int width)
+        public RightSlideBar(int width, int locationX)
         {
+            this.LocationX = locationX;
             Width = width;
 
             Operations = new List<Operation>()
@@ -42,6 +44,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
             };
 
             operationNames = Operations.Select(o => o.Name).ToList();
+            LocationX = locationX;
         }
 
         public override void Draw(int LocationX, API api, bool active = true)
@@ -53,7 +56,9 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
         {
             if (info.Key == ConsoleKey.Escape)
             {
+                api.Erase(this.Width, this.Height, this.LocationX, 1);
                 api.CloseActiveWindow();
+                api.ReDrawDirPanel();
             }
 
             if (info.Key == ConsoleKey.DownArrow)

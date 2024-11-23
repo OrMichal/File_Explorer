@@ -40,7 +40,7 @@ namespace Sunrise_Terminal
             selected = Input.Length - 1;
             Limit = width - 1;
 
-            foreach(var item in api.Application.ListWindows)
+            foreach(var item in api.Application.DirPanel.listWindows)
             {
                 paths.Add(item.ActivePath);
             }

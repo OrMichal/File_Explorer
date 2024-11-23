@@ -11,6 +11,7 @@ using Sunrise_Terminal.DataHandlers;
 using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.objects;
 using Sunrise_Terminal.Utilities;
+using Sunrise_Terminal.HelperPopUps;
 
 namespace Sunrise_Terminal.MessageBoxes
 {
@@ -37,6 +38,7 @@ namespace Sunrise_Terminal.MessageBoxes
         private DataManagement dataManager = new DataManagement();
         public Cursor<string> cursor { get; set; } = new Cursor<string>();
         private EditOperations editOperations;
+        public string HighLightedText = "";
         private string selectedRowText
         {
             get
@@ -68,10 +70,12 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             catch (FileNotFoundException)
             {
+                
                 return;
             }
             catch (UnauthorizedAccessException)
             {
+                api.Application.SwitchWindow(new ErrMessageBox(30, 7, "Access denied"));
                 return;
             }
             
@@ -94,11 +98,11 @@ namespace Sunrise_Terminal.MessageBoxes
         {
             if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
             {
-                api.Application.SwitchWindow(new InfoMessageBox(30, 7, "This is not a File"));
+                
                 return;
             }
 
-            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset);
+            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText);
         }
 
         
@@ -107,6 +111,7 @@ namespace Sunrise_Terminal.MessageBoxes
         {
             if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
             {
+                api.Application.SwitchWindow(new ErrMessageBox(30, 7, "This is not a File"));
                 return;
             }
 
@@ -115,11 +120,14 @@ namespace Sunrise_Terminal.MessageBoxes
             if (info.Key == ConsoleKey.DownArrow)
             {
                 cursor.MoveDown();
-                
             }
             else if (info.Key == ConsoleKey.UpArrow)
             {
                 cursor.MoveUp();
+            }
+            else if(info.Key == ConsoleKey.UpArrow && info.Modifiers.HasFlag(ConsoleModifiers.Alt))
+            {
+                throw new Exception();
             }
             else if(info.Key == ConsoleKey.RightArrow)
             {
@@ -128,6 +136,14 @@ namespace Sunrise_Terminal.MessageBoxes
             else if(info.Key == ConsoleKey.LeftArrow)
             {
                 cursor.MoveLeft();   
+            }
+            else if(info.Key == ConsoleKey.NumPad6)
+            {
+                editOperations.PushUp();
+            }
+            else if(info.Key == ConsoleKey.NumPad3)
+            {
+                editOperations.PushDown();
             }
             else if(char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar) && info.Key != ConsoleKey.Enter)
             {
@@ -174,6 +190,19 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 insertion = !insertion;
             }
+            else if(info.Key == ConsoleKey.H && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            {
+                api.Application.SwitchWindow(new SearcherPopUp(20,9, this, "Searcher"));
+            }
+            else if(info.Key == ConsoleKey.R && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            {
+                this.HighLightedText = string.Empty;
+            }
+            else if(info.Key == ConsoleKey.D && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            {
+                editOperations.CopyCurrentLine();
+            }
+            
         }
 
     }

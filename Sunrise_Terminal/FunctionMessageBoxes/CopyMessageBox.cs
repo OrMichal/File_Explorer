@@ -4,40 +4,40 @@ using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.windows;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Sunrise_Terminal
 {
-    public class RenMovMessageBox : Window, IMessageBox
+    public class CopyMessageBox : Window, IMessageBox
     {
-        new public int width { get; set; }
-        public int height { get; set; }
+        public bool confirmation = false;
         public string Heading { get; set; }
+        public int height { get; set; }
+        public int width { get; set; }
         public string Description { get; set; }
-        public bool confirmation { get; set; } = false;
         public string srcPath { get; set; }
+        public int destWindowIndex { get; set; } = 1;
         public string destPath { get; set; }
+        public Window window { get; set; }
 
-        private int LocationX { get; set; }
-        private int LocationY { get; set; }
-        private List<string> paths = new List<string>();
-        private int justOnce;
         private int selectedPath = 0;
+        private List<string> paths = new List<string>();
+        private int LocationX {  get; set; }
+        private int LocationY { get; set; }
         private DataManagement dataManager = new DataManagement();
 
-        public RenMovMessageBox(int Height, int Width, API api)
+        public CopyMessageBox(int height, int width, API api)
         {
-            justOnce = 0;
-            Heading = "Moving MessageBox";
-            Description = "Are you sure?";
-            this.height = Height;
-            this.width = Width;
+            this.height = height;
+            this.width = width;
+            Heading = "Copy window";
+            Description = "Choose the destination path";
+            
 
-
-            foreach (ListWindow lw in api.Application.ListWindows)
+            foreach (ListWindow lw in api.Application.DirPanel.listWindows)
             {
                 paths.Add(lw.ActivePath);
             }
@@ -50,9 +50,8 @@ namespace Sunrise_Terminal
             this.LocationY = Console.WindowHeight / 2 - this.height / 2 + api.Application.activeWindows.Count;
 
             graphics.DrawSquare(this.width, this.height, this.LocationX, LocationY, Heading);
-            graphics.DrawListBox(this.width - 2, api.Application.ListWindows.Count + 2, this.LocationX + 1, this.LocationY + 1, this.paths, selectedPath);
-            graphics.DrawLabel(this.LocationX, this.LocationY + 2 + api.Application.ListWindows.Count + 2, Description, 2);
-
+            graphics.DrawListBox(this.width - 2, api.Application.DirPanel.listWindows.Count + 2, this.LocationX + 1, this.LocationY + 1, this.paths, selectedPath);
+            graphics.DrawLabel(this.LocationX, this.LocationY + 2 + api.Application.DirPanel.listWindows.Count + 2, Description, 2);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
@@ -80,10 +79,12 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                dataManager.Move(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.ListWindows[this.selectedPath].ActivePath);
-                api.RequestFilesRefresh();
+                if (File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath,api.GetSelectedFile()))) dataManager.copyFile(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.DirPanel.listWindows[this.selectedPath].ActivePath);
+                else dataManager.copyDir(Path.Combine(api.GetActivePath(), api.GetSelectedFile()), api.Application.DirPanel.listWindows[this.selectedPath].ActivePath);
+
                 api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                 api.CloseActiveWindow();
+                api.RequestFilesRefresh();
             }
         }
     }

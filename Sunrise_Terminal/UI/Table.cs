@@ -11,7 +11,7 @@ namespace Sunrise_Terminal.UI
 {
     public class Table
     {
-        public int Limit { get; set; } = Console.WindowHeight - 7;
+        public int Limit { get; set; } = Settings.WindowDataLimit;
         public int width { get; set; }
         public int Offset { get; set; } = 0;
         public int selectedIndex { get; set; } = 0;
@@ -23,7 +23,6 @@ namespace Sunrise_Terminal.UI
 
         public void Draw(int LocationX, bool Active)
         {
-            Limit = Console.WindowHeight - 7;
             int[] lengths = dataMan.GetLengths(Rows);
 
             int nameWidth = width / 2;
@@ -96,8 +95,6 @@ namespace Sunrise_Terminal.UI
                 Console.SetCursorPosition(LocationX, i + 2);
                 Console.WriteLine($"└{new string("".PadRight(width, '─'))}┘");
                 i++;
-
-                Console.SetCursorPosition(LocationX, i + 3);
             }
             catch
             {
