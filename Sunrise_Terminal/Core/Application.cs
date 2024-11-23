@@ -31,6 +31,7 @@ namespace Sunrise_Terminal.Core
 
         public Application(int Height = 50, int Width = 160, int numberOfWindows = 2)
         {
+            Console.Title = "Sunrise Terminal";
             this.Api.Application = this;
             DirPanel = new DirPanel(numberOfWindows, this.Api);
             Settings.NumberOfWindows = numberOfWindows;

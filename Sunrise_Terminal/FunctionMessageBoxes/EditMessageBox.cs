@@ -25,8 +25,6 @@ namespace Sunrise_Terminal.MessageBoxes
         public string Heading { get; set; }
         public string Description { get; set; }
         public int Offset { get; set; }
-        public string path { get; set; }
-        public string itemToPreview { get; set; }
         public List<string> Rows { get; set; } = new List<string>();
         public List<char> selectedChars = new List<char>();
         public int Limit { get; set; }
@@ -37,8 +35,9 @@ namespace Sunrise_Terminal.MessageBoxes
         private bool insertion = false;
         private DataManagement dataManager = new DataManagement();
         public Cursor<string> cursor { get; set; } = new Cursor<string>();
-        private EditOperations editOperations;
+        private TextEditOperations editOperations;
         public string HighLightedText = "";
+        private string textToCopy = "";
         private string selectedRowText
         {
             get
@@ -50,7 +49,7 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public EditMessageBox(int Width, int Height, API api)
         {
-            editOperations = new EditOperations(this.cursor);
+            editOperations = new TextEditOperations(this.cursor);
             cursor.Movement.Data = this.Rows;
             this.width = Width;
             this.height = Height;
@@ -115,7 +114,10 @@ namespace Sunrise_Terminal.MessageBoxes
                 return;
             }
 
-            HandleMBoxChange(info, api);
+            if(info.Key == ConsoleKey.F1)
+            {
+                api.Application.SwitchWindow(new HelpMessageBox(50, 50));
+            }
 
             if (info.Key == ConsoleKey.DownArrow)
             {
@@ -180,7 +182,7 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.F5)
             {
-                dataManager.SaveChanges(this.path, this.itemToPreview, this.Rows);
+                dataManager.SaveChanges(api.GetActivePath(), api.GetSelectedFile(), this.Rows);
             }
             else if( info.Key == ConsoleKey.Escape)
             {
@@ -202,6 +204,15 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 editOperations.CopyCurrentLine();
             }
+            /*
+            else if(info.Key == ConsoleKey.C && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            {
+                editOperations.copy(out textToCopy);
+            }
+            else if(info.Key == ConsoleKey.V && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            {
+                editOperations.Paste(textToCopy);
+            }*/
             
         }
 

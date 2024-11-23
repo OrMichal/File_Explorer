@@ -14,7 +14,7 @@ namespace Sunrise_Terminal
     {
         public List<Object> objects { get; set; }
         public int selectedObject { get; set; } = 0;
-
+        private bool online = true;
         public int slideBarLocationX { get; set; }
         public HeaderMenu()
         {
@@ -80,8 +80,8 @@ namespace Sunrise_Terminal
             {
                 if (selectedObject == 0) OpenSlideBar(new LeftSlideBar(20, this.slideBarLocationX), api);
                 else if (selectedObject == 1) OpenSlideBar(new FileSlideBar(25, this.slideBarLocationX), api);
-                else if (selectedObject == 2) OpenSlideBar(new CommandSlideBar(30, this.slideBarLocationX), api);
-                else if (selectedObject == 3) OpenSlideBar(new OptionsSlideBar(30, this.slideBarLocationX), api);
+                else if (selectedObject == 2) OpenSlideBar(new CommandSlideBar(23, this.slideBarLocationX), api);
+                else if (selectedObject == 3) OpenSlideBar(new OptionsSlideBar(20, this.slideBarLocationX), api);
                 else if (selectedObject == 4) OpenSlideBar(new RightSlideBar(20, this.slideBarLocationX), api);
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key

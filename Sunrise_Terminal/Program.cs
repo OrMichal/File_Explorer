@@ -13,8 +13,8 @@ namespace Sunrise_Terminal
             Application app = new Application();
             API api = new API();
             Console.CursorVisible = false;
-            Console.BackgroundColor = ConsoleColor.Red;
             new BootingPopUp(20, 4, "booting mc").Draw(0, api);
+            Blockers.BlockCancelation();
             
             Console.Beep(440, 300);
             Console.Beep(440, 300);

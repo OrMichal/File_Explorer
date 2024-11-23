@@ -10,11 +10,11 @@ using Sunrise_Terminal.Utilities;
 namespace Sunrise_Terminal.DataHandlers
 {
 
-    public class EditOperations
+    public class TextEditOperations
     {
         public Cursor<string> cursor;
 
-        public EditOperations(Cursor<string> cursor)
+        public TextEditOperations(Cursor<string> cursor)
         {
             this.cursor = cursor;  
         }
@@ -50,7 +50,7 @@ namespace Sunrise_Terminal.DataHandlers
 
         public void InsertNewLine()
         {
-            cursor.Movement.Data.Insert(cursor.Y, " ");
+            cursor.Movement.Data.Insert(cursor.Y + 1, " ");
             cursor.Y++;
             cursor.X = 0;
             if (cursor.Y >= cursor.Offset + Settings.WindowDataLimit - 1)
@@ -92,6 +92,16 @@ namespace Sunrise_Terminal.DataHandlers
                 cursor.Movement.Data.Insert(cursor.Y + 1, cursor.Movement.Data[cursor.Y]);
                 cursor.MoveDown();
             }
+        }
+
+        public void copy(out string text)
+        {
+            text = cursor.Movement.Data[cursor.Y].ToString();
+        }
+
+        public void Paste(string text)
+        {
+            cursor.Movement.Data[cursor.Y] += text;
         }
     }
 }
