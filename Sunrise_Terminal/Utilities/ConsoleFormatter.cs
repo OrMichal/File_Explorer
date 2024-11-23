@@ -10,7 +10,7 @@ namespace Sunrise_Terminal.Utilities
     {
         public void FormatCheck()
         {
-            int width2 = Console.WindowWidth / 2;
+            int width2 = Console.WindowWidth / Settings.NumberOfWindows;
             if (width2 != Settings.WindowWidth)
             {
                 Console.Clear();

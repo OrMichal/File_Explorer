@@ -8,7 +8,7 @@ namespace Sunrise_Terminal.Utilities
 {
     public static class Settings
     {
-        public static int NumberOfWindows { get; set; } = 2;
+        public static int NumberOfWindows { get; set; } = 1;
         public static int WindowWidth { get; set; } = Console.WindowWidth / NumberOfWindows;
         public static int WindowDataLimit { get; set; } = Console.WindowHeight - 7;
 

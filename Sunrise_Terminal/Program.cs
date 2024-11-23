@@ -11,9 +11,8 @@ namespace Sunrise_Terminal
         static void Main(string[] args)
         {
             Application app = new Application();
-            API api = new API();
             Console.CursorVisible = false;
-            new BootingPopUp(20, 4, "booting mc").Draw(0, api);
+            new BootingPopUp(20, 4, "booting mc").Draw(0, app.Api);
             Blockers.BlockCancelation();
             
             Console.Beep(440, 300);

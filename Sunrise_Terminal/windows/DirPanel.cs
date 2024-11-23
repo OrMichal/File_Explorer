@@ -1,4 +1,5 @@
 ﻿using Sunrise_Terminal.Core;
+using Sunrise_Terminal.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Sunrise_Terminal.windows
             int i = 0;
             foreach (var item in listWindows)
             {
-                item.Draw(i * item.width, api, listWindows.IndexOf(item) == api.ActiveWindowIndex);
+                item.Draw(i * Settings.WindowWidth, api, listWindows.IndexOf(item) == api.ActiveWindowIndex);
                 i++;
             }
         }

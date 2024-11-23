@@ -29,12 +29,13 @@ namespace Sunrise_Terminal.Core
             }
         }
 
-        public Application(int Height = 50, int Width = 160, int numberOfWindows = 2)
+        public Application(int numberOfWindows = 2, int Height = 50, int Width = 200)
         {
             Console.Title = "Sunrise Terminal";
+            Settings.NumberOfWindows = numberOfWindows;
+            Settings.WindowWidth = Console.WindowWidth / numberOfWindows;
             this.Api.Application = this;
             DirPanel = new DirPanel(numberOfWindows, this.Api);
-            Settings.NumberOfWindows = numberOfWindows;
             SwitchWindow(DirPanel);
 
             if (Height != null && Width != null) Console.SetWindowSize(Width, Height);
@@ -44,6 +45,7 @@ namespace Sunrise_Terminal.Core
 
         public void Draw()
         {
+            Settings.WindowWidth = Console.WindowWidth / Settings.NumberOfWindows;
             consoleFormatter.FormatCheck();
             headerMenu.Draw(0, Api);
 
