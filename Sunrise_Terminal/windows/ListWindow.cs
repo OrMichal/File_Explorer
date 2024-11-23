@@ -1,6 +1,8 @@
 ﻿using Sunrise_Terminal.Core;
 using Sunrise_Terminal.DataHandlers;
+using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.MessageBoxes;
+using Sunrise_Terminal.objects;
 using Sunrise_Terminal.UI;
 using Sunrise_Terminal.Utilities;
 using System;
@@ -11,24 +13,27 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal.windows
 {
-    public class ListWindow : Window
+    public class ListWindow : Window, IHasCursor<Row>
     {
 
         public int selectedIndex = 0;
         public int width = Console.WindowWidth / 2;
         public int Limit = Console.WindowHeight - 7;
-        public int Offset = 0;
+        public int Offset { get; set; } = 0;
         public string ActivePath { get; set; }
         public int justOnce = 0;
 
-        public List<Row> Rows = new List<Row>();
+        public List<Row> Rows { get; set; } = new List<Row>();
         private Table table = new Table();
         private DataManagement dataManagement = new DataManagement();
+        public Cursor<Row> cursor {  get; set; }
 
         public ListWindow()
         {
+            cursor = new Cursor<Row>();
             ActivePath = dataManagement.StartingPath;
             Rows = new DataManagement().GetFiles(Rows, ActivePath);
+            cursor.Movement.Data = this.Rows;
         }
 
         public override void Draw(int LocationX, API api, bool active = true)
@@ -42,8 +47,8 @@ namespace Sunrise_Terminal.windows
             table.width = Settings.WindowWidth - 2;
             table.Rows = this.Rows;
             table.ActivePath = this.ActivePath;
-            table.selectedIndex = this.selectedIndex;
-            table.Offset = this.Offset;
+            table.selectedIndex = this.cursor.Y;
+            table.Offset = this.cursor.Offset;
             table.Draw(LocationX, active);
         }
 
@@ -51,26 +56,12 @@ namespace Sunrise_Terminal.windows
         {
             if (info.Key == ConsoleKey.DownArrow)
             {
-                if (this.selectedIndex <= this.Rows.Count() - 2)
-                {
-                    this.selectedIndex++;
-                    if (this.selectedIndex >= this.Offset + Limit - 1)
-                    {
-                        this.Offset++;
-                    }
-                }
+                cursor.MoveDown();
             }
             //---------------------------------------------------------------------------------------------------------------------------------Up Arrow key
             else if (info.Key == ConsoleKey.UpArrow)
             {
-                if (this.selectedIndex > 0)
-                {
-                    this.selectedIndex--;
-                    if (this.selectedIndex < this.Offset)
-                    {
-                        this.Offset--;
-                    }
-                }
+                cursor.MoveUp();
             }
             //--------------------------------------------------------------------------------------------------------------------------------Tab key
             if (info.Key == ConsoleKey.Tab)

@@ -36,18 +36,21 @@ namespace Sunrise_Terminal.DataHandlers
                 return;
             }
 
-            cursor.Movement.Data[cursor.Y] = new DataManagement().RemoveChar(cursor.Movement.Data[cursor.Y], cursor.X);
-            cursor.Movement.Data.RemoveAt(cursor.Y);
+            if(cursor.Y >= 1)
+            {
+                cursor.Movement.Data.RemoveAt(cursor.Y - 1);
+            }
+
             if (cursor.Y > 0)
             {
-                cursor.Y--;
+                cursor.MoveUp();
             }
             cursor.X = 0;
         }
 
         public void InsertNewLine()
         {
-            cursor.Movement.Data.Insert(cursor.Y + 1, " ");
+            cursor.Movement.Data.Insert(cursor.Y, " ");
             cursor.Y++;
             cursor.X = 0;
             if (cursor.Y >= cursor.Offset + Settings.WindowDataLimit - 1)
