@@ -102,12 +102,15 @@ namespace Sunrise_Terminal.MessageBoxes
             }
 
             graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText);
+            Console.SetCursorPosition(cursor.X, cursor.Y);
         }
 
         
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            Console.SetCursorPosition(cursor.X, cursor.Y);
+
             if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
             {
                 api.Application.SwitchWindow(new ErrMessageBox(30, 7, "This is not a File"));

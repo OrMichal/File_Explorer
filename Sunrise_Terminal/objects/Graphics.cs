@@ -214,7 +214,7 @@ namespace Sunrise_Terminal.objects
                     }
                     Console.Write($"{(actualIndex + 1).ToString().PadRight(4)} ");
                     Console.Write(currentLine);
-                    Console.Write($"{new string(' ', width - currentLine.Length - 7)} ");
+                    Console.WriteLine($"{new string(' ', width - currentLine.Length - 7)}│");
                 }
                 IMessageBox.DefaultColor();
             }
