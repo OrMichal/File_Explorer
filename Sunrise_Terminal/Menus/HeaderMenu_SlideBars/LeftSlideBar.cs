@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
@@ -76,6 +77,11 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                 {
                     this.SelectedOperation--;
                 }
+            }
+            
+            if(info.Key == ConsoleKey.Enter)
+            {
+                if (SelectedOperation == 6) api.Application.SwitchWindow(new FilterDialog(40, 15, "Filter", api));
             }
         }
     }

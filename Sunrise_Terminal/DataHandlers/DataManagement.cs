@@ -48,6 +48,7 @@ namespace Sunrise_Terminal.DataHandlers
                         Size = file.Length
                     });
                 }
+
                 return Rows;
 
             }
@@ -282,7 +283,6 @@ namespace Sunrise_Terminal.DataHandlers
         {
             string fileName = Path.GetFileName(sourceFilePath);
             string destinationFilePath = Path.Combine(destinationFolderPath, fileName);
-
 
             using (FileStream sourceStream = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
             using (FileStream destStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write))

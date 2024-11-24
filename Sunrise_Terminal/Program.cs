@@ -12,9 +12,9 @@ namespace Sunrise_Terminal
         {
             Application app = new Application();
             Console.CursorVisible = false;
-            new BootingPopUp(20, 4, "booting mc").Draw(0, app.Api);
             Blockers.BlockCancelation();
-            
+            //new BootingPopUp(20, 4, "booting mc").Draw(0, app.Api);
+            /*
             Console.Beep(440, 300);
             Console.Beep(440, 300);
             Console.Beep(440, 300);
@@ -25,7 +25,7 @@ namespace Sunrise_Terminal
             Console.Beep(349, 150);
             Console.Beep(523, 50);
             Console.Beep(440, 500);
-            
+            */
 
             for (;;)
             {

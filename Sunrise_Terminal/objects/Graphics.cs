@@ -261,6 +261,26 @@ namespace Sunrise_Terminal.objects
             Console.WriteLine($"└{new string('─', width - 2)}┘");
         }
 
+        public void DrawCheckBoxes(int LocationX, int LocationY, List<CheckBox> checkBoxes, int selectedBox, int margin = 2)
+        {
+            for (int i = 0; i < checkBoxes.Count; i++)
+            {
+                Console.SetCursorPosition(LocationX + margin, LocationY + ((i + 1) * margin));
+                Console.Write("[");
+                if(selectedBox == i)
+                {
+                    IMessageBox.SelectionColor();
+                    Console.Write($"{checkBoxes[i].activeChoice}");
+                    IMessageBox.DefaultColor();
+                }
+                else
+                {
+                    IMessageBox.DefaultColor();
+                    Console.Write($"{checkBoxes[i].activeChoice}");
+                }
+                Console.Write($"] {checkBoxes[i].Text}");
+            }
+        }
     }
 
 }
