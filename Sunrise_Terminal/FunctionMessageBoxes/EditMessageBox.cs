@@ -74,7 +74,7 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             catch (UnauthorizedAccessException)
             {
-                api.Application.SwitchWindow(new ErrMessageBox(30, 7, "Access denied"));
+                api.ThrowError("Access denied");
                 return;
             }
             
@@ -95,25 +95,33 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
+            Console.CursorVisible = true;
             if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
             {
-                
                 return;
             }
 
             graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText);
-            Console.SetCursorPosition(cursor.X, cursor.Y);
+
+            try
+            {
+                Console.SetCursorPosition(cursor.X + 6, cursor.Y + 2);
+
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            Console.SetCursorPosition(cursor.X, cursor.Y);
 
             if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
             {
-                api.Application.SwitchWindow(new ErrMessageBox(30, 7, "This is not a File"));
+                api.ThrowError("Not a file silly!");
                 return;
             }
 
@@ -150,7 +158,7 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 editOperations.PushDown();
             }
-            else if(char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar) && info.Key != ConsoleKey.Enter)
+            else if((char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar)) && info.Key != ConsoleKey.Enter)
             {
                 if (insertion)
                 {
@@ -216,7 +224,7 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 editOperations.Paste(textToCopy);
             }*/
-            
+            Console.SetCursorPosition(cursor.X + 1, cursor.Y + 1);
         }
 
     }

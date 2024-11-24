@@ -191,6 +191,7 @@ namespace Sunrise_Terminal.objects
                         if (j == selectedX)
                         {
                             IMessageBox.SelectionColor();
+                            //IMessageBox.DefaultColor();
                             Console.Write(currentLine[j]);
                         }
                         else
@@ -214,7 +215,15 @@ namespace Sunrise_Terminal.objects
                     }
                     Console.Write($"{(actualIndex + 1).ToString().PadRight(4)} ");
                     Console.Write(currentLine);
-                    Console.WriteLine($"{new string(' ', width - currentLine.Length - 7)}│");
+                    try
+                    {
+                        Console.WriteLine($"{new string(' ', width - currentLine.Length - 7)}│");
+
+                    }
+                    catch
+                    {
+
+                    }
                 }
                 IMessageBox.DefaultColor();
             }

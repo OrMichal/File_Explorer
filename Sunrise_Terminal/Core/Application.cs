@@ -32,6 +32,7 @@ namespace Sunrise_Terminal.Core
         public Application(int numberOfWindows = 2, int Height = 50, int Width = 200)
         {
             Console.Title = "Sunrise Terminal";
+            Console.SetBufferSize(Width, Height);
             Settings.NumberOfWindows = numberOfWindows;
             Settings.WindowWidth = Console.WindowWidth / numberOfWindows;
             this.Api.Application = this;
@@ -48,6 +49,7 @@ namespace Sunrise_Terminal.Core
             Settings.WindowWidth = Console.WindowWidth / Settings.NumberOfWindows;
             consoleFormatter.FormatCheck();
             headerMenu.Draw(0, Api);
+            footerMenu.Draw();
 
             if (DirPanel.listWindows.Contains(activeWindow))
             {
@@ -58,7 +60,6 @@ namespace Sunrise_Terminal.Core
                 activeWindow.Draw(activeWindow.LocationX, Api);
             }
 
-            footerMenu.Draw();
         }
 
         public void HandleKey(ConsoleKeyInfo info)
