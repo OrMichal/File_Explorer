@@ -50,6 +50,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
         public override void Draw(int LocationX, API api, bool active = true)
         {
             graphics.DrawListBox(Width, Height, this.LocationX, 1, operationNames, SelectedOperation);
+            Window.DefaultColor();
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)

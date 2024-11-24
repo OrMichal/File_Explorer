@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Core;
 using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.Utilities;
 
@@ -230,6 +231,33 @@ namespace Sunrise_Terminal.objects
 
             IMessageBox.DefaultColor();
             Console.SetCursorPosition(0, Settings.WindowDataLimit + 2);
+            Console.WriteLine($"└{new string('─', width - 2)}┘");
+        }
+
+        public void DrawView(int width, string Heading, List<string> array, int Offset)
+        {
+            
+            IMessageBox.DefaultColor();
+            int i = 0;
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine($"┌{formatter.DoublePadding(Heading, width - 2, '─')}┐");
+            for (i = 0; i < Settings.WindowDataLimit; i++)
+            {
+                int actualIndex = 0;
+                if (i < array.Count())
+                {
+
+                    actualIndex = Offset + i;
+                    Console.SetCursorPosition(0, i + 2);
+                    Console.WriteLine($"│{(actualIndex + 1).ToString().PadRight(4)} {formatter.PadTrimRight(array[actualIndex], width - 7)}│");
+                }
+                else
+                {
+                    Console.SetCursorPosition(0, i + 2);
+                    Console.WriteLine($"│{new string(' ', width - 2)}│");
+                }
+            }
+            Console.SetCursorPosition(0, i + 2);
             Console.WriteLine($"└{new string('─', width - 2)}┘");
         }
 

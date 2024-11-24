@@ -206,6 +206,7 @@ namespace Sunrise_Terminal.MessageBoxes
             else if(info.Key == ConsoleKey.H && info.Modifiers.HasFlag(ConsoleModifiers.Control))
             {
                 api.Application.SwitchWindow(new SearcherPopUp(20,9, this, "Searcher"));
+                Console.CursorVisible = false;
             }
             else if(info.Key == ConsoleKey.R && info.Modifiers.HasFlag(ConsoleModifiers.Control))
             {
@@ -224,7 +225,6 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 editOperations.Paste(textToCopy);
             }*/
-            Console.SetCursorPosition(cursor.X + 1, cursor.Y + 1);
         }
 
     }

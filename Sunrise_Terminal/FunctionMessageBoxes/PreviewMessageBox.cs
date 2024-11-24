@@ -8,6 +8,7 @@ using Sunrise_Terminal.Core;
 using Sunrise_Terminal.DataHandlers;
 using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.Utilities;
+using Sunrise_Terminal.HelperPopUps;
 
 namespace Sunrise_Terminal.MessageBoxes
 {
@@ -53,36 +54,13 @@ namespace Sunrise_Terminal.MessageBoxes
                 api.CloseActiveWindow();
                 return;
             }
-            
 
-            IMessageBox.DefaultColor();
-            int i = 0;
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"┌{formatter.DoublePadding(Heading + api.GetSelectedFile(), width - 2, '─')}┐");
-            for (i = 0; i < api.GetActiveListWindow().Limit; i++)
-            {
-                int actualIndex = 0;
-                if (i < DataParted.Count())
-                {
-                    actualIndex = offset + i;
-                    Console.SetCursorPosition(0, i + 2);
-                    Console.WriteLine($"│{(actualIndex + 1).ToString().PadRight(4)} {formatter.PadTrimRight(DataParted[actualIndex], width - 7)}│");
-                }
-                else
-                {
-                    Console.SetCursorPosition(0, i + 2);
-                    Console.WriteLine($"│{new string(' ',width - 2)}│");
-                }
-            }
-            Console.SetCursorPosition(0, i + 2);
-            Console.WriteLine($"└{new string('─', width - 2)}┘");
+            graphics.DrawView(this.width, this.Heading, this.DataParted, this.offset);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
             
-            HandleMBoxChange(info, api);
-
             if (info.Key == ConsoleKey.DownArrow && this.offset <= DataParted.Count() - api.GetActiveListWindow().Limit - 1)
             {
                 offset++;
