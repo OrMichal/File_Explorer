@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
@@ -21,6 +22,8 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
         private List<CheckBox> checkBoxes;
         private int selectedBox = 0;
         private HeaderActions headerActions;
+        private List<Button> buttons;
+        private int selectedButton = 0;
 
         public FilterDialog(int width, int height, string heading, API api)
         {
@@ -31,6 +34,13 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
                 new CheckBox(){ Text = "Directories"},
                 new CheckBox(){ Text = "Date"}
             };
+
+            this.buttons = new List<Button>()
+            {
+                new() {Label = "Yes"},
+                new() {Label = "No"}
+            };
+
             this.width = width;
             this.height = height;
             this.Heading = heading;
@@ -42,6 +52,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
         {
             graphics.DrawSquare(this.width, this.height, this.LocationX, this.LocationY, this.Heading);
             graphics.DrawCheckBoxes(this.LocationX + 1, this.LocationY + 1, this.checkBoxes, this.selectedBox);
+            graphics.DrawButtons(5, this.LocationX + this.width/3, this.LocationY + this.height - 5, this.buttons, selectedButton);
             Window.DefaultColor();
         }
 
@@ -62,10 +73,23 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                headerActions.Filter(this.checkBoxes);
+                if(selectedButton == 0)
+                {
+                    headerActions.Filter(this.checkBoxes);
+                }
+                
                 api.CloseActiveWindow();
                 api.ReDrawDirPanel();
             }
+            else if(info.Key == ConsoleKey.RightArrow)
+            {
+                this.selectedButton = 1;
+            }
+            else if(info.Key == ConsoleKey.LeftArrow)
+            {
+                this.selectedButton = 0;
+            }
         }
+
     }
 }

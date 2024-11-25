@@ -56,6 +56,9 @@ namespace Sunrise_Terminal.DataHandlers
             {
 
             }
+
+            
+
             return Rows;
         }
 
