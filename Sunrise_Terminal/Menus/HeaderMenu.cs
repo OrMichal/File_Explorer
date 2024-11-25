@@ -19,11 +19,10 @@ namespace Sunrise_Terminal
         public HeaderMenu()
         {
             objects = new List<Object>(){ 
-                new Object(){name = "Left"},
+                new Object(){name = "SelWinOpts"},
                 new Object(){name = "File"},
                 new Object(){name = "Command"},
-                new Object(){name = "Options"},
-                new Object(){name = "Right"}
+                new Object(){name = "Options"}
             };
         }
 
@@ -78,11 +77,10 @@ namespace Sunrise_Terminal
             }
             else if(info.Key == ConsoleKey.Enter)
             {
-                if (selectedObject == 0) OpenSlideBar(new LeftSlideBar(20, this.slideBarLocationX), api);
+                if (selectedObject == 0) OpenSlideBar(new SelWinOpts(20, this.slideBarLocationX), api);
                 else if (selectedObject == 1) OpenSlideBar(new FileSlideBar(25, this.slideBarLocationX), api);
                 else if (selectedObject == 2) OpenSlideBar(new CommandSlideBar(23, this.slideBarLocationX), api);
                 else if (selectedObject == 3) OpenSlideBar(new OptionsSlideBar(20, this.slideBarLocationX), api);
-                else if (selectedObject == 4) OpenSlideBar(new RightSlideBar(20, this.slideBarLocationX), api);
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
             else if (info.Key == ConsoleKey.F9)

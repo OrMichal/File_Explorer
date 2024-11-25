@@ -10,13 +10,13 @@ namespace Sunrise_Terminal.Core
 {
     public class API
     {
+        public delegate void FilterDelegate(List<Row> rows);
         public Application Application { get; set; }
         public Window activeWindow { get; set; }
 
         public event Action RefreshFilesEvent;
         public int ActiveWindowIndex { get; set; } = 0;
-
-
+        public FilterDelegate Filter { get; set; }
         public void RequestFilesRefresh()
         {
             RefreshFilesEvent?.Invoke();

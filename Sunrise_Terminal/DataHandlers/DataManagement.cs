@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sunrise_Terminal.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace Sunrise_Terminal.DataHandlers
     public class DataManagement
     {
         public string StartingPath { get; } = $@"C:\users\{Environment.UserName}\desktop";
+        public delegate List<Row> FilterDelegate(List<Row> rows);
+        public FilterDelegate Filter { get; set; }
 
         public List<Row> GetFiles(List<Row> Rows, string path)
         {
@@ -49,6 +52,8 @@ namespace Sunrise_Terminal.DataHandlers
                     });
                 }
 
+                if(Filter != null) Rows = Filter(Rows);
+
                 return Rows;
 
             }
@@ -56,8 +61,6 @@ namespace Sunrise_Terminal.DataHandlers
             {
 
             }
-
-            
 
             return Rows;
         }
@@ -90,7 +93,7 @@ namespace Sunrise_Terminal.DataHandlers
 
             lens[0] = Console.WindowWidth / 4;
             lens[1] = sizeMaxLen;
-            if (sizeMaxLen < rows[0].Description.Length)
+            if (sizeMaxLen < rows[0].Description?.Length)
             {
                 lens[1] = rows[0].Description.Length;
             }

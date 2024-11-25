@@ -6,25 +6,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
-    public class RightSlideBar : Window, ISlideBar
+    public class SelWinOpts :Window, ISlideBar
     {
         public int Height { get; set; }
-        public int Width { get; set; }
+        public int Width { get; set; }  
         public int SelectedOperation { get; set; } = 0;
         public List<Operation> Operations { get; set; }
         private List<string> operationNames { get; set; }
-        private int LocationX { get; set; }
+        new int LocationX { get; set; }
 
         private Graphics graphics = new Graphics();
 
 
-        public RightSlideBar(int width, int locationX)
+        public SelWinOpts( int width, int locationX)
         {
             this.LocationX = locationX;
-            Width = width;
+            this.Width = width;
 
             Operations = new List<Operation>()
             {
@@ -49,33 +50,38 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 
         public override void Draw(int LocationX, API api, bool active = true)
         {
-            graphics.DrawListBox(Width, Height, this.LocationX, 1, operationNames, SelectedOperation);
+            graphics.DrawListBox(this.Width, this.Height, this.LocationX, 1, operationNames, SelectedOperation);
             Window.DefaultColor();
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if (info.Key == ConsoleKey.Escape)
+            if(info.Key == ConsoleKey.Escape)
             {
-                api.Erase(this.Width, this.Height, this.LocationX, 1);
                 api.CloseActiveWindow();
+                api.Erase(this.Width, this.Height, this.LocationX, 1);
                 api.ReDrawDirPanel();
             }
 
-            if (info.Key == ConsoleKey.DownArrow)
+            if(info.Key == ConsoleKey.DownArrow)
             {
-                if (SelectedOperation < Operations.Count - 1)
+                if(this.SelectedOperation < Operations.Count - 1)
                 {
-                    SelectedOperation++;
+                    this.SelectedOperation++;
                 }
             }
 
-            if (info.Key == ConsoleKey.UpArrow)
+            if(info.Key == ConsoleKey.UpArrow)
             {
-                if (SelectedOperation > 0)
+                if(this.SelectedOperation > 0)
                 {
-                    SelectedOperation--;
+                    this.SelectedOperation--;
                 }
+            }
+            
+            if(info.Key == ConsoleKey.Enter)
+            {
+                if (SelectedOperation == 6) api.Application.SwitchWindow(new FilterDialog(40, 15, "Filter", api));
             }
         }
     }

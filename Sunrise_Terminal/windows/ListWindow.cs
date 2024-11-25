@@ -23,14 +23,17 @@ namespace Sunrise_Terminal.windows
 
         public List<Row> Rows { get; set; } = new List<Row>();
         private Table table = new Table();
-        private DataManagement dataManagement = new DataManagement();
+        public DataManagement dataManagement = new DataManagement();
         public Cursor<Row> cursor {  get; set; }
+
+
 
         public ListWindow()
         {
             cursor = new Cursor<Row>();
             ActivePath = dataManagement.StartingPath;
             Rows = new DataManagement().GetFiles(Rows, ActivePath);
+            if(dataManagement.Filter != null) Rows = dataManagement.Filter(this.Rows);
             cursor.Movement.Data = this.Rows;
         }
 
@@ -55,13 +58,11 @@ namespace Sunrise_Terminal.windows
             if (info.Key == ConsoleKey.DownArrow)
             {
                 cursor.MoveDown();
-                Console.Beep(8000, 1);
             }
             //---------------------------------------------------------------------------------------------------------------------------------Up Arrow key
             else if (info.Key == ConsoleKey.UpArrow)
             {
                 cursor.MoveUp();
-                Console.Beep(8000, 1);
             }
             //--------------------------------------------------------------------------------------------------------------------------------Tab key
             if (info.Key == ConsoleKey.Tab)

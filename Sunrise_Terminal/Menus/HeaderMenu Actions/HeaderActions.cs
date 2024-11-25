@@ -1,5 +1,6 @@
 ﻿using Sunrise_Terminal.Core;
 using Sunrise_Terminal.objects;
+using Sunrise_Terminal.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,19 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_Actions
 
             if (checkBoxes[((int)checkBoxOptions.File)].activeChoice == 'x')
             {
-                var FilteredArray = api.GetActiveListWindow().Rows.Where(x => x.file == true).ToList();
+                api.GetActiveListWindow().dataManagement.Filter = Filters.FilterFiles;
+                api.RequestFilesRefresh();
+            }
+
+            if (checkBoxes[((int)checkBoxOptions.Directory)].activeChoice == 'x')
+            {
+                var FilteredArray = api.GetActiveListWindow().Rows.Where(x => x.file == false).ToList();
+                api.GetActiveListWindow().Rows = FilteredArray;
+            }
+
+            if (checkBoxes[((int)checkBoxOptions.Date)].activeChoice == 'x')
+            {
+                var FilteredArray = api.GetActiveListWindow().Rows.OrderByDescending(x => x.DateOfLastChange).ToList();
                 api.GetActiveListWindow().Rows = FilteredArray;
             }
         }
