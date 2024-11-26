@@ -282,36 +282,7 @@ namespace Sunrise_Terminal.objects
             }
         }
 
-        public void DrawTreeStruct(int LocationX, int LocationY, int width, DirectoryInfo dirInfo, string heading)
-        {
-            int countOfObjs = 0;
-            Console.SetCursorPosition(LocationX, LocationY);
-            Console.WriteLine($"┌{formatter.DoublePadding(heading, Console.WindowWidth-2, '─')}┐");
-
-            Console.SetCursorPosition(LocationX, LocationY + 1);
-            DrawTree(dirInfo, 0, out countOfObjs);
-            Console.SetCursorPosition(LocationX, LocationY + countOfObjs);
-            Console.WriteLine($"└{formatter.DoublePadding(heading, Console.WindowWidth-2, '─')}┘");
-        }
-
-        private void DrawTree(DirectoryInfo dirInfo,  int level , out int count)
-        {
-            count = 0;
-            Console.WriteLine($"{new string(' ', level*2)}{dirInfo.Name}");
-
-            foreach(var dir in dirInfo.GetDirectories())
-            {
-                count++;
-                DrawTree(dir, level++, out count);
-            }
-
-            foreach(var file in dirInfo.GetFiles())
-            {
-                count++;
-                Console.WriteLine($"{new string(' ', level*2)}{file.Name}");
-            }
-
-        }
+        
     }
 
 }

@@ -12,20 +12,23 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
     {
         public int width { get; set; }
         public int height { get; set; }
-        public string Heading { get; set; }
+        public string Heading { get; set; } = "Tree";
         public string Description { get; set; }
 
         public int LocationX { get; set; }
         public int LocationY { get; set; }
         private DirectoryInfo source;
+        private List<string> data = new List<string>();
+        private int offset = 0;
         public TreeStructDialog(string source)
         {
             this.source = new DirectoryInfo(source);
+            GetDrawTree(this.source, 0);
         }
 
         public override void Draw(int LocationX, API api, bool active = true)
         {
-            graphics.DrawTreeStruct(0,0, 40, source, "Tree");
+            graphics.DrawView(Console.WindowWidth, "Tree structure", this.data, this.offset);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
@@ -33,7 +36,39 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
             if(info.Key == ConsoleKey.Escape)
             {
                 api.CloseActiveWindow();
+                api.ReDrawDirPanel();
+            }
+            else if (info.Key == ConsoleKey.DownArrow && this.offset <= this.data.Count() - api.GetActiveListWindow().Limit - 1)
+            {
+                this.offset++;
+            }
+            else if (info.Key == ConsoleKey.UpArrow && this.offset > 0)
+            {
+                this.offset--;
             }
         }
+
+        public void GetDrawTree(DirectoryInfo dirInfo, int level, string prefix = "")
+        {
+            data.Add($"{prefix}├─ {dirInfo.Name}");
+
+            var subDirs = dirInfo.GetDirectories();
+            var files = dirInfo.GetFiles();
+
+            for (int i = 0; i < subDirs.Length; i++)
+            {
+                var isLastDir = (i == subDirs.Length - 1) && files.Length == 0;
+                string newPrefix = prefix + (isLastDir ? "   " : "│  ");
+                GetDrawTree(subDirs[i], level + 1, newPrefix);
+            }
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                bool isLastFile = (i == files.Length - 1);
+                string filePrefix = prefix + (isLastFile ? "└─ " : "├─ ");
+                data.Add($"{filePrefix}{files[i].Name}");
+            }
+        }
+
     }
 }

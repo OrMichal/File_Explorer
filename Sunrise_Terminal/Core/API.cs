@@ -24,7 +24,7 @@ namespace Sunrise_Terminal.Core
 
         public string GetSelectedFile()
         {
-            return GetActiveListWindow().Rows[GetActiveListWindow().cursor.Y].Name;
+            return GetActiveListWindow().Rows[GetActiveListWindow().cursor.Y].Name.Substring(1);
         }
 
         public string GetActivePath()
