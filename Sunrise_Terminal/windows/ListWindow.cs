@@ -1,6 +1,7 @@
 ﻿using Sunrise_Terminal.Core;
 using Sunrise_Terminal.DataHandlers;
 using Sunrise_Terminal.interfaces;
+using Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left;
 using Sunrise_Terminal.MessageBoxes;
 using Sunrise_Terminal.objects;
 using Sunrise_Terminal.UI;
@@ -25,15 +26,18 @@ namespace Sunrise_Terminal.windows
         private Table table = new Table();
         public DataManagement dataManagement = new DataManagement();
         public Cursor<Row> cursor {  get; set; }
+        public delegate List<Row> filterGelegate(List<Row> rows);
+        public event Func<List<Row>, List<Row>> Filter;
+        public FilterDialog FilterDialog;
 
 
 
-        public ListWindow()
+        public ListWindow( API api)
         {
             cursor = new Cursor<Row>();
             ActivePath = dataManagement.StartingPath;
             Rows = new DataManagement().GetFiles(Rows, ActivePath);
-            if(dataManagement.Filter != null) Rows = dataManagement.Filter(this.Rows);
+            FilterDialog = new FilterDialog(50, 15, "Filter", api);
             cursor.Movement.Data = this.Rows;
         }
 
@@ -103,6 +107,20 @@ namespace Sunrise_Terminal.windows
         private void OnFileRefreshed()
         {
             this.Rows = new DataManagement().GetFiles(this.Rows, this.ActivePath);
+            if (Filter != null)
+            {
+                foreach (var item in Filter.GetInvocationList())
+                {
+                    this.Rows = ((Func<List<Row>, List<Row>>)item)(this.Rows);
+                }
+            }
         }
+
+        public void FilterNullify()
+        {
+            Filter = null;
+            OnFileRefreshed();
+        }
+
     }
 }

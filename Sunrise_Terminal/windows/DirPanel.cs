@@ -16,7 +16,7 @@ namespace Sunrise_Terminal.windows
         {
             for (int i = 0; i < numberOfListWindows; i++)
             {
-                listWindows.Add(new ListWindow());
+                listWindows.Add(new ListWindow(api));
             }
             api.Application.SwitchWindow(listWindows[0]);
         }

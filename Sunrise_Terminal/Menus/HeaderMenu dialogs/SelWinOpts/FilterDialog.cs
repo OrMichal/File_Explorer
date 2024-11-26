@@ -38,7 +38,8 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
             this.buttons = new List<Button>()
             {
                 new() {Label = "Yes"},
-                new() {Label = "No"}
+                new() {Label = "No"},
+                new() {Label = "Reset Filter"}
             };
 
             this.width = width;
@@ -52,7 +53,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
         {
             graphics.DrawSquare(this.width, this.height, this.LocationX, this.LocationY, this.Heading);
             graphics.DrawCheckBoxes(this.LocationX + 1, this.LocationY + 1, this.checkBoxes, this.selectedBox);
-            graphics.DrawButtons(5, this.LocationX + this.width/3, this.LocationY + this.height - 5, this.buttons, selectedButton);
+            graphics.DrawButtons(this.LocationX + this.width/3, this.LocationY + this.height - 5, this.buttons, selectedButton);
             Window.DefaultColor();
         }
 
@@ -78,16 +79,24 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
                     headerActions.Filter(this.checkBoxes);
                 }
                 
+                if(selectedButton == 2) headerActions.ResetFilters();
+
                 api.CloseActiveWindow();
                 api.ReDrawDirPanel();
             }
             else if(info.Key == ConsoleKey.RightArrow)
             {
-                this.selectedButton = 1;
+                if(selectedButton < buttons.Count - 1)
+                {
+                    selectedButton++;
+                }
             }
             else if(info.Key == ConsoleKey.LeftArrow)
             {
-                this.selectedButton = 0;
+                if(selectedButton > 0)
+                {
+                    selectedButton--;
+                }
             }
         }
 

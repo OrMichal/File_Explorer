@@ -9,7 +9,6 @@ namespace Sunrise_Terminal.Utilities
 {
     public class Filters
     {
-
         public static List<Row> FilterDesc(List<Row> rows)
         {
             var FilteredArray = rows.OrderDescending();

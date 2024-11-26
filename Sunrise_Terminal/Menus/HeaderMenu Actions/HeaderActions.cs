@@ -43,21 +43,41 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_Actions
 
             if (checkBoxes[((int)checkBoxOptions.File)].activeChoice == 'x')
             {
-                api.GetActiveListWindow().dataManagement.Filter = Filters.FilterFiles;
+                api.GetActiveListWindow().Filter += Filters.FilterFiles;
+                api.RequestFilesRefresh();
+            }
+            else if (checkBoxes[((int)checkBoxOptions.File)].activeChoice == ' ')
+            {
+                api.GetActiveListWindow().Filter -= Filters.FilterFiles;
                 api.RequestFilesRefresh();
             }
 
             if (checkBoxes[((int)checkBoxOptions.Directory)].activeChoice == 'x')
             {
-                var FilteredArray = api.GetActiveListWindow().Rows.Where(x => x.file == false).ToList();
-                api.GetActiveListWindow().Rows = FilteredArray;
+                api.GetActiveListWindow().Filter += Filters.FilterDirectories;
+                api.RequestFilesRefresh();
+            }
+            else if(checkBoxes[((int)checkBoxOptions.Directory)].activeChoice == ' ')
+            {
+                api.GetActiveListWindow().Filter -= Filters.FilterDirectories;
+                api.RequestFilesRefresh();
             }
 
             if (checkBoxes[((int)checkBoxOptions.Date)].activeChoice == 'x')
             {
-                var FilteredArray = api.GetActiveListWindow().Rows.OrderByDescending(x => x.DateOfLastChange).ToList();
-                api.GetActiveListWindow().Rows = FilteredArray;
+                api.GetActiveListWindow().Filter += Filters.FilterByOldest;
+                api.RequestFilesRefresh();
             }
+            else if(checkBoxes[((int)checkBoxOptions.Date)].activeChoice == ' ')
+            {
+                api.GetActiveListWindow().Filter -= Filters.FilterByOldest;
+                api.RequestFilesRefresh();
+            }
+        }
+
+        public void ResetFilters()
+        {
+            api.GetActiveListWindow().FilterNullify();
         }
     }
 }

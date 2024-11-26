@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left;
+using Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
@@ -81,7 +82,13 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
             
             if(info.Key == ConsoleKey.Enter)
             {
-                if (SelectedOperation == 6) api.Application.SwitchWindow(new FilterDialog(40, 15, "Filter", api));
+                if (SelectedOperation == 0) return;
+                else if(SelectedOperation == 1) return;
+                else if(SelectedOperation == 2) return;
+                else if(SelectedOperation == 3) api.Application.SwitchWindow(new TreeStructDialog(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())));
+                else if(SelectedOperation == 4) return;
+                else if(SelectedOperation == 5) return;
+                else if (SelectedOperation == 6) api.Application.SwitchWindow(api.GetActiveListWindow().FilterDialog);
             }
         }
     }

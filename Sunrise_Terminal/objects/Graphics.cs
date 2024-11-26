@@ -123,16 +123,16 @@ namespace Sunrise_Terminal.objects
             Console.WriteLine($"└{new string("").PadRight(width - 2, '─')}┘");
         }
 
-        public void DrawButtons(int ButtonWidth, int LocationX, int LocationY, List<Button> buttons, int selectedButton = 0)
+        public void DrawButtons(int LocationX, int LocationY, List<Button> buttons, int selectedButton = 0)
         {
             for (int i = 0; i < buttons.Count; i++)
             {
-                int buttonX = LocationX + (ButtonWidth * i);
+                int buttonX = LocationX + (5 * i);
                 int buttonY = LocationY;
 
                 Console.SetCursorPosition(buttonX, buttonY);
                 IMessageBox.DefaultColor();
-                Console.Write($"┌{new string('─', ButtonWidth - 2)}┐");
+                Console.Write($"┌{new string('─', buttons[i].Label.Length)}┐");
 
                 Console.SetCursorPosition(buttonX, buttonY + 1);
                 IMessageBox.DefaultColor();
@@ -140,19 +140,19 @@ namespace Sunrise_Terminal.objects
                 if (i == selectedButton)
                 {
                     IMessageBox.SelectionColor();
-                    Console.Write(buttons[i].Label.PadRight(ButtonWidth - 2));
+                    Console.Write(buttons[i].Label);
                 }
                 else
                 {
                     IMessageBox.DefaultColor();
-                    Console.Write(buttons[i].Label.PadRight(ButtonWidth - 2));
+                    Console.Write(buttons[i].Label);
                 }
                 IMessageBox.DefaultColor();
                 Console.Write("│");
 
                 Console.SetCursorPosition(buttonX, buttonY + 2);
                 IMessageBox.DefaultColor();
-                Console.Write($"└{new string('─', ButtonWidth - 2)}┘");
+                Console.Write($"└{new string('─', buttons[i].Label.Length)}┘");
             }
         }
 
@@ -280,6 +280,37 @@ namespace Sunrise_Terminal.objects
                 }
                 Console.Write($"] {checkBoxes[i].Text}");
             }
+        }
+
+        public void DrawTreeStruct(int LocationX, int LocationY, int width, DirectoryInfo dirInfo, string heading)
+        {
+            int countOfObjs = 0;
+            Console.SetCursorPosition(LocationX, LocationY);
+            Console.WriteLine($"┌{formatter.DoublePadding(heading, Console.WindowWidth-2, '─')}┐");
+
+            Console.SetCursorPosition(LocationX, LocationY + 1);
+            DrawTree(dirInfo, 0, out countOfObjs);
+            Console.SetCursorPosition(LocationX, LocationY + countOfObjs);
+            Console.WriteLine($"└{formatter.DoublePadding(heading, Console.WindowWidth-2, '─')}┘");
+        }
+
+        private void DrawTree(DirectoryInfo dirInfo,  int level , out int count)
+        {
+            count = 0;
+            Console.WriteLine($"{new string(' ', level*2)}{dirInfo.Name}");
+
+            foreach(var dir in dirInfo.GetDirectories())
+            {
+                count++;
+                DrawTree(dir, level++, out count);
+            }
+
+            foreach(var file in dirInfo.GetFiles())
+            {
+                count++;
+                Console.WriteLine($"{new string(' ', level*2)}{file.Name}");
+            }
+
         }
     }
 

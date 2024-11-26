@@ -83,7 +83,7 @@ namespace Sunrise_Terminal
                 else if (selectedObject == 3) OpenSlideBar(new OptionsSlideBar(20, this.slideBarLocationX), api);
             }
             //------------------------------------------------------------------------------------------------------------------------------------F9 key
-            else if (info.Key == ConsoleKey.F9)
+            else if (info.Key == ConsoleKey.F9 || info.Key == ConsoleKey.Escape)
             {
                 api.Application.SwitchWindow(api.GetActiveListWindow());
             }

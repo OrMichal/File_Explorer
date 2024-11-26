@@ -11,8 +11,6 @@ namespace Sunrise_Terminal.DataHandlers
     public class DataManagement
     {
         public string StartingPath { get; } = $@"C:\users\{Environment.UserName}\desktop";
-        public delegate List<Row> FilterDelegate(List<Row> rows);
-        public FilterDelegate Filter { get; set; }
 
         public List<Row> GetFiles(List<Row> Rows, string path)
         {
@@ -51,9 +49,6 @@ namespace Sunrise_Terminal.DataHandlers
                         Size = file.Length
                     });
                 }
-
-                if(Filter != null) Rows = Filter(Rows);
-
                 return Rows;
 
             }

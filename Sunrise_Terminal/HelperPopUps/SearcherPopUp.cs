@@ -48,7 +48,7 @@ namespace Sunrise_Terminal.HelperPopUps
         {
             graphics.DrawSquare(this.width, this.height, this.LocationX, this.LocationY, this.Heading);
             graphics.DrawTextBox(this.width - 2, this.LocationX + 1, this.LocationY + 1, editBox.HighLightedText, this.selectedChar, this.offset);
-            graphics.DrawButtons(5, this.LocationX + 1, this.LocationY + 4, this.buttons, this.selectedButton);
+            graphics.DrawButtons(this.LocationX + 1, this.LocationY + 4, this.buttons, this.selectedButton);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)

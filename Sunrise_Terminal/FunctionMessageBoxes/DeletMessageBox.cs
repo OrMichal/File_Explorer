@@ -47,7 +47,7 @@ namespace Sunrise_Terminal
             this.LocationY = Console.WindowHeight / 2 - this.height / 2 + api.Application.activeWindows.Count;
 
             graphics.DrawSquare(this.width, this.height, this.LocationX , this.LocationY , Heading);
-            graphics.DrawButtons(buttonWidth, this.LocationX + this.width / 2 - buttonWidth, LocationY + this.height/2 - this.height / 2 + MarginTop, this.buttons, selectedButton);
+            graphics.DrawButtons(this.LocationX + this.width / 2 - buttonWidth, LocationY + this.height/2 - this.height / 2 + MarginTop, this.buttons, selectedButton);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
