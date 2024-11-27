@@ -1,4 +1,5 @@
 ﻿using Sunrise_Terminal.Core;
+using Sunrise_Terminal.DataHandlers;
 using Sunrise_Terminal.MessageBoxes;
 using Sunrise_Terminal.objects;
 using Sunrise_Terminal.Utilities;
@@ -31,8 +32,31 @@ namespace Sunrise_Terminal
         {
             if (info.Key == ConsoleKey.F1) api.Application.SwitchWindow(new HelpMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
             else if (info.Key == ConsoleKey.F2) api.Application.SwitchWindow(new MenuMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
-            else if (info.Key == ConsoleKey.F3) api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth, Console.WindowHeight, api));
-            else if (info.Key == ConsoleKey.F4) api.Application.SwitchWindow(new EditMessageBox(Console.WindowWidth, Console.WindowHeight, api));
+            else if (info.Key == ConsoleKey.F3)
+            {
+                if(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                {
+                    api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth, Console.WindowHeight, api));
+                }
+                else
+                {
+                    api.GetActiveListWindow().ActivePath = new DataManagement().GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile().Substring(1));
+                    api.RequestFilesRefresh();
+                }
+
+            }
+            else if (info.Key == ConsoleKey.F4)
+            {
+                if (File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                {
+                    api.Application.SwitchWindow(new EditMessageBox(Console.WindowWidth, Console.WindowHeight, api));
+                }
+                else
+                {
+                    api.ThrowError("Not a file");
+                }
+
+            }
             else if (info.Key == ConsoleKey.F5) api.Application.SwitchWindow(new CopyMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F6) api.Application.SwitchWindow(new RenMovMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F7) api.Application.SwitchWindow(new CrtDirMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));

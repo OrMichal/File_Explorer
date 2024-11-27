@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -162,7 +163,7 @@ namespace Sunrise_Terminal.objects
             Console.Write(Content);
         }
 
-        public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset, string highLightedText)
+        public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset, string highLightedText, List<Point> selectLoacations)
         {
             IMessageBox.DefaultColor();
             Console.SetCursorPosition(0, 1);
@@ -192,7 +193,12 @@ namespace Sunrise_Terminal.objects
                         if (j == selectedX)
                         {
                             IMessageBox.SelectionColor();
-                            //IMessageBox.DefaultColor();
+                            Console.Write(currentLine[j]);
+                        }
+                        else if(selectLoacations.Contains(new Point(j, i)))
+                        {
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.Black;
                             Console.Write(currentLine[j]);
                         }
                         else
@@ -204,27 +210,28 @@ namespace Sunrise_Terminal.objects
                 }
                 else
                 {
-                    Console.Write($"│");
+                    Console.Write($"│{(actualIndex + 1).ToString().PadRight(4)} ");
+                    for (int j = 0; j < currentLine.Length; j++)
+                    {
+                        if (checkers.StringContains(currentLine, highLightedText))
+                        {
+                            Console.BackgroundColor = ConsoleColor.Red;
+                            Console.Write($"{currentLine[j]}");
+                        }
+                        else if (selectLoacations.Contains(new Point(j,i)))
+                        {
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.Write($"{currentLine[j]}");
+                        }
+                        else
+                        {
+                            IMessageBox.DefaultColor();
+                            Console.Write($"{currentLine[j]}");
+                        }
+                    }
+                    Console.WriteLine($"{new string(' ', width - currentLine.Length - 7)}│");
 
-                    if (checkers.StringContains(currentLine, highLightedText))
-                    {
-                        Console.BackgroundColor = ConsoleColor.Red;
-                    }
-                    else
-                    {
-                        IMessageBox.DefaultColor();
-                    }
-                    Console.Write($"{(actualIndex + 1).ToString().PadRight(4)} ");
-                    Console.Write(currentLine);
-                    try
-                    {
-                        Console.WriteLine($"{new string(' ', width - currentLine.Length - 7)}│");
-
-                    }
-                    catch
-                    {
-
-                    }
                 }
                 IMessageBox.DefaultColor();
             }

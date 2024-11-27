@@ -16,7 +16,7 @@ namespace Sunrise_Terminal.Core
         public API Api { get; set; } = new API();
         private UltraFormatter Formatter = new UltraFormatter();
         public HeaderMenu headerMenu = new HeaderMenu();
-        private FooterMenu footerMenu = new FooterMenu();
+        
         private ConsoleFormatter consoleFormatter = new ConsoleFormatter();
         public DirPanel DirPanel;
         public Settings Settings = new Settings();
@@ -49,7 +49,6 @@ namespace Sunrise_Terminal.Core
             Settings.WindowWidth = Console.WindowWidth / Settings.NumberOfWindows;
             consoleFormatter.FormatCheck();
             headerMenu.Draw(0, Api);
-            footerMenu.Draw();
 
             if (DirPanel.listWindows.Contains(activeWindow))
             {

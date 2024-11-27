@@ -24,7 +24,15 @@ namespace Sunrise_Terminal.Core
 
         public string GetSelectedFile()
         {
-            return GetActiveListWindow().Rows[GetActiveListWindow().cursor.Y].Name.Substring(1);
+            if (Directory.Exists(GetActiveListWindow().Rows[GetActiveListWindow().cursor.Y].Name.Substring(1)))
+            {
+                return GetActiveListWindow().Rows[GetActiveListWindow().cursor.Y].Name.Substring(1);
+            }
+            else
+            {
+                return GetActiveListWindow().Rows[GetActiveListWindow().cursor.Y].Name;
+            }
+
         }
 
         public string GetActivePath()

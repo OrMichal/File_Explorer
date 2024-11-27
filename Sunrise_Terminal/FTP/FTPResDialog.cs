@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sunrise_Terminal.HelperPopUps
+namespace Sunrise_Terminal.FTP
 {
     public class FTPResDialog : Window, IMessageBox
     {
@@ -21,7 +21,7 @@ namespace Sunrise_Terminal.HelperPopUps
         {
             width = Width;
             height = Height;
-            this.Description = Message;
+            Description = Message;
             LocationX = Console.WindowWidth / 2 - width / 2;
             LocationY = Console.WindowHeight / 2 - height / 2;
         }

@@ -12,6 +12,7 @@ using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.objects;
 using Sunrise_Terminal.Utilities;
 using Sunrise_Terminal.HelperPopUps;
+using System.Drawing;
 
 namespace Sunrise_Terminal.MessageBoxes
 {
@@ -38,6 +39,13 @@ namespace Sunrise_Terminal.MessageBoxes
         private TextEditOperations editOperations;
         public string HighLightedText = "";
         private string textToCopy = "";
+
+        private bool marking = false;
+        private string selectedText = "";
+        private bool left = false;
+
+        private List<Point> selectionLocation = new List<Point>();
+
         private string selectedRowText
         {
             get
@@ -96,35 +104,33 @@ namespace Sunrise_Terminal.MessageBoxes
         public override void Draw(int LocationX, API api, bool _ = true)
         {
             Console.CursorVisible = true;
-            if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
-            {
-                return;
-            }
+            new FooterMenu(new List<Object>() 
+            { 
+                new Object() { name = "Help"}, 
+                new Object() { name = "Save"}, 
+                new Object() { name = "Mark"}, 
+                new Object() { name = "Replace"}, 
+                new Object() { name = "Copy"}, 
+                new Object() { name = "Move"}, 
+                new Object() { name = "Search"}, 
+                new Object() { name = "Delete"}, 
+                new Object() { name = "PullDn"}, 
+                new Object() { name = "Quit"} 
+            }).Draw();
 
-            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText);
+            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText, this.selectionLocation);
 
-            try
-            {
-                Console.SetCursorPosition(cursor.X + 6, cursor.Y + 2);
+            
+               // Console.SetCursorPosition(cursor.X + 6, cursor.Y + 2);
 
-            }
-            catch (Exception)
-            {
+            
 
-            }
         }
 
         
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-
-            if (!(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()))))
-            {
-                api.ThrowError("Not a file silly!");
-                return;
-            }
-
             if(info.Key == ConsoleKey.F1)
             {
                 api.Application.SwitchWindow(new HelpMessageBox(50, 50));
@@ -144,11 +150,25 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.RightArrow)
             {
+                left = false;
                 cursor.MoveRight();
+
+                if (marking)
+                {
+                    selectedText += Rows[this.cursor.Y][cursor.X];
+                    selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
+                }
             }
             else if(info.Key == ConsoleKey.LeftArrow)
             {
-                cursor.MoveLeft();   
+                left = true;
+                cursor.MoveLeft();
+
+                if (marking)
+                {
+                    selectedText += Rows[this.cursor.Y][cursor.X];
+                    selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
+                }
             }
             else if(info.Key == ConsoleKey.NumPad6)
             {
@@ -191,11 +211,11 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 editOperations.InsertNewLine();
             }
-            else if(info.Key == ConsoleKey.F5)
+            else if(info.Key == ConsoleKey.F2)
             {
                 dataManager.SaveChanges(api.GetActivePath(), api.GetSelectedFile(), this.Rows);
             }
-            else if( info.Key == ConsoleKey.Escape)
+            else if( info.Key == ConsoleKey.F10)
             {
                 api.CloseActiveWindow();
             }
@@ -203,7 +223,7 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 insertion = !insertion;
             }
-            else if(info.Key == ConsoleKey.H && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            else if(info.Key == ConsoleKey.F7)
             {
                 api.Application.SwitchWindow(new SearcherPopUp(20,9, this, "Searcher"));
                 Console.CursorVisible = false;
@@ -216,15 +236,41 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 editOperations.CopyCurrentLine();
             }
-            /*
-            else if(info.Key == ConsoleKey.C && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            else if(info.Key == ConsoleKey.F3)
             {
-                editOperations.copy(out textToCopy);
+                marking = !marking;
+
+                if (marking)
+                {
+                    selectedText += Rows[cursor.Y][cursor.X];
+                    selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
+                }
+                else if(marking == false)
+                {
+                    marking = false;
+                    if(left) selectedText = editOperations.InvertString(selectedText);
+                }
             }
-            else if(info.Key == ConsoleKey.V && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            else if(info.Key == ConsoleKey.Escape)
             {
-                editOperations.Paste(textToCopy);
-            }*/
+                if (marking)
+                {
+                    this.selectedText = string.Empty;
+                    marking = false;
+                }
+
+                selectionLocation.Clear();
+            }
+            else if(info.Key == ConsoleKey.F5)
+            {
+                Rows[cursor.Y] = selectedText;
+            }
+
+            if(info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift))
+            {
+                throw new NotImplementedException(this.selectedText);
+            }
+
         }
 
     }

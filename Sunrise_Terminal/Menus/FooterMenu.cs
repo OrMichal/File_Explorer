@@ -11,21 +11,9 @@ namespace Sunrise_Terminal
     {
         public List<Object> objects { get; set; }
 
-        public FooterMenu()
+        public FooterMenu(List<Object> objects)
         {
-            objects = new List<Object>()
-            {
-                new Object(){name = "Help"},
-                new Object(){name = "Menu"},
-                new Object(){name = "Preview"},
-                new Object(){name = "Edit"},
-                new Object(){name = "Copy"},
-                new Object(){name = "RenMov"},
-                new Object(){name = "CrtDir"},
-                new Object(){name = "Delete"},
-                new Object(){name = "PullDn"},
-                new Object(){name = "Quit"}
-            };
+            this.objects = objects;
         }
         public void Draw()
         {

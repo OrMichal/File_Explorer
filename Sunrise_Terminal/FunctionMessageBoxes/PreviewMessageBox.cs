@@ -46,15 +46,6 @@ namespace Sunrise_Terminal.MessageBoxes
         }
         public override void Draw(int LocationX, API api, bool _ =  true)
         {
-            
-            if (Directory.Exists(api.GetActiveListWindow().ActivePath + api.GetSelectedFile()))
-            {
-                api.GetActiveListWindow().ActivePath = dataManager.GoIn(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
-                api.RequestFilesRefresh();
-                api.CloseActiveWindow();
-                return;
-            }
-
             graphics.DrawView(this.width, this.Heading, this.DataParted, this.offset);
         }
 

@@ -23,7 +23,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
         {
             this.height = height;
             this.width = width;
-            this.ftpService = new FTPService(api);
+            //this.ftpService = new FTPService(api);
         }
 
         public override void Draw(int LocationX, API api, bool active = true)

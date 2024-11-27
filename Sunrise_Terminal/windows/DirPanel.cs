@@ -11,7 +11,19 @@ namespace Sunrise_Terminal.windows
     public class DirPanel : Window
     {
         public List<ListWindow> listWindows = new List<ListWindow>();
+        public FooterMenu footerMenu = new FooterMenu(new List<Object>() {
 
+                new Object(){name = "Help"},
+                new Object(){name = "Menu"},
+                new Object(){name = "Preview"},
+                new Object(){name = "Edit"},
+                new Object(){name = "Copy"},
+                new Object(){name = "RenMov"},
+                new Object(){name = "CrtDir"},
+                new Object(){name = "Delete"},
+                new Object(){name = "PullDn"},
+                new Object(){name = "Quit"}
+            });
         public DirPanel(int numberOfListWindows, API api)
         {
             for (int i = 0; i < numberOfListWindows; i++)
@@ -29,6 +41,7 @@ namespace Sunrise_Terminal.windows
                 item.Draw(i * Settings.WindowWidth, api, listWindows.IndexOf(item) == api.ActiveWindowIndex);
                 i++;
             }
+            footerMenu.Draw();
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
