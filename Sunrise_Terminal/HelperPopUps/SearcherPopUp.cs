@@ -1,7 +1,7 @@
 ﻿using Sunrise_Terminal.Core;
 using Sunrise_Terminal.DataHandlers;
+using Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox;
 using Sunrise_Terminal.interfaces;
-using Sunrise_Terminal.MessageBoxes;
 using Sunrise_Terminal.objects;
 using System;
 using System.Collections.Generic;

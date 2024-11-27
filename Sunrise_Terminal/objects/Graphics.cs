@@ -124,38 +124,38 @@ namespace Sunrise_Terminal.objects
             Console.WriteLine($"└{new string("").PadRight(width - 2, '─')}┘");
         }
 
-        public void DrawButtons(int LocationX, int LocationY, List<Button> buttons, int selectedButton = 0)
+        public void DrawButtons(int LocationX, int LocationY, List<Button> buttons, int selectedButton = 0, int padding = 2)
         {
-            for (int i = 0; i < buttons.Count; i++)
+            int currentX = LocationX;
+
+            foreach (var button in buttons)
             {
-                int buttonX = LocationX + (5 * i);
-                int buttonY = LocationY;
+                string label = button.Label;
+                int buttonWidth = label.Length + 2;
 
-                Console.SetCursorPosition(buttonX, buttonY);
+                Console.SetCursorPosition(currentX, LocationY);
                 IMessageBox.DefaultColor();
-                Console.Write($"┌{new string('─', buttons[i].Label.Length)}┐");
+                Console.Write($"┌{new string('─', label.Length)}┐");
 
-                Console.SetCursorPosition(buttonX, buttonY + 1);
+                Console.SetCursorPosition(currentX, LocationY + 1);
                 IMessageBox.DefaultColor();
                 Console.Write("│");
-                if (i == selectedButton)
+                if (buttons.IndexOf(button) == selectedButton)
                 {
                     IMessageBox.SelectionColor();
-                    Console.Write(buttons[i].Label);
                 }
-                else
-                {
-                    IMessageBox.DefaultColor();
-                    Console.Write(buttons[i].Label);
-                }
+                Console.Write(label);
                 IMessageBox.DefaultColor();
                 Console.Write("│");
 
-                Console.SetCursorPosition(buttonX, buttonY + 2);
+                Console.SetCursorPosition(currentX, LocationY + 2);
                 IMessageBox.DefaultColor();
-                Console.Write($"└{new string('─', buttons[i].Label.Length)}┘");
+                Console.Write($"└{new string('─', label.Length)}┘");
+
+                currentX += buttonWidth + padding;
             }
         }
+
 
         public void DrawLabel(int LocationX, int LocationY, string Content = "", int marginLeft = 0)
         {

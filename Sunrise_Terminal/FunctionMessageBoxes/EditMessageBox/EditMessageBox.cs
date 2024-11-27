@@ -13,8 +13,10 @@ using Sunrise_Terminal.objects;
 using Sunrise_Terminal.Utilities;
 using Sunrise_Terminal.HelperPopUps;
 using System.Drawing;
+using Sunrise_Terminal.MessageBoxes;
+using System.Runtime.CompilerServices;
 
-namespace Sunrise_Terminal.MessageBoxes
+namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 {
     public class EditMessageBox : Window, IMessageBox, IHasCursor<string>
     {
@@ -40,6 +42,7 @@ namespace Sunrise_Terminal.MessageBoxes
         public string HighLightedText = "";
         private string textToCopy = "";
 
+        private bool chgMade = false;
         private bool marking = false;
         private string selectedText = "";
         private bool left = false;
@@ -50,19 +53,19 @@ namespace Sunrise_Terminal.MessageBoxes
         {
             get
             {
-                return this.Rows[cursor.Y] ?? (0).ToString();
+                return Rows[cursor.Y] ?? 0.ToString();
             }
 
         }
 
         public EditMessageBox(int Width, int Height, API api)
         {
-            editOperations = new TextEditOperations(this.cursor);
-            cursor.Movement.Data = this.Rows;
-            this.width = Width;
-            this.height = Height;
+            editOperations = new TextEditOperations(cursor);
+            cursor.Movement.Data = Rows;
+            width = Width;
+            height = Height;
             Heading = "Editation";
-            
+
             using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
             {
                 while (!sr.EndOfStream)
@@ -73,14 +76,14 @@ namespace Sunrise_Terminal.MessageBoxes
                 Rows.Add(" ");
             }
 
-            if(Rows.Count == 0)
+            if (Rows.Count == 0)
             {
                 Rows.Add(" ");
             }
 
             for (int i = 0; i < Rows.Count; i++)
             {
-                if(Rows[i].Length == 0)
+                if (Rows[i].Length == 0)
                 {
                     Rows[i] = " ";
                 }
@@ -89,27 +92,27 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, this.HighLightedText, this.selectionLocation);
-            new FooterMenu(new List<Object>() 
-            { 
-                new Object() { name = "Help"}, 
-                new Object() { name = "Save"}, 
-                new Object() { name = "Mark"}, 
-                new Object() { name = "Replace"}, 
-                new Object() { name = "Copy"}, 
-                new Object() { name = "Move"}, 
-                new Object() { name = "Search"}, 
-                new Object() { name = "Delete"}, 
-                new Object() { name = "PullDn"}, 
-                new Object() { name = "Quit"} 
+            graphics.DrawEditView(width, Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText, selectionLocation);
+            new FooterMenu(new List<Object>()
+            {
+                new Object() { name = "Help"},
+                new Object() { name = "Save"},
+                new Object() { name = "Mark"},
+                new Object() { name = "Replace"},
+                new Object() { name = "Copy"},
+                new Object() { name = "Move"},
+                new Object() { name = "Search"},
+                new Object() { name = "Delete"},
+                new Object() { name = "PullDn"},
+                new Object() { name = "Quit"}
             }).Draw();
         }
 
-        
+
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-            if(info.Key == ConsoleKey.F1)
+            if (info.Key == ConsoleKey.F1)
             {
                 api.Application.SwitchWindow(new HelpMessageBox(50, 50));
             }
@@ -122,52 +125,55 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 cursor.MoveUp();
             }
-            else if(info.Key == ConsoleKey.RightArrow)
+            else if (info.Key == ConsoleKey.RightArrow)
             {
-                int oldX = this.cursor.X;
+                int oldX = cursor.X;
                 left = false;
                 cursor.MoveRight();
 
                 if (marking && oldX != cursor.X)
                 {
-                    selectedText += Rows[this.cursor.Y][cursor.X];
-                    selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
+                    selectedText += Rows[cursor.Y][cursor.X];
+                    selectionLocation.Add(new Point(cursor.X, cursor.Y));
                 }
             }
-            else if(info.Key == ConsoleKey.LeftArrow)
+            else if (info.Key == ConsoleKey.LeftArrow)
             {
-                int oldX = this.cursor.X;
+                int oldX = cursor.X;
                 left = true;
                 cursor.MoveLeft();
 
                 if (marking && oldX != cursor.X)
                 {
-                    selectedText += Rows[this.cursor.Y][cursor.X];
-                    selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
+                    selectedText += Rows[cursor.Y][cursor.X];
+                    selectionLocation.Add(new Point(cursor.X, cursor.Y));
                 }
             }
-            else if(info.Key == ConsoleKey.PageUp)
+            else if (info.Key == ConsoleKey.PageUp)
             {
                 cursor.PgUp();
             }
-            else if(info.Key == ConsoleKey.PageDown)
+            else if (info.Key == ConsoleKey.PageDown)
             {
                 cursor.PgDown();
             }
-            else if(info.Key == ConsoleKey.NumPad6)
+            else if (info.Key == ConsoleKey.NumPad6)
             {
                 editOperations.PushUp();
+                chgMade = true;
             }
-            else if(info.Key == ConsoleKey.NumPad3)
+            else if (info.Key == ConsoleKey.NumPad3)
             {
                 editOperations.PushDown();
+                chgMade = true;
             }
-            else if((char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar)) && info.Key != ConsoleKey.Enter)
+            else if ((char.IsLetterOrDigit(info.KeyChar) || char.IsWhiteSpace(info.KeyChar)) && info.Key != ConsoleKey.Enter)
             {
+                chgMade = true;
                 if (insertion)
                 {
                     Rows[cursor.Y] = dataManager.AddCharToText_Insert(cursor.X, selectedRowText, info);
-                    if(cursor.X < this.selectedRowText.Count() - 1)
+                    if (cursor.X < selectedRowText.Count() - 1)
                     {
                         cursor.X++;
                     }
@@ -175,14 +181,14 @@ namespace Sunrise_Terminal.MessageBoxes
                 else if (!insertion)
                 {
                     Rows[cursor.Y] = dataManager.AddCharToText(selectedRowText, info);
-                    cursor.X = this.Rows[this.cursor.Y].Count() - 1;
+                    cursor.X = Rows[cursor.Y].Count() - 1;
 
                 }
             }
-            else if(info.Key == ConsoleKey.Backspace)
+            else if (info.Key == ConsoleKey.Backspace)
             {
-
-                if(cursor.X == 0)
+                chgMade = true;
+                if (cursor.X == 0)
                 {
                     editOperations.RemoveRow();
                 }
@@ -191,67 +197,77 @@ namespace Sunrise_Terminal.MessageBoxes
                     editOperations.EraseLastChar();
                 }
             }
-            else if(info.Key == ConsoleKey.Enter)
+            else if (info.Key == ConsoleKey.Enter)
             {
                 editOperations.InsertNewLine();
             }
-            else if(info.Key == ConsoleKey.F2)
+            else if (info.Key == ConsoleKey.F2)
             {
-                dataManager.SaveChanges(api.GetActivePath(), api.GetSelectedFile(), this.Rows);
+                dataManager.SaveChanges(api.GetActivePath(), api.GetSelectedFile(), Rows);
             }
-            else if( info.Key == ConsoleKey.F10)
+            else if (info.Key == ConsoleKey.F10)
             {
-                api.CloseActiveWindow();
+                if(!chgMade)
+                {
+                    api.CloseActiveWindow();
+                }
+                else
+                {
+                    api.Application.SwitchWindow(new QuitEditMessageBox(50,10, this));
+                }
+
             }
-            else if(info.Key == ConsoleKey.Insert)
+            else if (info.Key == ConsoleKey.Insert)
             {
                 insertion = !insertion;
             }
-            else if(info.Key == ConsoleKey.F7)
+            else if (info.Key == ConsoleKey.F7)
             {
-                api.Application.SwitchWindow(new SearcherPopUp(20,9, this, "Searcher"));
+                api.Application.SwitchWindow(new SearcherPopUp(20, 9, this, "Searcher"));
                 Console.CursorVisible = false;
             }
-            else if(info.Key == ConsoleKey.R && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            else if (info.Key == ConsoleKey.R && info.Modifiers.HasFlag(ConsoleModifiers.Control))
             {
-                this.HighLightedText = string.Empty;
+                HighLightedText = string.Empty;
             }
-            else if(info.Key == ConsoleKey.D && info.Modifiers.HasFlag(ConsoleModifiers.Control))
+            else if (info.Key == ConsoleKey.D && info.Modifiers.HasFlag(ConsoleModifiers.Control))
             {
+                chgMade = true;
                 editOperations.CopyCurrentLine();
             }
-            else if(info.Key == ConsoleKey.F3)
+            else if (info.Key == ConsoleKey.F3)
             {
                 marking = !marking;
-
                 if (marking)
                 {
                     selectedText += Rows[cursor.Y][cursor.X];
-                    selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
+                    selectionLocation.Add(new Point(cursor.X, cursor.Y));
                 }
-                else if(marking == false)
+                else if (marking == false)
                 {
                     marking = false;
-                    if(left) selectedText = editOperations.InvertString(selectedText);
+                    if (left) selectedText = editOperations.InvertString(selectedText);
                 }
             }
-            else if(info.Key == ConsoleKey.Escape)
+            else if (info.Key == ConsoleKey.Escape)
             {
                 if (marking)
                 {
-                    this.selectedText = string.Empty;
+                    selectedText = string.Empty;
                     marking = false;
                 }
 
                 selectionLocation.Clear();
             }
-            else if(info.Key == ConsoleKey.F5)
+            else if (info.Key == ConsoleKey.F5)
             {
+                chgMade = true;
                 Rows[cursor.Y] = selectedText;
             }
 
-            if (info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift)) {
-                throw new Exception(this.selectedText);
+            if (info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift))
+            {
+                throw new Exception(selectedText);
             }
         }
 
