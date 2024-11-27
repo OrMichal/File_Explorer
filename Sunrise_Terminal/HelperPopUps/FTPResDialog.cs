@@ -1,27 +1,27 @@
-﻿using System;
+﻿using Sunrise_Terminal.Core;
+using Sunrise_Terminal.interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Sunrise_Terminal.Core;
-using Sunrise_Terminal.interfaces;
 
 namespace Sunrise_Terminal.HelperPopUps
 {
-    public class ErrMessageBox : Window, IMessageBox
+    public class FTPResDialog : Window, IMessageBox
     {
         new public int width { get; set; }
         public int height { get; set; }
-        public string Heading { get; set; } = "Error occured";
+        public string Heading { get; set; } = "FTP message";
         public string Description { get; set; }
         public int LocationX { get; set; }
         public int LocationY { get; set; }
 
-        public ErrMessageBox(int Width, int Height, string Message)
+        public FTPResDialog(int Width, int Height, string Message)
         {
             width = Width;
             height = Height;
-            Description = Message;
+            this.Description = Message;
             LocationX = Console.WindowWidth / 2 - width / 2;
             LocationY = Console.WindowHeight / 2 - height / 2;
         }
@@ -30,7 +30,6 @@ namespace Sunrise_Terminal.HelperPopUps
         {
             graphics.DrawSquare(width, height, this.LocationX, LocationY, Heading);
             graphics.DrawLabel(this.LocationX, LocationY + 4, Description, 6);
-            Console.Beep(2000, 500);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)

@@ -83,12 +83,28 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
             if(info.Key == ConsoleKey.Enter)
             {
                 if (SelectedOperation == 0) return;
-                else if(SelectedOperation == 1) return;
-                else if(SelectedOperation == 2) return;
-                else if(SelectedOperation == 3) api.Application.SwitchWindow(new TreeStructDialog(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())));
-                else if(SelectedOperation == 4) return;
-                else if(SelectedOperation == 5) return;
+                else if (SelectedOperation == 1) return;
+                else if (SelectedOperation == 2) return;
+                else if (SelectedOperation == 3)
+                {
+                    if(Directory.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                    {
+                        api.Application.SwitchWindow(new TreeStructDialog(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())));
+                    }
+                    else
+                    {
+                        api.ThrowError("Not a directory");
+                    }
+                }
+
+                else if (SelectedOperation == 4) return;
+                else if (SelectedOperation == 5) return;
                 else if (SelectedOperation == 6) api.Application.SwitchWindow(api.GetActiveListWindow().FilterDialog);
+                else if(SelectedOperation == 7) return;
+                else if(SelectedOperation == 8)
+                {
+
+                }
             }
         }
     }

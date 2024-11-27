@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sunrise_Terminal.Utilities
 {
-    public static class Settings
+    public class Settings
     {
         public static int NumberOfWindows { get; set; } = 1;
         public static int WindowWidth { get; set; } = Console.WindowWidth / NumberOfWindows;

@@ -14,12 +14,12 @@ namespace Sunrise_Terminal.Core
     {
         public Stack<Window> activeWindows = new Stack<Window>();
         public API Api { get; set; } = new API();
-
         private UltraFormatter Formatter = new UltraFormatter();
         public HeaderMenu headerMenu = new HeaderMenu();
         private FooterMenu footerMenu = new FooterMenu();
         private ConsoleFormatter consoleFormatter = new ConsoleFormatter();
         public DirPanel DirPanel;
+        public Settings Settings = new Settings();
 
         public Window activeWindow
         {

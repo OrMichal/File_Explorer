@@ -20,6 +20,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
         private DirectoryInfo source;
         private List<string> data = new List<string>();
         private int offset = 0;
+        private bool notDirectory = false;
         public TreeStructDialog(string source)
         {
             this.source = new DirectoryInfo(source);
@@ -29,10 +30,12 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
         public override void Draw(int LocationX, API api, bool active = true)
         {
             graphics.DrawView(Console.WindowWidth, "Tree structure", this.data, this.offset);
+            Window.DefaultColor();
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+            
             if(info.Key == ConsoleKey.Escape)
             {
                 api.CloseActiveWindow();
@@ -69,6 +72,5 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
                 data.Add($"{filePrefix}{files[i].Name}");
             }
         }
-
     }
 }
