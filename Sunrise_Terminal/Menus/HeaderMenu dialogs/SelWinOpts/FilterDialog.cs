@@ -78,8 +78,18 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left
                 {
                     headerActions.Filter(this.checkBoxes);
                 }
-                
-                if(selectedButton == 2) headerActions.ResetFilters();
+
+                if (selectedButton == 2)
+                {
+                    headerActions.ResetFilters();
+                    foreach (var item in this.checkBoxes)
+                    {
+                        if(item.activeChoice == 'x')
+                        {
+                            item.check();
+                        }
+                    }
+                }
 
                 api.CloseActiveWindow();
                 api.ReDrawDirPanel();

@@ -166,10 +166,12 @@ namespace Sunrise_Terminal.objects
         public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset, string highLightedText, List<Point> selectLoacations)
         {
             IMessageBox.DefaultColor();
+            Console.SetCursorPosition(0, 2);
+            Console.WriteLine(new string(' ', width));
             Console.SetCursorPosition(0, 1);
             Console.WriteLine($"┌{new UltraFormatter().DoublePadding(Heading, width - 2, '─')}┐");
 
-            for (int i = 0; i < Settings.WindowDataLimit; i++)
+            for (int i = 0; i < Settings.WindowDataLimit + 2; i++)
             {
                 if (Offset + i >= array.Count)
                 {
@@ -187,8 +189,7 @@ namespace Sunrise_Terminal.objects
 
                 if (isSelected)
                 {
-                    Console.Write($"│{(actualIndex + 1).ToString().PadRight(4)} ");
-
+                    Console.Write($"│ ");
                     for (int j = 0; j < currentLine.Length; j++)
                     {
                         if (j == selectedX)
@@ -211,7 +212,7 @@ namespace Sunrise_Terminal.objects
                 }
                 else
                 {
-                    Console.Write($"│{(actualIndex + 1).ToString().PadRight(4)} ");
+                    Console.Write($"│ ");
                     StringBuilder outputLine = new StringBuilder();
 
                     bool containsHighlight = checkers.StringContains(currentLine, highLightedText);
@@ -245,15 +246,14 @@ namespace Sunrise_Terminal.objects
                         IMessageBox.DefaultColor();
                         Console.Write(outputLine.ToString());
                     }
-
-                    Console.WriteLine(new string(' ', width - currentLine.Length - 7) + "│");
+                    Console.WriteLine(new string(' ', width - currentLine.Length - 3) + "│");
 
                 }
                 IMessageBox.DefaultColor();
             }
 
             IMessageBox.DefaultColor();
-            Console.SetCursorPosition(0, Settings.WindowDataLimit + 2);
+            Console.SetCursorPosition(0, Settings.WindowDataLimit + 4);
             Console.WriteLine($"└{new string('─', width - 2)}┘");
         }
 

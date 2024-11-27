@@ -114,6 +114,7 @@ namespace Sunrise_Terminal.windows
                     this.Rows = ((Func<List<Row>, List<Row>>)item)(this.Rows);
                 }
             }
+            this.cursor.Y = 0;
         }
 
         public void FilterNullify()

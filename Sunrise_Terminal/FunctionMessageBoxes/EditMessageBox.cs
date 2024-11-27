@@ -89,6 +89,7 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
+            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, this.HighLightedText, this.selectionLocation);
             new FooterMenu(new List<Object>() 
             { 
                 new Object() { name = "Help"}, 
@@ -102,17 +103,12 @@ namespace Sunrise_Terminal.MessageBoxes
                 new Object() { name = "PullDn"}, 
                 new Object() { name = "Quit"} 
             }).Draw();
-
-            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, this.HighLightedText, this.selectionLocation);
-            // Console.SetCursorPosition(cursor.X + 6, cursor.Y + 2);
         }
 
         
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
-
-
             if(info.Key == ConsoleKey.F1)
             {
                 api.Application.SwitchWindow(new HelpMessageBox(50, 50));
@@ -147,6 +143,14 @@ namespace Sunrise_Terminal.MessageBoxes
                     selectedText += Rows[this.cursor.Y][cursor.X];
                     selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
                 }
+            }
+            else if(info.Key == ConsoleKey.PageUp)
+            {
+                cursor.PgUp();
+            }
+            else if(info.Key == ConsoleKey.PageDown)
+            {
+                cursor.PgDown();
             }
             else if(info.Key == ConsoleKey.NumPad6)
             {
@@ -242,6 +246,10 @@ namespace Sunrise_Terminal.MessageBoxes
             else if(info.Key == ConsoleKey.F5)
             {
                 Rows[cursor.Y] = selectedText;
+            }
+
+            if (info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift)) {
+                throw new Exception(this.selectedText);
             }
         }
 
