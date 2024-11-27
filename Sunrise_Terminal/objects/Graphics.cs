@@ -188,6 +188,7 @@ namespace Sunrise_Terminal.objects
                 if (isSelected)
                 {
                     Console.Write($"│{(actualIndex + 1).ToString().PadRight(4)} ");
+
                     for (int j = 0; j < currentLine.Length; j++)
                     {
                         if (j == selectedX)
@@ -211,26 +212,41 @@ namespace Sunrise_Terminal.objects
                 else
                 {
                     Console.Write($"│{(actualIndex + 1).ToString().PadRight(4)} ");
+                    StringBuilder outputLine = new StringBuilder();
+
+                    bool containsHighlight = checkers.StringContains(currentLine, highLightedText);
+
                     for (int j = 0; j < currentLine.Length; j++)
                     {
-                        if (checkers.StringContains(currentLine, highLightedText))
+                        Point currentPoint = new Point(j, i);
+
+                        if (containsHighlight && currentLine.Substring(j).StartsWith(highLightedText))
                         {
                             Console.BackgroundColor = ConsoleColor.Red;
-                            Console.Write($"{currentLine[j]}");
+                            Console.Write(currentLine.Substring(j, highLightedText.Length));
+                            j += highLightedText.Length - 1;
+                            IMessageBox.DefaultColor();
                         }
-                        else if (selectLoacations.Contains(new Point(j,i)))
+                        else if (selectLoacations.Contains(currentPoint))
                         {
                             Console.BackgroundColor = ConsoleColor.White;
                             Console.ForegroundColor = ConsoleColor.Black;
-                            Console.Write($"{currentLine[j]}");
+                            Console.Write(currentLine[j]);
+                            IMessageBox.DefaultColor();
                         }
                         else
                         {
-                            IMessageBox.DefaultColor();
-                            Console.Write($"{currentLine[j]}");
+                            outputLine.Append(currentLine[j]);
                         }
                     }
-                    Console.WriteLine($"{new string(' ', width - currentLine.Length - 7)}│");
+
+                    if (outputLine.Length > 0)
+                    {
+                        IMessageBox.DefaultColor();
+                        Console.Write(outputLine.ToString());
+                    }
+
+                    Console.WriteLine(new string(' ', width - currentLine.Length - 7) + "│");
 
                 }
                 IMessageBox.DefaultColor();

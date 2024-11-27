@@ -62,30 +62,16 @@ namespace Sunrise_Terminal.MessageBoxes
             this.width = Width;
             this.height = Height;
             Heading = "Editation";
-            try
+            
+            using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
             {
-                using (StreamReader sr = new StreamReader(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                while (!sr.EndOfStream)
                 {
-                    while (!sr.EndOfStream)
-                    {
-                        Rows.Add(sr.ReadLine());
-                    }
-
-                    Rows.Add(" ");
+                    Rows.Add(sr.ReadLine());
                 }
 
+                Rows.Add(" ");
             }
-            catch (FileNotFoundException)
-            {
-                
-                return;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                api.ThrowError("Access denied");
-                return;
-            }
-            
 
             if(Rows.Count == 0)
             {
@@ -103,7 +89,6 @@ namespace Sunrise_Terminal.MessageBoxes
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            Console.CursorVisible = true;
             new FooterMenu(new List<Object>() 
             { 
                 new Object() { name = "Help"}, 
@@ -118,19 +103,16 @@ namespace Sunrise_Terminal.MessageBoxes
                 new Object() { name = "Quit"} 
             }).Draw();
 
-            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText, this.selectionLocation);
-
-            
-               // Console.SetCursorPosition(cursor.X + 6, cursor.Y + 2);
-
-            
-
+            graphics.DrawEditView(this.width, this.Heading, Rows, cursor.X, cursor.Y, cursor.Offset, this.HighLightedText, this.selectionLocation);
+            // Console.SetCursorPosition(cursor.X + 6, cursor.Y + 2);
         }
 
         
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
         {
+
+
             if(info.Key == ConsoleKey.F1)
             {
                 api.Application.SwitchWindow(new HelpMessageBox(50, 50));
@@ -143,10 +125,6 @@ namespace Sunrise_Terminal.MessageBoxes
             else if (info.Key == ConsoleKey.UpArrow)
             {
                 cursor.MoveUp();
-            }
-            else if(info.Key == ConsoleKey.UpArrow && info.Modifiers.HasFlag(ConsoleModifiers.Alt))
-            {
-                throw new Exception();
             }
             else if(info.Key == ConsoleKey.RightArrow)
             {
@@ -265,12 +243,6 @@ namespace Sunrise_Terminal.MessageBoxes
             {
                 Rows[cursor.Y] = selectedText;
             }
-
-            if(info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift))
-            {
-                throw new NotImplementedException(this.selectedText);
-            }
-
         }
 
     }

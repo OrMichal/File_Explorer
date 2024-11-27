@@ -87,9 +87,9 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                 else if (SelectedOperation == 2) return;
                 else if (SelectedOperation == 3)
                 {
-                    if(Directory.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                    if(Directory.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile().Substring(1))))
                     {
-                        api.Application.SwitchWindow(new TreeStructDialog(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())));
+                        api.Application.SwitchWindow(new TreeStructDialog(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile().Substring(1))));
                     }
                     else
                     {

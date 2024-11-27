@@ -29,8 +29,7 @@ namespace Sunrise_Terminal.UI
             int sizeWidth = width / 4;
             int timeWidth = width / 4;
 
-            try
-            {
+            
                 Console.SetCursorPosition(LocationX, 1);
                 DirectoryInfo dir = new DirectoryInfo(ActivePath);
                 Console.WriteLine($"┌{ActivePath.PadRight(width, '─')}┐");
@@ -45,10 +44,8 @@ namespace Sunrise_Terminal.UI
                     if (i < Rows.Count)
                     {
                         actualIndex = Offset + i;
-                        try
-                        {
+                        
                             Row row = Rows[actualIndex];
-
 
                             Console.SetCursorPosition(LocationX, i + 3);
                             Console.Write("│");
@@ -73,11 +70,7 @@ namespace Sunrise_Terminal.UI
                             Window.DefaultColor();
                             Console.WriteLine("│");
 
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        {
-
-                        }
+                        
                     }
                     else
                     {
@@ -95,11 +88,7 @@ namespace Sunrise_Terminal.UI
                 Console.SetCursorPosition(LocationX, i + 2);
                 Console.WriteLine($"└{new string("".PadRight(width, '─'))}┘");
                 i++;
-            }
-            catch
-            {
-
-            }
+            
         }
     }
 }

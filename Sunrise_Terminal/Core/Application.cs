@@ -32,7 +32,8 @@ namespace Sunrise_Terminal.Core
         public Application(int numberOfWindows = 2, int Height = 50, int Width = 200)
         {
             Console.Title = "Sunrise Terminal";
-            Console.SetBufferSize(Width, Height);
+            Console.BufferWidth = Width;
+            Console.BufferHeight = Height;
             Settings.NumberOfWindows = numberOfWindows;
             Settings.WindowWidth = Console.WindowWidth / numberOfWindows;
             this.Api.Application = this;
@@ -69,7 +70,6 @@ namespace Sunrise_Terminal.Core
         public void SwitchWindow(Window window)
         {
             activeWindows.Push(window);
-            
         }
     }
 
