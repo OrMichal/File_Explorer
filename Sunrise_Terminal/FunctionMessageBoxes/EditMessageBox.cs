@@ -124,10 +124,11 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.RightArrow)
             {
+                int oldX = this.cursor.X;
                 left = false;
                 cursor.MoveRight();
 
-                if (marking)
+                if (marking && oldX != cursor.X)
                 {
                     selectedText += Rows[this.cursor.Y][cursor.X];
                     selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
@@ -135,10 +136,11 @@ namespace Sunrise_Terminal.MessageBoxes
             }
             else if(info.Key == ConsoleKey.LeftArrow)
             {
+                int oldX = this.cursor.X;
                 left = true;
                 cursor.MoveLeft();
 
-                if (marking)
+                if (marking && oldX != cursor.X)
                 {
                     selectedText += Rows[this.cursor.Y][cursor.X];
                     selectionLocation.Add(new Point(this.cursor.X, this.cursor.Y));
