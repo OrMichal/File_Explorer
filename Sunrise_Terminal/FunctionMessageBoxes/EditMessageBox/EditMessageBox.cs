@@ -39,15 +39,17 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
         private DataManagement dataManager = new DataManagement();
         public Cursor<string> cursor { get; set; } = new Cursor<string>();
         private TextEditOperations editOperations;
+        private FooterMenu footerMenu;
         public string HighLightedText = "";
         private string textToCopy = "";
+
 
         private bool chgMade = false;
         private bool marking = false;
         private string selectedText = "";
         private bool left = false;
 
-        private List<Point> selectionLocation = new List<Point>();
+        private Selector selector = new Selector();
 
         private string selectedRowText
         {
@@ -55,7 +57,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             {
                 return Rows[cursor.Y] ?? 0.ToString();
             }
-
+            
         }
 
         public EditMessageBox(int Width, int Height, API api)
@@ -75,7 +77,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 
                 Rows.Add(" ");
             }
-
+            
             if (Rows.Count == 0)
             {
                 Rows.Add(" ");
@@ -88,12 +90,8 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                     Rows[i] = " ";
                 }
             }
-        }
 
-        public override void Draw(int LocationX, API api, bool _ = true)
-        {
-            graphics.DrawEditView(width, Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText, selectionLocation);
-            new FooterMenu(new List<Object>()
+            footerMenu = new FooterMenu(new List<Object>()
             {
                 new Object() { name = "Help"},
                 new Object() { name = "Save"},
@@ -105,7 +103,13 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 new Object() { name = "Delete"},
                 new Object() { name = "PullDn"},
                 new Object() { name = "Quit"}
-            }).Draw();
+            });
+        }
+
+        public override void Draw(int LocationX, API api, bool _ = true)
+        {
+            graphics.DrawEditView(width, Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText, selector.selectedPoints);
+            footerMenu.Draw();
         }
 
 
@@ -119,11 +123,35 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 
             if (info.Key == ConsoleKey.DownArrow)
             {
+                if(marking)
+                {
+                    if(cursor.Y == this.Rows.Count - 1)
+                    {
+                        return;
+                    }
+
+                    selector.SelectLR(this.cursor.X, this.Rows[cursor.Y].Length, this.Rows, cursor.Y);
+                    selector.SelectLR(0, this.cursor.X, this.Rows, cursor.Y + 1);
+                }
+
                 cursor.MoveDown();
             }
             else if (info.Key == ConsoleKey.UpArrow)
             {
+                if (marking)
+                {
+                    if(cursor.Y == 0)
+                    {
+                        return;
+                    }
+
+                    selector.SelectLR(0, cursor.X, this.Rows, cursor.Y);
+                    selector.SelectRL(cursor.X, this.Rows[cursor.Y].Length, this.Rows, cursor.Y + 1);
+                }
+                
                 cursor.MoveUp();
+                
+
             }
             else if (info.Key == ConsoleKey.RightArrow)
             {
@@ -134,7 +162,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 if (marking && oldX != cursor.X)
                 {
                     selectedText += Rows[cursor.Y][cursor.X];
-                    selectionLocation.Add(new Point(cursor.X, cursor.Y));
+                    selector.selectedPoints.Add(new Point(cursor.X, cursor.Y));
                 }
             }
             else if (info.Key == ConsoleKey.LeftArrow)
@@ -146,7 +174,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 if (marking && oldX != cursor.X)
                 {
                     selectedText += Rows[cursor.Y][cursor.X];
-                    selectionLocation.Add(new Point(cursor.X, cursor.Y));
+                    selector.selectedPoints.Add(new Point(cursor.X, cursor.Y));
                 }
             }
             else if (info.Key == ConsoleKey.PageUp)
@@ -241,12 +269,12 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 if (marking)
                 {
                     selectedText += Rows[cursor.Y][cursor.X];
-                    selectionLocation.Add(new Point(cursor.X, cursor.Y));
+                    selector.selectedPoints.Add(new Point(cursor.X, cursor.Y));
                 }
                 else if (marking == false)
                 {
                     marking = false;
-                    if (left) selectedText = editOperations.InvertString(selectedText);
+                    if (left) selectedText = new Checkers().InvertString(selectedText);
                 }
             }
             else if (info.Key == ConsoleKey.Escape)
@@ -257,12 +285,20 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                     marking = false;
                 }
 
-                selectionLocation.Clear();
+                selector.selectedPoints.Clear();
             }
             else if (info.Key == ConsoleKey.F5)
             {
                 chgMade = true;
-                Rows[cursor.Y] = selectedText;
+                /*
+                Rows[cursor.Y] = selectedText;*/
+
+                int i = 0;
+                selector.selectedText.ForEach(x =>
+                {
+                    this.Rows.Insert(cursor.Y + i, x);
+                    i++;
+                });
             }
 
             if (info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift))

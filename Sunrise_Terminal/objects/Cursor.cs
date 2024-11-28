@@ -40,7 +40,7 @@ namespace Sunrise_Terminal.objects
                 }
                 else
                 {
-                    this.X = lastOkX;
+                    this.X = this.lastOkX;
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace Sunrise_Terminal.objects
             }
             else
             {
-                this.X = Math.Min(this.X, this.Movement.Data[this.Y].ToString().Length - 1);
+                this.X = this.lastOkX;
             }
         }
 

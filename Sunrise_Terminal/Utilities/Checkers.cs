@@ -32,6 +32,9 @@ namespace Sunrise_Terminal.Utilities
             return false;
         }
 
-
+        public string InvertString(string text)
+        {
+            return new string(text.Reverse().ToArray());
+        }
     }
 }

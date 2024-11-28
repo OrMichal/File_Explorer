@@ -192,16 +192,19 @@ namespace Sunrise_Terminal.objects
                     Console.Write($"│ ");
                     for (int j = 0; j < currentLine.Length; j++)
                     {
+                        Point currP = new Point(j,i);
+
                         if (j == selectedX)
                         {
                             IMessageBox.SelectionColor();
                             Console.Write(currentLine[j]);
                         }
-                        else if(selectLoacations.Contains(new Point(j, i)))
+                        else if(selectLoacations.Contains(currP))
                         {
                             Console.BackgroundColor = ConsoleColor.White;
                             Console.ForegroundColor = ConsoleColor.Black;
                             Console.Write(currentLine[j]);
+                            Window.DefaultColor();
                         }
                         else
                         {
@@ -219,8 +222,7 @@ namespace Sunrise_Terminal.objects
 
                     for (int j = 0; j < currentLine.Length; j++)
                     {
-                        Point currentPoint = new Point(j, i);
-
+                        Point currentPoint = new Point(j, i + Offset);
                         if (containsHighlight && currentLine.Substring(j).StartsWith(highLightedText))
                         {
                             Console.BackgroundColor = ConsoleColor.Red;

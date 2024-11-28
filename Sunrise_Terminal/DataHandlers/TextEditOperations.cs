@@ -103,10 +103,5 @@ namespace Sunrise_Terminal.DataHandlers
         {
             cursor.Movement.Data[cursor.Y] += text;
         }
-
-        public string InvertString(string text)
-        {
-            return new string(text.Reverse().ToArray());
-        }
     }
 }
