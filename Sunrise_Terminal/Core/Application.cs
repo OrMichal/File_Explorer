@@ -32,10 +32,11 @@ namespace Sunrise_Terminal.Core
         public Application(int numberOfWindows = 2, int Height = 50, int Width = 200)
         {
             Console.Title = "Sunrise Terminal";
-            Console.BufferWidth = Width;
-            Console.BufferHeight = Height;
+
             Settings.NumberOfWindows = numberOfWindows;
             Settings.WindowWidth = Console.WindowWidth / numberOfWindows;
+            Console.BufferHeight = Height;
+
             this.Api.Application = this;
             DirPanel = new DirPanel(numberOfWindows, this.Api);
             SwitchWindow(DirPanel);

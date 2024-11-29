@@ -77,6 +77,7 @@ namespace Sunrise_Terminal.HelperPopUps
             {
                 if(selectedButton == 0)
                 {
+                    editBox.cursor.LocateText(editBox.Rows, editBox.HighLightedText);
                     api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                     api.CloseActiveWindow();
                 }

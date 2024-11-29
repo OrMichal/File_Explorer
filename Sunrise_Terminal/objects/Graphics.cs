@@ -163,7 +163,7 @@ namespace Sunrise_Terminal.objects
             Console.Write(Content);
         }
 
-        public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset, string highLightedText, List<Point> selectLoacations)
+        public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset, List<Point> selectLoacations)
         {
             IMessageBox.DefaultColor();
             Console.SetCursorPosition(0, 2);
@@ -175,7 +175,6 @@ namespace Sunrise_Terminal.objects
             {
                 if (Offset + i >= array.Count)
                 {
-                    IMessageBox.DefaultColor();
                     Console.SetCursorPosition(0, i + 2);
                     Console.WriteLine($"│{new string(' ', width - 2)}│");
                     continue;
@@ -218,19 +217,10 @@ namespace Sunrise_Terminal.objects
                     Console.Write($"│ ");
                     StringBuilder outputLine = new StringBuilder();
 
-                    bool containsHighlight = checkers.StringContains(currentLine, highLightedText);
-
                     for (int j = 0; j < currentLine.Length; j++)
                     {
                         Point currentPoint = new Point(j, i + Offset);
-                        if (containsHighlight && currentLine.Substring(j).StartsWith(highLightedText))
-                        {
-                            Console.BackgroundColor = ConsoleColor.Red;
-                            Console.Write(currentLine.Substring(j, highLightedText.Length));
-                            j += highLightedText.Length - 1;
-                            IMessageBox.DefaultColor();
-                        }
-                        else if (selectLoacations.Contains(currentPoint))
+                        if (selectLoacations.Contains(currentPoint))
                         {
                             Console.BackgroundColor = ConsoleColor.White;
                             Console.ForegroundColor = ConsoleColor.Black;

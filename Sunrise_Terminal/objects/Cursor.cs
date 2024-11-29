@@ -121,5 +121,31 @@ namespace Sunrise_Terminal.objects
             }
         }
 
+        public void LocateText(List<string> data, string searchText)
+        {
+            int currentRow = this.Y;
+            int closestDistance = int.MaxValue;
+            int targetRow = -1;
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].Contains(searchText))
+                {
+                    int distance = Math.Abs(i - currentRow);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        targetRow = i;
+                    }
+                }
+            }
+
+            if (targetRow != -1)
+            {
+                this.Y = targetRow;
+                this.X = data[targetRow].IndexOf(searchText);
+            }
+        }
+
     }
 }

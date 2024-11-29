@@ -38,7 +38,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
         private bool insertion = false;
         private DataManagement dataManager = new DataManagement();
         public Cursor<string> cursor { get; set; } = new Cursor<string>();
-        private TextEditOperations editOperations;
+        public TextEditOperations editOperations;
         private FooterMenu footerMenu;
         public string HighLightedText = "";
         private string textToCopy = "";
@@ -108,7 +108,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 
         public override void Draw(int LocationX, API api, bool _ = true)
         {
-            graphics.DrawEditView(width, Heading, Rows, cursor.X, cursor.Y, cursor.Offset, HighLightedText, selector.selectedPoints);
+            graphics.DrawEditView(width, Heading, Rows, cursor.X, cursor.Y, cursor.Offset, selector.SelectedPoints);
             footerMenu.Draw();
         }
 
@@ -130,11 +130,11 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                         return;
                     }
 
-                    selector.SelectLR(this.cursor.X, this.Rows[cursor.Y].Length, this.Rows, cursor.Y);
-                    selector.SelectLR(0, this.cursor.X, this.Rows, cursor.Y + 1);
+                    selector.SelectLineDown(this.cursor.X, this.Rows[cursor.Y].Length, this.Rows, this.cursor.Y, 1);
                 }
+                    cursor.MoveDown();
+                
 
-                cursor.MoveDown();
             }
             else if (info.Key == ConsoleKey.UpArrow)
             {
@@ -145,13 +145,10 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                         return;
                     }
 
-                    selector.SelectLR(0, cursor.X, this.Rows, cursor.Y);
-                    selector.SelectRL(cursor.X, this.Rows[cursor.Y].Length, this.Rows, cursor.Y + 1);
+                    selector.SelectLineDown(cursor.X, this.Rows[cursor.Y].Length, this.Rows, cursor.Y, -1);
                 }
-                
                 cursor.MoveUp();
                 
-
             }
             else if (info.Key == ConsoleKey.RightArrow)
             {
@@ -161,8 +158,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 
                 if (marking && oldX != cursor.X)
                 {
-                    selectedText += Rows[cursor.Y][cursor.X];
-                    selector.selectedPoints.Add(new Point(cursor.X, cursor.Y));
+                    selector.SelectSingle(this.Rows, this.cursor.Y, this.cursor.X);
                 }
             }
             else if (info.Key == ConsoleKey.LeftArrow)
@@ -173,8 +169,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 
                 if (marking && oldX != cursor.X)
                 {
-                    selectedText += Rows[cursor.Y][cursor.X];
-                    selector.selectedPoints.Add(new Point(cursor.X, cursor.Y));
+                    selector.SelectSingle(this.Rows, this.cursor.Y, cursor.X, true);
                 }
             }
             else if (info.Key == ConsoleKey.PageUp)
@@ -269,13 +264,17 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 if (marking)
                 {
                     selectedText += Rows[cursor.Y][cursor.X];
-                    selector.selectedPoints.Add(new Point(cursor.X, cursor.Y));
+                    selector.SelectSingle(this.Rows, this.cursor.Y, this.cursor.X);
                 }
                 else if (marking == false)
                 {
                     marking = false;
                     if (left) selectedText = new Checkers().InvertString(selectedText);
                 }
+            }
+            else if(info.Key == ConsoleKey.F4)
+            {
+                api.Application.SwitchWindow(new EditMBoxReplaceDialog(16, 40, this.Rows, this));
             }
             else if (info.Key == ConsoleKey.Escape)
             {
@@ -285,7 +284,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                     marking = false;
                 }
 
-                selector.selectedPoints.Clear();
+                selector.ClearSelection();
             }
             else if (info.Key == ConsoleKey.F5)
             {
@@ -294,11 +293,24 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 Rows[cursor.Y] = selectedText;*/
 
                 int i = 0;
-                selector.selectedText.ForEach(x =>
+                selector.SelectedText.ForEach(x =>
                 {
                     this.Rows.Insert(cursor.Y + i, x);
                     i++;
                 });
+            }
+            else if(info.Key == ConsoleKey.F6)
+            {
+                selector.MoveSelection(this.Rows, selector.SelectedText, cursor.X, cursor.Y);
+            }
+            else if(info.Key == ConsoleKey.F8)
+            {
+                selector.DeleteSelected(selector.SelectedPoints, this.Rows, " ");
+            }
+            else if(info.Key == ConsoleKey.F1)
+            {
+                api.Application.SwitchWindow(new EditMBoxHelper(40, 50));
+                return;
             }
 
             if (info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift))

@@ -78,6 +78,11 @@ namespace Sunrise_Terminal.windows
             //--------------------------------------------------------------------------------------------------------------------------------Enter key
             if (info.Key == ConsoleKey.Enter)
             {
+                if (File.Exists(this.ActivePath + "//" + api.GetSelectedFile()))
+                {
+                    api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth - 2, Settings.WindowDataLimit, api));
+                    return;
+                }
 
                 if (api.GetActiveListWindow().cursor.Y == 0)
                 {

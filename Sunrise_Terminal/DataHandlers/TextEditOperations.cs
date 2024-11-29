@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox;
 using Sunrise_Terminal.objects;
 using Sunrise_Terminal.Utilities;
 
@@ -99,9 +102,24 @@ namespace Sunrise_Terminal.DataHandlers
             text = cursor.Movement.Data[cursor.Y].ToString();
         }
 
-        public void Paste(string text)
+        public void Paste(List<string> SelectedText)
         {
-            cursor.Movement.Data[cursor.Y] += text;
+            
         }
+
+        public void Replace(string textToReplace, string replacement)
+        {
+            for (int i = 0; i < cursor.Movement.Data.Count; i++)
+            {
+                string item = cursor.Movement.Data[i];
+
+                if (item.Contains(textToReplace))
+                {
+                    cursor.Movement.Data[i] = Regex.Replace(item, textToReplace, replacement);
+                }
+            }
+        }
+
+
     }
 }
