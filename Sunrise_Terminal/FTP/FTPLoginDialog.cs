@@ -109,6 +109,7 @@ namespace Sunrise_Terminal.FTP
             else if(info.Key == ConsoleKey.Backspace)
             {
                 textboxStr[selectedTxtbox] = new DataManagement().RemoveChar(textboxStr[selectedTxtbox], textboxStr[selectedTxtbox].Length - 1);
+                textBoxes[selectedTxtbox].content = new DataManagement().RemoveChar(textBoxes[selectedTxtbox].content, textBoxes[selectedTxtbox].content.Length - 1);
             }
             else if(info.Key == ConsoleKey.Escape)
             {
@@ -147,10 +148,6 @@ namespace Sunrise_Terminal.FTP
                 }
 
                 textboxStr[selectedTxtbox] = new DataManagement().AddCharToText(textboxStr[selectedTxtbox], info);
-            }
-            else if(info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Alt))
-            {
-                throw new Exception(passWord);
             }
         }
     }
