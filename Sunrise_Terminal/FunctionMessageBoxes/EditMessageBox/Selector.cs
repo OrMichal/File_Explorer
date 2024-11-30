@@ -87,7 +87,6 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
         public void DeleteSelected(List<Point> selectedPoints, List<string> data, string replacement)
         {
             if (selectedPoints.Count == 0 || string.IsNullOrEmpty(replacement)) return;
-
             var pointsByRow = selectedPoints.GroupBy(p => p.Y).OrderBy(g => g.Key);
 
             foreach (var group in pointsByRow)
@@ -113,17 +112,20 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                     suffix = "";
                 }
 
-                string newLine = prefix + replacement + suffix;
-
-                
-                data[row] = newLine;
-                
-
-                SelectedText.Add(newLine);
-                ClearSelection();
+                data[row] = prefix + replacement + suffix;
             }
 
-            SelectedText.Clear();
+
+            var rowsToDelete = selectedPoints
+                .Select(p => p.Y)
+                .Where(y => y != pointsByRow.First().Key && y != pointsByRow.Last().Key)
+                .Distinct()
+                .OrderByDescending(y => y)
+                .ToList();
+
+            rowsToDelete.ForEach(r => data.RemoveAt(r));
+            
+            ClearSelection();
         }
 
         public void MoveSelection(List<string> data, List<string> selection, int targetX, int targetY)

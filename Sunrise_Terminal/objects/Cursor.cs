@@ -125,7 +125,7 @@ namespace Sunrise_Terminal.objects
         {
             int currentRow = this.Y;
             int closestDistance = int.MaxValue;
-            int targetRow = -1;
+            int targetRow = 0;
 
             for (int i = 0; i < data.Count; i++)
             {
@@ -144,6 +144,15 @@ namespace Sunrise_Terminal.objects
             {
                 this.Y = targetRow;
                 this.X = data[targetRow].IndexOf(searchText);
+            }
+
+            if(this.Y >= this.Offset)
+            {
+                this.Offset += this.Y;
+            }
+            else if(this.Y < this.Offset)
+            {
+                this.Offset = this.Y; 
             }
         }
 

@@ -229,7 +229,7 @@ namespace Sunrise_Terminal.objects
                         }
                         else
                         {
-                            outputLine.Append(currentLine[j]);
+                            Console.Write(currentLine[j]);
                         }
                     }
 

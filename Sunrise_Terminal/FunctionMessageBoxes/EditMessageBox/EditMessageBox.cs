@@ -118,7 +118,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
         {
             if (info.Key == ConsoleKey.F1)
             {
-                api.Application.SwitchWindow(new HelpMessageBox(50, 50));
+                api.Application.SwitchWindow(new EditMBoxHelper(50, 50));
             }
 
             if (info.Key == ConsoleKey.DownArrow)
@@ -305,12 +305,8 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             }
             else if(info.Key == ConsoleKey.F8)
             {
+                this.cursor.Y = selector.SelectedPoints.First().Y;
                 selector.DeleteSelected(selector.SelectedPoints, this.Rows, " ");
-            }
-            else if(info.Key == ConsoleKey.F1)
-            {
-                api.Application.SwitchWindow(new EditMBoxHelper(40, 50));
-                return;
             }
 
             if (info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift))

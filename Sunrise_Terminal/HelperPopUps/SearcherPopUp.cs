@@ -26,6 +26,7 @@ namespace Sunrise_Terminal.HelperPopUps
         private bool insertion = false;
         private int selectedButton = 0;
         private List<Button> buttons;
+        private string textToFind = "text to find";
 
         public SearcherPopUp(int width, int height, EditMessageBox editMBox, string heading = "")
         {
@@ -47,7 +48,7 @@ namespace Sunrise_Terminal.HelperPopUps
         public override void Draw(int LocationX, API api, bool active = true)
         {
             graphics.DrawSquare(this.width, this.height, this.LocationX, this.LocationY, this.Heading);
-            graphics.DrawTextBox(this.width - 2, this.LocationX + 1, this.LocationY + 1, editBox.HighLightedText, this.selectedChar, this.offset);
+            graphics.DrawListBox(this.width -2, this.height, this.LocationX + 1, this.LocationY + 1, new List<TextBox>() { new() { content = textToFind} }.Select(x => x.content));
             graphics.DrawButtons(this.LocationX + 1, this.LocationY + 4, this.buttons, this.selectedButton);
         }
 
@@ -60,24 +61,17 @@ namespace Sunrise_Terminal.HelperPopUps
             }
             else if (char.IsLetterOrDigit(info.KeyChar))
             {
-                if (!insertion)
-                {
-                    editBox.HighLightedText = dataMan.AddCharToText(editBox.HighLightedText, info);
-                }
-                else
-                {
-                    editBox.HighLightedText = dataMan.AddCharToText_Insert(selectedChar, editBox.HighLightedText, info);
-                }
+                textToFind = dataMan.AddCharToText(textToFind, info);
             }
             else if(info.Key == ConsoleKey.Backspace)
             {
-                editBox.HighLightedText = dataMan.RemoveChar(editBox.HighLightedText, selectedChar);
+                this.textToFind = dataMan.RemoveChar(this.textToFind, this.textToFind.Length - 1);
             }
             else if(info.Key == ConsoleKey.Enter)
             {
                 if(selectedButton == 0)
                 {
-                    editBox.cursor.LocateText(editBox.Rows, editBox.HighLightedText);
+                    editBox.cursor.LocateText(editBox.Rows, this.textToFind);
                     api.Erase(this.width, this.height, this.LocationX, this.LocationY);
                     api.CloseActiveWindow();
                 }
