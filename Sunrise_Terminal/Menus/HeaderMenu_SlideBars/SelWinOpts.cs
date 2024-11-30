@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sunrise_Terminal.Menus.HeaderMenu_dialogs.Left;
 using Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts;
+using Sunrise_Terminal.FTP;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
@@ -38,7 +39,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                 new Operation(){ Name = "Sort order" },
                 new Operation(){ Name = "Filter" },
                 new Operation(){ Name = "Encoding"},
-                new Operation(){ Name = "FTP link"},
+                new Operation(){ Name = "FTP"},
                 new Operation(){ Name = "Shell link"},
                 new Operation(){ Name = "SMB link"},
                 new Operation(){ Name = "Panelize"},
@@ -103,7 +104,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                 else if(SelectedOperation == 7) return;
                 else if(SelectedOperation == 8)
                 {
-
+                    api.Application.SwitchWindow(new FTPLoginDialog(50, 20));
                 }
             }
         }

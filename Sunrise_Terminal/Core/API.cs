@@ -61,7 +61,7 @@ namespace Sunrise_Terminal.Core
 
         public void ThrowError(string message)
         {
-            Application.SwitchWindow(new ErrMessageBox(30, 7, message));
+            Application.SwitchWindow(new ErrMessageBox(message));
         }
 
         public void ReDrawDirPanel()

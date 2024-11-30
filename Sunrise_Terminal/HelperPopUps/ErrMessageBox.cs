@@ -17,10 +17,10 @@ namespace Sunrise_Terminal.HelperPopUps
         public int LocationX { get; set; }
         public int LocationY { get; set; }
 
-        public ErrMessageBox(int Width, int Height, string Message)
+        public ErrMessageBox(string Message)
         {
-            width = Width;
-            height = Height;
+            width = Message.Length + 4;
+            height = 10;
             Description = Message;
             LocationX = Console.WindowWidth / 2 - width / 2;
             LocationY = Console.WindowHeight / 2 - height / 2;
@@ -29,7 +29,7 @@ namespace Sunrise_Terminal.HelperPopUps
         public override void Draw(int LocationX, API api, bool _ = true)
         {
             graphics.DrawSquare(width, height, this.LocationX, LocationY, Heading);
-            graphics.DrawLabel(this.LocationX, LocationY + 4, Description, 6);
+            graphics.DrawLabel(this.LocationX, LocationY, Description, 6);
             Console.Beep(2000, 500);
         }
 

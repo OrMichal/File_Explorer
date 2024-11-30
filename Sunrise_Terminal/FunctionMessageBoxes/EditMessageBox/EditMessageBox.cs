@@ -301,17 +301,14 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             }
             else if(info.Key == ConsoleKey.F6)
             {
+                chgMade = true;
                 selector.MoveSelection(this.Rows, selector.SelectedText, cursor.X, cursor.Y);
             }
             else if(info.Key == ConsoleKey.F8)
             {
+                chgMade = true;
                 this.cursor.Y = selector.SelectedPoints.First().Y;
-                selector.DeleteSelected(selector.SelectedPoints, this.Rows, " ");
-            }
-
-            if (info.Key == ConsoleKey.A && info.Modifiers.HasFlag(ConsoleModifiers.Shift))
-            {
-                throw new Exception(selectedText);
+                selector.DeleteSelected(selector.SelectedPoints, this.Rows);
             }
         }
 

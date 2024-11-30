@@ -84,9 +84,9 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
         }
 
 
-        public void DeleteSelected(List<Point> selectedPoints, List<string> data, string replacement)
+        public void DeleteSelected(List<Point> selectedPoints, List<string> data)
         {
-            if (selectedPoints.Count == 0 || string.IsNullOrEmpty(replacement)) return;
+            if (selectedPoints.Count == 0) return;
             var pointsByRow = selectedPoints.GroupBy(p => p.Y).OrderBy(g => g.Key);
 
             foreach (var group in pointsByRow)
@@ -112,7 +112,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                     suffix = "";
                 }
 
-                data[row] = prefix + replacement + suffix;
+                data[row] = prefix + " " + suffix;
             }
 
 
@@ -124,7 +124,6 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 .ToList();
 
             rowsToDelete.ForEach(r => data.RemoveAt(r));
-            
             ClearSelection();
         }
 
