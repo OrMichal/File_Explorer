@@ -53,7 +53,6 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 
         public void SelectSingle(List<string> data, int row, int c, bool reverse = false)
         {
-
             Point p = new Point(c, row);
             string charToAdd = data[row][c].ToString();
 
@@ -133,7 +132,9 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             {
                 int index = data.IndexOf(row);
                 if (index >= 0)
+                {
                     data[index] = data[index].Replace(row, new string(' ', row.Length));
+                }
             }
 
             foreach (var item in selection)
