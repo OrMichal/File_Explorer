@@ -307,8 +307,17 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             else if(info.Key == ConsoleKey.F8)
             {
                 chgMade = true;
-                this.cursor.Y = selector.SelectedPoints.First().Y;
-                selector.DeleteSelected(selector.SelectedPoints, this.Rows);
+                if(selector.SelectedPoints.Count > 0)
+                {
+                    this.cursor.Y = selector.SelectedPoints.First().Y;
+                    selector.DeleteSelected(selector.SelectedPoints, this.Rows);
+                }
+                else
+                {
+                    editOperations.RemoveRow();
+                }
+
+
             }
         }
 

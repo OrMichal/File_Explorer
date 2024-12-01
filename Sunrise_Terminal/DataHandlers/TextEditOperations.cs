@@ -39,9 +39,9 @@ namespace Sunrise_Terminal.DataHandlers
                 return;
             }
 
-            if(cursor.Y >= 1)
+            if(cursor.Y >= 1 )
             {
-                cursor.Movement.Data.RemoveAt(cursor.Y - 1);
+                cursor.Movement.Data.RemoveAt(cursor.Y);
             }
 
             if (cursor.Y > 0)
