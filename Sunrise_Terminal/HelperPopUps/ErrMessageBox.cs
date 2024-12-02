@@ -29,7 +29,7 @@ namespace Sunrise_Terminal.HelperPopUps
         public override void Draw(int LocationX, API api, bool _ = true)
         {
             graphics.DrawSquare(width, height, this.LocationX, LocationY, Heading);
-            graphics.DrawLabel(this.LocationX, LocationY, Description, 6);
+            graphics.DrawLabel(this.LocationX, LocationY + this.height/2, Description, 2);
             Console.Beep(2000, 500);
         }
 

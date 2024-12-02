@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Sunrise_Terminal.HelperPopUps;
+using System.Reflection.Emit;
 
 namespace Sunrise_Terminal.FTP
 {
@@ -25,11 +26,36 @@ namespace Sunrise_Terminal.FTP
 
         public void CreateDirectory(string fileName)
         {
-            WebRequest request = WebRequest.Create(this._ftpAdress + "//" +  fileName);
+            WebRequest request = WebRequest.Create(this._ftpAdress);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
             request.Credentials = new NetworkCredential(_userID, _password);
 
             using (var res = (FtpWebResponse)request.GetResponse())
+            {
+                _api.Application.SwitchWindow(new FTPResDialog(30, 20, res.StatusCode.ToString()));
+            }
+        }
+
+        public List<Row> getFiles()
+        {
+            WebRequest req = WebRequest.Create(this._ftpAdress);
+            req.Method = WebRequestMethods.Ftp.ListDirectory;
+            req.Credentials = new NetworkCredential(_userID, _password);
+
+            using(var res = (FtpWebResponse)req.GetResponse())
+            {
+                _api.Application.SwitchWindow(new FTPResDialog(30, 20, res.StatusCode.ToString()));
+            }
+            return new List<Row>();
+        }
+
+        public void uploadFile(string fileName)
+        {
+            WebRequest req = WebRequest.Create(this._ftpAdress);
+            req.Method = WebRequestMethods.Ftp.UploadFile;
+            req.Credentials = new NetworkCredential(this._userID, this._password);
+
+            using(var res = (FtpWebResponse)req.GetResponse())
             {
                 _api.Application.SwitchWindow(new FTPResDialog(30, 20, res.StatusCode.ToString()));
             }
