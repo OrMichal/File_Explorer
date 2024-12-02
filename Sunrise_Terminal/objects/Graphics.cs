@@ -124,6 +124,38 @@ namespace Sunrise_Terminal.objects
             Console.WriteLine($"└{new string("").PadRight(width - 2, '─')}┘");
         }
 
+        public void DrawButtonsVertical(int LocationX, int LocationY, List<Button> buttons, int selectedButton = 0, int padding = 2)
+        {
+            int currentY = LocationY;
+
+            foreach (var button in buttons)
+            {
+                string label = button.Label;
+                int buttonWidth = buttons.Select(x => x.Label.Length).Max() + 2;
+
+                Console.SetCursorPosition(LocationX, currentY);
+                IMessageBox.DefaultColor();
+                Console.Write($"┌{new string('─', buttonWidth)}┐");
+
+                Console.SetCursorPosition(LocationX, currentY + 1);
+                IMessageBox.DefaultColor();
+                Console.Write("│");
+                if (buttons.IndexOf(button) == selectedButton)
+                {
+                    IMessageBox.SelectionColor();
+                }
+                Console.Write(label.PadRight(buttonWidth));
+                IMessageBox.DefaultColor();
+                Console.Write("│");
+
+                Console.SetCursorPosition(LocationX, currentY + 2);
+                IMessageBox.DefaultColor();
+                Console.Write($"└{new string('─', buttonWidth)}┘");
+
+                currentY += 3 + padding;
+            }
+        }
+
         public void DrawButtons(int LocationX, int LocationY, List<Button> buttons, int selectedButton = 0, int padding = 2)
         {
             int currentX = LocationX;

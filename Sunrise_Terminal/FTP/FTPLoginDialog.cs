@@ -120,15 +120,15 @@ namespace Sunrise_Terminal.FTP
             {
                 if(selectedButton == 0)
                 {
-                    
+                    /*
                     if(!Fetcher.TryReachFTP(this.username, this.passWord, this.ftpAdress))
                     {
                         api.ThrowError("could not reach FTP server");
                         return;
-                    }
+                    }*/
                     
                     api.CloseActiveWindow();
-                    api.Application.SwitchWindow(new FTPDialog(30, 30,"FTP", this.passWord, this.username, this.ftpAdress, api));
+                    api.Application.SwitchWindow(new FTPDialog(30, 50,"FTP", this.passWord, this.username, this.ftpAdress, api));
                     api.ReDrawDirPanel();
                     
                 }

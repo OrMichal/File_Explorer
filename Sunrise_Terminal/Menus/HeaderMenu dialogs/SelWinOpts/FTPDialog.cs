@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.FTP.ActionBoxes;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
 {
@@ -51,14 +52,16 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
                 new(){Label = "Preview"},
                 new(){Label = "Link"}
             };
-
-
         }
 
         public override void Draw(int LocationX, API api, bool active = true)
         {
             graphics.DrawSquare(this.width, this.height, this.LocationX, this.LocationY, this.Heading);
-            graphics.DrawButtons(this.LocationX + 2, this.LocationY + 2, this.buttons, selectedButton);
+
+            graphics.DrawLabel(this.LocationX + 1, this.LocationY + 2, this.ftpService.GetHostAdress());
+            graphics.DrawLabel(this.LocationX + 1, this.LocationY + 3, this.ftpService.GetUserId());
+
+            graphics.DrawButtonsVertical(this.LocationX + 1, this.LocationY + 5, this.buttons, selectedButton, 1);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
@@ -70,6 +73,21 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
             else if(info.Key == ConsoleKey.Tab)
             {
                 selectedButton = (selectedButton + 1) % this.buttons.Count;
+            }
+            else if(info.Key == ConsoleKey.Enter)
+            {
+                if(selectedAction == 0)
+                {
+
+                }
+                else if(selectedAction == 1)
+                {
+                    api.Application.SwitchWindow(new FTPDownloadBox(30, 20));
+                }
+                else if(selectedAction == 2)
+                {
+
+                }
             }
         }
     }
