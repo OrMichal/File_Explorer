@@ -120,38 +120,30 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             ClearSelection();
         }
 
-        public void MoveSelection(List<string> data, List<string> selection, int targetX, int targetY)
+        public void MoveSelection(List<string> data, List<string> selection, int targetX, int targetY, List<Point> points)
         {
-            foreach (var row in selection)
-            {
-                int index = data.IndexOf(row);
-                if (index >= 0)
-                {
-                    data[index] = data[index].Replace(row, new string(' ', row.Length));
-                }
-            }
-
-            foreach (var item in selection)
-            {
-                data.Insert(targetY, new string(" "));
-            }
-
             for (int i = 0; i < selection.Count; i++)
             {
                 int targetRow = targetY + i;
-                if (targetRow >= data.Count) break;
 
-                string selectedRow = selection[i];
-                string currentRow = data[targetRow];
 
-                string prefix = currentRow.Substring(0, Math.Min(targetX, currentRow.Length));
-                string suffix = targetX + selectedRow.Length < currentRow.Length
-                    ? currentRow.Substring(targetX + selectedRow.Length)
-                    : "";
+                string prefix = data[targetRow].Substring(0, Math.Min(targetX, data[targetRow].Length));
+                string suffix;
 
-                data[targetRow] = prefix + selectedRow + suffix;
+                if(targetX + selection[i].Length < data[targetRow].Length)
+                {
+                    suffix = data[targetRow].Substring(targetX + selection[i].Length);
+                }
+                else
+                {
+                    suffix = "";
+                }
+
+                data.Insert(targetRow, prefix + selection[i] + suffix);
             }
 
+            var grouped = points.Select(x => x.Y).Distinct().ToList();
+            data.RemoveRange(grouped.First(), grouped.Count());
             ClearSelection();
         }
 

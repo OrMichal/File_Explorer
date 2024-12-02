@@ -289,8 +289,6 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             else if (info.Key == ConsoleKey.F5)
             {
                 chgMade = true;
-                /*
-                Rows[cursor.Y] = selectedText;*/
 
                 int i = 0;
                 selector.SelectedText.ForEach(x =>
@@ -302,7 +300,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
             else if(info.Key == ConsoleKey.F6)
             {
                 chgMade = true;
-                selector.MoveSelection(this.Rows, selector.SelectedText, cursor.X, cursor.Y);
+                selector.MoveSelection(this.Rows, selector.SelectedText, cursor.X, cursor.Y, selector.SelectedPoints);
             }
             else if(info.Key == ConsoleKey.F8)
             {
@@ -315,6 +313,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                 else
                 {
                     editOperations.RemoveRow();
+                    marking = !marking;
                 }
 
 

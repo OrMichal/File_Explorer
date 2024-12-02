@@ -12,23 +12,24 @@ namespace Sunrise_Terminal.FTP
 {
     public class FTPService
     {
-        private string _userID {  get; set; }
-        private string _password { get; set; }
-        private string _ftpAdress { get; set; }
+        private string _hostAdress { get; set; }
         private API _api;
+        private NetworkCredential _credentials;
         public FTPService(string ftpAdress, string UserID, string Password, API api)
         {
-            this._ftpAdress = ftpAdress;
-            this._userID = UserID;
-            this._password = Password;
+            this._hostAdress = ftpAdress;
             this._api = api;
+            this._credentials = new NetworkCredential(UserID, Password);
         }
 
         public void CreateDirectory(string fileName)
         {
-            WebRequest request = WebRequest.Create(this._ftpAdress);
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(this._hostAdress);
+
+            WebRequest request = WebRequest.Create(_hostAdress);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
-            request.Credentials = new NetworkCredential(_userID, _password);
+            request.Credentials = this._credentials;
 
             using (var res = (FtpWebResponse)request.GetResponse())
             {
@@ -36,29 +37,5 @@ namespace Sunrise_Terminal.FTP
             }
         }
 
-        public List<Row> getFiles()
-        {
-            WebRequest req = WebRequest.Create(this._ftpAdress);
-            req.Method = WebRequestMethods.Ftp.ListDirectory;
-            req.Credentials = new NetworkCredential(_userID, _password);
-
-            using(var res = (FtpWebResponse)req.GetResponse())
-            {
-                _api.Application.SwitchWindow(new FTPResDialog(30, 20, res.StatusCode.ToString()));
-            }
-            return new List<Row>();
-        }
-
-        public void uploadFile(string fileName)
-        {
-            WebRequest req = WebRequest.Create(this._ftpAdress);
-            req.Method = WebRequestMethods.Ftp.UploadFile;
-            req.Credentials = new NetworkCredential(this._userID, this._password);
-
-            using(var res = (FtpWebResponse)req.GetResponse())
-            {
-                _api.Application.SwitchWindow(new FTPResDialog(30, 20, res.StatusCode.ToString()));
-            }
-        }
     }
 }
