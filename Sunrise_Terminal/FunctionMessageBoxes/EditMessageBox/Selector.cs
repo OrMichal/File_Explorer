@@ -85,24 +85,18 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
 
         public void DeleteSelected(List<Point> selectedPoints, List<string> data)
         {
-            if (selectedPoints.Count == 0) return;
             var pointsByRow = selectedPoints.GroupBy(p => p.Y).OrderBy(g => g.Key);
 
             foreach (var group in pointsByRow)
             {
-                int row = group.Key;
                 var pointsInRow = group.OrderBy(p => p.X).ToList();
 
-                int start = pointsInRow.First().X;
-                int end = pointsInRow.Last().X;
-
-                string currentLine = data[row];
                 string prefix;
                 string suffix;
                 try
                 {
-                    prefix = currentLine.Substring(0, start);
-                    suffix = currentLine.Substring(end + 1);
+                    prefix = data[group.Key].Substring(0, pointsInRow.First().X);
+                    suffix = data[group.Key].Substring(pointsInRow.Last().X + 1);
 
                 }
                 catch
@@ -111,7 +105,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                     suffix = "";
                 }
 
-                data[row] = prefix + " " + suffix;
+                data[group.Key] = prefix + " " + suffix;
             }
 
 
