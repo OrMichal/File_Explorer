@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sunrise_Terminal.FTP.ActionBoxes;
+using System.Data.SqlTypes;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
 {
@@ -21,11 +22,13 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
         private int LocationY { get; set; }
         private int selectedAction = 0;
         private int selectedButton = 0;
+        private int selectedFile = 0;
         private FTPService ftpService;
 
         private List<Operation> operations;
         private List<Button> buttons;
         private List<Row> ftpFiles = new List<Row>();
+        private List<string> data = new List<string>();
 
         public FTPDialog(int height, int width, string heading, string psw, string username, string ftpAdr, API api)
         {
@@ -62,6 +65,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
             graphics.DrawLabel(this.LocationX + 1, this.LocationY + 3, this.ftpService.GetUserId());
 
             graphics.DrawButtonsVertical(this.LocationX + 1, this.LocationY + 5, this.buttons, selectedButton, 1);
+            graphics.DrawListBox(this.width - 10, this.height - 2, this.LocationX + 10, this.LocationY + 1, this.data, this.selectedFile);
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)
@@ -88,6 +92,14 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.SelWinOpts
                 {
 
                 }
+            }
+            else if(info.Key == ConsoleKey.DownArrow)
+            {
+                
+            }
+            else if(info.Key == ConsoleKey.UpArrow)
+            {
+
             }
         }
     }

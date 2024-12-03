@@ -10,7 +10,7 @@ namespace Sunrise_Terminal.Utilities
     {
         public static int NumberOfWindows { get; set; } = 1;
         public static int WindowWidth { get; set; } = Console.WindowWidth / NumberOfWindows;
-        public static int WindowDataLimit { get; set; } = Console.WindowHeight - 7;
+        public static int WindowDataLimit { get; set; } = Console.WindowHeight - 8;
 
         public static int SmallMessageBoxWidth { get; set; } = 22;
         public static int SmallMessageBoxHeight { get; set; } = 7;

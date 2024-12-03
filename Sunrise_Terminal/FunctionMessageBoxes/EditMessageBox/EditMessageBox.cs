@@ -296,6 +296,7 @@ namespace Sunrise_Terminal.FunctionMessageBoxes.EditMessageBox
                     this.Rows.Insert(cursor.Y + i, x);
                     i++;
                 });
+                selector.ClearSelection();
             }
             else if(info.Key == ConsoleKey.F6)
             {

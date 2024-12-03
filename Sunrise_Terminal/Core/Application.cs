@@ -35,7 +35,7 @@ namespace Sunrise_Terminal.Core
 
             Settings.NumberOfWindows = numberOfWindows;
             Settings.WindowWidth = Console.WindowWidth / numberOfWindows;
-            Console.BufferHeight = Height;
+            //Console.BufferHeight = Height;
 
             this.Api.Application = this;
             DirPanel = new DirPanel(numberOfWindows, this.Api);
