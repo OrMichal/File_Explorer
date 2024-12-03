@@ -88,6 +88,10 @@ namespace Sunrise_Terminal
                     {
                         api.ThrowError("Access denied!!!");
                     }
+                    catch
+                    {
+                        throw;
+                    }
                 }
 
                 api.Erase(this.width, this.height, this.LocationX, this.LocationY);
