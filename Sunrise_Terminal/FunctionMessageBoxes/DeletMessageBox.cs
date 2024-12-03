@@ -71,15 +71,23 @@ namespace Sunrise_Terminal
             {
                 if (selectedButton == 0)
                 {
-                    if(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                    try
                     {
-                        dataManager.DeleteFile(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()));
+                        if(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                        {
+                            dataManager.DeleteFile(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile()));
+                        }
+                        else
+                        {
+                            dataManager.DeleteDir(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
+                        }
+                        api.RequestFilesRefresh();
+
                     }
-                    else
+                    catch (UnauthorizedAccessException)
                     {
-                        dataManager.DeleteDir(api.GetActiveListWindow().ActivePath, api.GetSelectedFile());
+                        api.ThrowError("Access denied!!!");
                     }
-                    api.RequestFilesRefresh();
                 }
 
                 api.Erase(this.width, this.height, this.LocationX, this.LocationY);

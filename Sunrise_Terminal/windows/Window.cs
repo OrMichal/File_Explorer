@@ -34,7 +34,7 @@ namespace Sunrise_Terminal
             else if (info.Key == ConsoleKey.F2) api.Application.SwitchWindow(new MenuMessageBox(Settings.BigMessageBoxHeight, Settings.BigMessageBoxWidth));
             else if (info.Key == ConsoleKey.F3)
             {
-                if(File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
+                if (File.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile())))
                 {
                     api.Application.SwitchWindow(new PreviewMessageBox(Console.WindowWidth, Console.WindowHeight, api));
                 }
@@ -60,7 +60,16 @@ namespace Sunrise_Terminal
             else if (info.Key == ConsoleKey.F5) api.Application.SwitchWindow(new CopyMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F6) api.Application.SwitchWindow(new RenMovMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
             else if (info.Key == ConsoleKey.F7) api.Application.SwitchWindow(new CrtDirMessageBox(Settings.MediumMessageBoxHeight, Settings.MediumMessageBoxWidth, api));
-            else if (info.Key == ConsoleKey.F8) api.Application.SwitchWindow(new DeletMessageBox(Settings.SmallMessageBoxHeight, Settings.SmallMessageBoxWidth));
+            else if (info.Key == ConsoleKey.F8)
+            {
+                if (api.GetActiveListWindow().cursor.Y == 0)
+                {
+                    api.ThrowError("NO!!! you cannot delete this");
+                    return;
+                }
+
+                api.Application.SwitchWindow(new DeletMessageBox(Settings.SmallMessageBoxHeight, Settings.SmallMessageBoxWidth));
+            }
             else if (info.Key == ConsoleKey.F10) api.Application.SwitchWindow(new QuitMessageBox(Settings.SmallMessageBoxHeight, Settings.SmallMessageBoxWidth));
         }
 

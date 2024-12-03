@@ -84,6 +84,8 @@ namespace Sunrise_Terminal.windows
                     return;
                 }
 
+                
+
                 if (api.GetActiveListWindow().cursor.Y == 0)
                 {
                     api.GetActiveListWindow().ActivePath = dataManagement.GoBackByOne(api.GetActiveListWindow().ActivePath);
