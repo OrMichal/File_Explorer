@@ -21,6 +21,13 @@ namespace Sunrise_Terminal.Core
         {
             RefreshFilesEvent?.Invoke();
         }
+        public string selectedFullPath
+        {
+            get
+            {
+                return Path.Combine(this.GetActiveListWindow().ActivePath, this.GetSelectedFile());
+            }
+        }
 
         public string GetSelectedFile()
         {
@@ -68,5 +75,7 @@ namespace Sunrise_Terminal.Core
         {
             Application.DirPanel.Draw(0, this);
         }
+
+        
     }
 }

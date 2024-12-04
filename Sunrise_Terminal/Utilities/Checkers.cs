@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +36,29 @@ namespace Sunrise_Terminal.Utilities
         public string InvertString(string text)
         {
             return new string(text.Reverse().ToArray());
+        }
+
+        public bool HasAccessFile(string path)
+        {
+            try
+            {
+                using var fs = File.Open(path, FileMode.Open, FileAccess.ReadWrite);
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
+
+        public bool IsFile(string path)
+        {
+            return File.Exists(path);
+        }
+
+        public bool IsDirectory(string path)
+        {
+            return Directory.Exists(path);
         }
     }
 }
