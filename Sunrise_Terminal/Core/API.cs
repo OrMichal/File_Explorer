@@ -75,7 +75,5 @@ namespace Sunrise_Terminal.Core
         {
             Application.DirPanel.Draw(0, this);
         }
-
-        
     }
 }

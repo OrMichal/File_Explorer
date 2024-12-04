@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,21 @@ namespace Sunrise_Terminal.Utilities
             catch (UnauthorizedAccessException)
             {
                 return false;
+            }
+        }
+
+        public bool HasAccessDirectory(string path)
+        {
+            try
+            {
+
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
             }
         }
 
