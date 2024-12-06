@@ -31,19 +31,10 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 
             Operations = new List<Operation>()
             {
-                new Operation(){ Name = "File listing" },
-                new Operation(){ Name = "Quick view" },
-                new Operation(){ Name = "Info" },
                 new Operation(){ Name = "Tree" },
-                new Operation(){ Name = "Listing format" },
-                new Operation(){ Name = "Sort order" },
                 new Operation(){ Name = "Filter" },
-                new Operation(){ Name = "Encoding"},
                 new Operation(){ Name = "FTP"},
-                new Operation(){ Name = "Shell link"},
-                new Operation(){ Name = "SMB link"},
-                new Operation(){ Name = "Panelize"},
-                new Operation(){ Name = "Rescan"}
+                new Operation(){ Name = "Discs"}
             };
 
             operationNames = Operations.Select(o => o.Name).ToList();
@@ -83,10 +74,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
             
             if(info.Key == ConsoleKey.Enter)
             {
-                if (SelectedOperation == 0) return;
-                else if (SelectedOperation == 1) return;
-                else if (SelectedOperation == 2) return;
-                else if (SelectedOperation == 3)
+                if (SelectedOperation == 0)
                 {
                     if(Directory.Exists(Path.Combine(api.GetActiveListWindow().ActivePath, api.GetSelectedFile().Substring(1))))
                     {
@@ -97,15 +85,16 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                         api.ThrowError("Not a directory");
                     }
                 }
-
-                else if (SelectedOperation == 4) return;
-                else if (SelectedOperation == 5) return;
-                else if (SelectedOperation == 6) api.Application.SwitchWindow(api.GetActiveListWindow().FilterDialog);
-                else if(SelectedOperation == 7) return;
-                else if(SelectedOperation == 8)
+                else if (SelectedOperation == 1) api.Application.SwitchWindow(api.GetActiveListWindow().FilterDialog);
+                else if(SelectedOperation == 2)
                 {
                     api.Application.SwitchWindow(new FTPLoginDialog(50, 20));
                 }
+                else if(SelectedOperation == 3)
+                {
+                    api.Application.SwitchWindow(new DriverSelection(40));
+                }
+
             }
         }
     }

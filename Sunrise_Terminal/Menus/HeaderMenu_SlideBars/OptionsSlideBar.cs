@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sunrise_Terminal.Menus.HeaderMenu_dialogs.Options;
 
 namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 {
@@ -28,14 +29,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
 
             Operations = new List<Operation>()
             {
-                new Operation(){ Name = "Layout" },
-                new Operation(){ Name = "Configuration" },
-                new Operation(){ Name = "Learn keys" },
-                new Operation(){ Name = "Appearance" },
-                new Operation(){ Name = "Display bits" },
-                new Operation(){ Name = "Save setup" },
-                new Operation(){ Name = "Save panels setup" },
-                new Operation(){ Name = "Panel options" }
+                new Operation(){ Name = "Change Color" }
             };
 
             operationNames = Operations.Select(o => o.Name).ToList();
@@ -57,7 +51,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                 api.ReDrawDirPanel();
             }
 
-            if (info.Key == ConsoleKey.DownArrow)
+            else if (info.Key == ConsoleKey.DownArrow)
             {
                 if (SelectedOperation < Operations.Count - 1)
                 {
@@ -65,11 +59,19 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_SlideBars
                 }
             }
 
-            if (info.Key == ConsoleKey.UpArrow)
+            else if (info.Key == ConsoleKey.UpArrow)
             {
                 if (SelectedOperation > 0)
                 {
                     SelectedOperation--;
+                }
+            }
+
+            else if(info.Key == ConsoleKey.Enter)
+            {
+                if(SelectedOperation == 0)
+                {
+                    api.Application.SwitchWindow(new ColorChanger(40,20));
                 }
             }
         }

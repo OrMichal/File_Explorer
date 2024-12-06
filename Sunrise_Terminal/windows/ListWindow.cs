@@ -30,8 +30,6 @@ namespace Sunrise_Terminal.windows
         public event Func<List<Row>, List<Row>> Filter;
         public FilterDialog FilterDialog;
 
-
-
         public ListWindow( API api)
         {
             cursor = new Cursor<Row>();

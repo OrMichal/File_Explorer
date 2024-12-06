@@ -20,5 +20,11 @@ namespace Sunrise_Terminal.Utilities
 
         public static int BigMessageBoxHeight { get; set; } = 20;
         public static int BigMessageBoxWidth { get; set; } = 60;
+
+        public static Action ActiveColor = () =>
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+        };
     }
 }

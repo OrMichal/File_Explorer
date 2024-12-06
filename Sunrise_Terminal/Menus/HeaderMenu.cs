@@ -1,6 +1,7 @@
 ﻿using Sunrise_Terminal.Core;
 using Sunrise_Terminal.interfaces;
 using Sunrise_Terminal.Menus.HeaderMenu_SlideBars;
+using Sunrise_Terminal.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace Sunrise_Terminal
             slideBarLocationX = GetLocation();
             
             Console.WriteLine(new string(' ', GetLastGapLength()));
-            Window.DefaultColor();
+            Settings.ActiveColor();
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)

@@ -94,16 +94,11 @@ namespace Sunrise_Terminal
                     return;
                 }
 
-
-                if (Checkers.IsFile(api.selectedFullPath))
+                if (!Checkers.HasAccess(api.selectedFullPath, FileSystemRights.Delete))
                 {
-                    if (!Checkers.HasAccessFile(api.selectedFullPath))
-                    {
-                        api.ThrowError("Access Denied");
-                        return;
-                    }
+                    api.ThrowError("Access Denied");
+                    return;
                 }
-
 
                 api.Application.SwitchWindow(new DeletMessageBox(Settings.SmallMessageBoxHeight, Settings.SmallMessageBoxWidth));
             }

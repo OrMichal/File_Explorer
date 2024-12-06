@@ -38,7 +38,7 @@ namespace Sunrise_Terminal.UI
                 Console.WriteLine($"│{new string($"{formatter.DoublePadding(Headers[0], nameWidth)}│{formatter.DoublePadding(Headers[1], sizeWidth)}│{formatter.DoublePadding(Headers[2], timeWidth - 3)}").PadRight(width)}│");
 
                 int i = 0;
-                for (i = 0; i < Limit; i++)
+                for (i = 0; i < Settings.WindowDataLimit; i++)
                 {
                     int actualIndex = 0;
                     if (i < Rows.Count)
@@ -67,7 +67,7 @@ namespace Sunrise_Terminal.UI
                             {
                                 Console.Write($"{new string($"{formatter.PadTrimRight(row.Name, nameWidth)}│{formatter.PadTrimLeft(row.Size.ToString(), sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange, timeWidth - 3)}").PadRight(width)}");
                             }
-                            Window.DefaultColor();
+                            Settings.ActiveColor();
                             Console.WriteLine("│");
 
                         

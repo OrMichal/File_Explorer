@@ -52,19 +52,33 @@ namespace Sunrise_Terminal.Utilities
             }
         }
 
-        public bool HasAccessDirectory(string path)
+        public bool HasAccess(string path, FileSystemRights right)
         {
             try
             {
+                DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                DirectorySecurity security = directoryInfo.GetAccessControl();
+                AuthorizationRuleCollection rules = security.GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount));
 
-
-                return true;
+                foreach (FileSystemAccessRule rule in rules)
+                {
+                    if ((rule.FileSystemRights & right) == right)
+                    {
+                        if (rule.AccessControlType == AccessControlType.Allow)
+                            return true;
+                    }
+                }
             }
-            catch (Exception)
+            catch (UnauthorizedAccessException)
             {
                 return false;
-                throw;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+            return false;
         }
 
         public bool IsFile(string path)
