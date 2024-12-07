@@ -197,88 +197,97 @@ namespace Sunrise_Terminal.objects
 
         public void DrawEditView(int width, string Heading, List<string> array, int selectedX, int selectedY, int Offset, List<Point> selectLoacations)
         {
-            IMessageBox.DefaultColor();
-            Console.SetCursorPosition(0, 2);
-            Console.WriteLine(new string(' ', width));
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"┌{new UltraFormatter().DoublePadding(Heading, width - 2, '─')}┐");
-
-            for (int i = 0; i < Settings.WindowDataLimit + 2; i++)
+            try
             {
-                if (Offset + i >= array.Count)
-                {
-                    Console.SetCursorPosition(0, i + 2);
-                    Console.WriteLine($"│{new string(' ', width - 2)}│");
-                    continue;
-                }
 
-                int actualIndex = Offset + i;
-                string currentLine = array[actualIndex];
-                bool isSelected = (actualIndex == selectedY);
-
-                Console.SetCursorPosition(0, i + 2);
-
-                if (isSelected)
-                {
-                    Console.Write($"│ ");
-                    for (int j = 0; j < currentLine.Length; j++)
-                    {
-                        Point currP = new Point(j,i);
-
-                        if (j == selectedX)
-                        {
-                            IMessageBox.SelectionColor();
-                            Console.Write(currentLine[j]);
-                        }
-                        else if(selectLoacations.Contains(currP))
-                        {
-                            Console.BackgroundColor = ConsoleColor.White;
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.Write(currentLine[j]);
-                            Window.DefaultColor();
-                        }
-                        else
-                        {
-                            IMessageBox.DefaultColor();
-                            Console.Write(currentLine[j]);
-                        }
-                    }
-                }
-                else
-                {
-                    Console.Write($"│ ");
-                    StringBuilder outputLine = new StringBuilder();
-
-                    for (int j = 0; j < currentLine.Length; j++)
-                    {
-                        Point currentPoint = new Point(j, i + Offset);
-                        if (selectLoacations.Contains(currentPoint))
-                        {
-                            Console.BackgroundColor = ConsoleColor.White;
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.Write(currentLine[j]);
-                            IMessageBox.DefaultColor();
-                        }
-                        else
-                        {
-                            Console.Write(currentLine[j]);
-                        }
-                    }
-
-                    if (outputLine.Length > 0)
-                    {
-                        IMessageBox.DefaultColor();
-                        Console.Write(outputLine.ToString());
-                    }
-                    Console.WriteLine(new string(' ', width - currentLine.Length - 3) + "│");
-
-                }
                 IMessageBox.DefaultColor();
-            }
+                Console.SetCursorPosition(0, 2);
+                Console.WriteLine(new string(' ', width));
+                Console.SetCursorPosition(0, 1);
+                Console.WriteLine($"┌{new UltraFormatter().DoublePadding(Heading, width - 2, '─')}┐");
 
-            IMessageBox.DefaultColor();
-            Console.SetCursorPosition(0, Settings.WindowDataLimit + 4);
-            Console.WriteLine($"└{new string('─', width - 2)}┘");
+                for (int i = 0; i < Settings.WindowDataLimit + 2; i++)
+                {
+                    if (Offset + i >= array.Count)
+                    {
+                        Console.SetCursorPosition(0, i + 2);
+                        Console.WriteLine($"│{new string(' ', width - 2)}│");
+                        continue;
+                    }
+
+                    int actualIndex = Offset + i;
+                    string currentLine = array[actualIndex];
+                    bool isSelected = (actualIndex == selectedY);
+
+                    Console.SetCursorPosition(0, i + 2);
+
+                    if (isSelected)
+                    {
+                        Console.Write($"│ ");
+                        for (int j = 0; j < currentLine.Length; j++)
+                        {
+                            Point currP = new Point(j,i);
+
+                            if (j == selectedX)
+                            {
+                                IMessageBox.SelectionColor();
+                                Console.Write(currentLine[j]);
+                            }
+                            else if(selectLoacations.Contains(currP))
+                            {
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                Console.Write(currentLine[j]);
+                                Window.DefaultColor();
+                            }
+                            else
+                            {
+                                IMessageBox.DefaultColor();
+                                Console.Write(currentLine[j]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.Write($"│ ");
+                        StringBuilder outputLine = new StringBuilder();
+
+                        for (int j = 0; j < currentLine.Length; j++)
+                        {
+                            Point currentPoint = new Point(j, i + Offset);
+                            if (selectLoacations.Contains(currentPoint))
+                            {
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                Console.Write(currentLine[j]);
+                                IMessageBox.DefaultColor();
+                            }
+                            else
+                            {
+                                Console.Write(currentLine[j]);
+                            }
+                        }
+
+                        if (outputLine.Length > 0)
+                        {
+                            IMessageBox.DefaultColor();
+                            Console.Write(outputLine.ToString());
+                        }
+                        Console.WriteLine(new string(' ', width - currentLine.Length - 3) + "│");
+
+                    }
+                    IMessageBox.DefaultColor();
+                }
+
+                IMessageBox.DefaultColor();
+                Console.SetCursorPosition(0, Settings.WindowDataLimit + 4);
+                Console.WriteLine($"└{new string('─', width - 2)}┘");
+
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         public void DrawView(int width, string Heading, List<string> array, int Offset)

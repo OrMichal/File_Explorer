@@ -59,9 +59,10 @@ namespace Sunrise_Terminal
                 {
                     api.Application.SwitchWindow(new EditMessageBox(Console.WindowWidth, Console.WindowHeight, api));
                 }
-                else
+                else if (Directory.Exists(api.selectedFullPath))
                 {
                     api.ThrowError("Not a file");
+                    return;
                 }
 
             }
