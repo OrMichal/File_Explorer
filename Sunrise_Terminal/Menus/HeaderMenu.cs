@@ -54,7 +54,7 @@ namespace Sunrise_Terminal
             slideBarLocationX = GetLocation();
             
             Console.WriteLine(new string(' ', GetLastGapLength()));
-            Settings.ActiveColor();
+            Settings.ListWindowColor();
         }
 
         public override void HandleKey(ConsoleKeyInfo info, API api)

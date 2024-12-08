@@ -40,7 +40,10 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Options
                 new(){Name = "Matrix", Use = Themes.Metrix},
                 new(){Name = "Solarized Dark", Use = Themes.SolarizedDark},
                 new(){Name = "Sunrise", Use = Themes.Sunrise},
-                new(){Name = "Communism", Use = Themes.Communism}
+                new(){Name = "Cyberpunk", Use = Themes.Cyberpunk},
+                new(){Name = "Neon glow", Use = Themes.NeonGlow},
+                new(){Name = "Autumn", Use = Themes.Autumn},
+                new(){Name = "Ocean breeze", Use = Themes.OceanBreeze}
 
             };
 
@@ -49,7 +52,7 @@ namespace Sunrise_Terminal.Menus.HeaderMenu_dialogs.Options
 
         public override void Draw(int LocationX, API api, bool active = true)
         {
-            graphics.DrawSquare(this.width, this.height, this.LocationX, this.LocationY, this.Heading);
+            graphics.DrawSquare(this.width, this.colorChBoxes.Count + 4, this.LocationX, this.LocationY, this.Heading);
             graphics.DrawListBox(this.width - 2, this.height, this.LocationX + 1, this.LocationY + 1, this.colorStrings, this.selectedColor);
         }
 

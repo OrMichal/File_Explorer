@@ -51,7 +51,7 @@ namespace Sunrise_Terminal.UI
                             Console.Write("│");
                             if (actualIndex == selectedIndex && Active)
                             {
-                                Window.SelectionColor();
+                                Settings.LWindowselectionColor();
                             }
                             if (!row.file && row.Size == 0)
                             {
@@ -67,7 +67,7 @@ namespace Sunrise_Terminal.UI
                             {
                                 Console.Write($"{new string($"{formatter.PadTrimRight(row.Name, nameWidth)}│{formatter.PadTrimLeft(row.Size.ToString(), sizeWidth)}│{formatter.DoublePadding(row.DateOfLastChange, timeWidth - 3)}").PadRight(width)}");
                             }
-                            Settings.ActiveColor();
+                            Settings.ListWindowColor();
                             Console.WriteLine("│");
 
                         

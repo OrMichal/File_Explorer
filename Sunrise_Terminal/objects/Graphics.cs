@@ -19,7 +19,7 @@ namespace Sunrise_Terminal.objects
             int i = 0;
 
             Console.SetCursorPosition(LocationX, i + LocationY);
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"┌{formatter.DoublePadding(Heading,Width - 2, '─')}┐");
 
             for(i = 1; i <= Height - 2; i++)
@@ -28,7 +28,7 @@ namespace Sunrise_Terminal.objects
                 Console.WriteLine($"│{new string(' ', Width - 2)}│");
             }
             Console.SetCursorPosition(LocationX, i + LocationY);
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"└{new string("").PadRight(Width - 2, '─')}┘");
         }
 
@@ -37,7 +37,7 @@ namespace Sunrise_Terminal.objects
             int i = 0;
 
             Console.SetCursorPosition(LocationX, i + LocationY);
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"┌{new string('─', Width - 2)}┐");
             i = 1;
             foreach(string s in Content)
@@ -48,19 +48,19 @@ namespace Sunrise_Terminal.objects
                     Console.Write("│");
                     IMessageBox.SelectionColor();
                     Console.Write($"{formatter.PadTrimRight(s, Width - 2)}");
-                    IMessageBox.DefaultColor();
+                    Settings.MBoxColor();
                     Console.WriteLine("│");
                 }
                 else
                 {
                     Console.SetCursorPosition(LocationX, LocationY + i);
-                    IMessageBox.DefaultColor();
+                    Settings.MBoxColor();
                     Console.WriteLine($"│{formatter.PadTrimRight(s, Width - 2)}│");
                 }
                 i++;
             }
             Console.SetCursorPosition(LocationX, i + LocationY);
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"└{new string("").PadRight(Width - 2, '─')}┘");
             
         }
@@ -70,7 +70,7 @@ namespace Sunrise_Terminal.objects
             int i = 0;
 
             Console.SetCursorPosition(LocationX, i + LocationY);
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"┌{new string('─', width - 2)}┐");
             for(i = 1; i < 2; i++)
             {
@@ -87,22 +87,22 @@ namespace Sunrise_Terminal.objects
                         }
                         else
                         {
-                            IMessageBox.DefaultColor();
+                            Settings.MBoxColor();
                             Console.Write(Content[index + offset]);
                         }
                     }
                     else
                     {
-                        IMessageBox.DefaultColor();
+                        Settings.MBoxColor();
                         Console.Write(" ");
                     }
                 }
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.WriteLine($"│");
             }
 
             Console.SetCursorPosition(LocationX, i + LocationY );
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"└{new string("").PadRight(width - 2, '─')}┘");
         }
 
@@ -111,7 +111,7 @@ namespace Sunrise_Terminal.objects
             int i = 0;
 
             Console.SetCursorPosition(LocationX, i + LocationY);
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"┌{new string('─', width - 2)}┐");
             for (i = 1; i < Content.Count(); i++)
             {
@@ -120,7 +120,7 @@ namespace Sunrise_Terminal.objects
             }
 
             Console.SetCursorPosition(LocationX, i + LocationY);
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             Console.WriteLine($"└{new string("").PadRight(width - 2, '─')}┘");
         }
 
@@ -134,22 +134,22 @@ namespace Sunrise_Terminal.objects
                 int buttonWidth = buttons.Select(x => x.Label.Length).Max() + 2;
 
                 Console.SetCursorPosition(LocationX, currentY);
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write($"┌{new string('─', buttonWidth)}┐");
 
                 Console.SetCursorPosition(LocationX, currentY + 1);
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write("│");
                 if (buttons.IndexOf(button) == selectedButton)
                 {
                     IMessageBox.SelectionColor();
                 }
                 Console.Write(label.PadRight(buttonWidth));
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write("│");
 
                 Console.SetCursorPosition(LocationX, currentY + 2);
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write($"└{new string('─', buttonWidth)}┘");
 
                 currentY += 3 + padding;
@@ -166,22 +166,22 @@ namespace Sunrise_Terminal.objects
                 int buttonWidth = label.Length + 2;
 
                 Console.SetCursorPosition(currentX, LocationY);
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write($"┌{new string('─', label.Length)}┐");
 
                 Console.SetCursorPosition(currentX, LocationY + 1);
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write("│");
                 if (buttons.IndexOf(button) == selectedButton)
                 {
                     IMessageBox.SelectionColor();
                 }
                 Console.Write(label);
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write("│");
 
                 Console.SetCursorPosition(currentX, LocationY + 2);
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.Write($"└{new string('─', label.Length)}┘");
 
                 currentX += buttonWidth + padding;
@@ -200,7 +200,7 @@ namespace Sunrise_Terminal.objects
             try
             {
 
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.SetCursorPosition(0, 2);
                 Console.WriteLine(new string(' ', width));
                 Console.SetCursorPosition(0, 1);
@@ -242,7 +242,7 @@ namespace Sunrise_Terminal.objects
                             }
                             else
                             {
-                                IMessageBox.DefaultColor();
+                                Settings.MBoxColor();
                                 Console.Write(currentLine[j]);
                             }
                         }
@@ -260,7 +260,7 @@ namespace Sunrise_Terminal.objects
                                 Console.BackgroundColor = ConsoleColor.White;
                                 Console.ForegroundColor = ConsoleColor.Black;
                                 Console.Write(currentLine[j]);
-                                IMessageBox.DefaultColor();
+                                Settings.MBoxColor();
                             }
                             else
                             {
@@ -270,16 +270,16 @@ namespace Sunrise_Terminal.objects
 
                         if (outputLine.Length > 0)
                         {
-                            IMessageBox.DefaultColor();
+                            Settings.MBoxColor();
                             Console.Write(outputLine.ToString());
                         }
                         Console.WriteLine(new string(' ', width - currentLine.Length - 3) + "│");
 
                     }
-                    IMessageBox.DefaultColor();
+                    Settings.MBoxColor();
                 }
 
-                IMessageBox.DefaultColor();
+                Settings.MBoxColor();
                 Console.SetCursorPosition(0, Settings.WindowDataLimit + 4);
                 Console.WriteLine($"└{new string('─', width - 2)}┘");
 
@@ -293,7 +293,7 @@ namespace Sunrise_Terminal.objects
         public void DrawView(int width, string Heading, List<string> array, int Offset)
         {
             
-            IMessageBox.DefaultColor();
+            Settings.MBoxColor();
             int i = 0;
             Console.SetCursorPosition(0, 1);
             Console.WriteLine($"┌{formatter.DoublePadding(Heading, width - 2, '─')}┐");
@@ -327,11 +327,11 @@ namespace Sunrise_Terminal.objects
                 {
                     IMessageBox.SelectionColor();
                     Console.Write($"{checkBoxes[i].activeChoice}");
-                    IMessageBox.DefaultColor();
+                    Settings.MBoxColor();
                 }
                 else
                 {
-                    IMessageBox.DefaultColor();
+                    Settings.MBoxColor();
                     Console.Write($"{checkBoxes[i].activeChoice}");
                 }
                 Console.Write($"] {checkBoxes[i].Text}");
